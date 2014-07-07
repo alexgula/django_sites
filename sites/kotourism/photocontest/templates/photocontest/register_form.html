@@ -1,0 +1,18 @@
+{% extends 'base_sidebar.html' %}
+
+{% load future %}
+{% load i18n markup %}
+{% load paging_extras %}
+
+{% block title %}{% trans "Photo contest author registration" %}{% endblock %}
+
+{% block content %}
+    <h3>{% trans "Photo contest author registration" %}</h3>
+
+    <div>
+        <form class='double shift-single page-form' action='{% url 'photocontest_register' %}' method='POST'>{% csrf_token %}
+            {{ form }}
+            <div class=''><input type='submit' value='{% trans "Register" %}'/></div>
+        </form>
+    </div>
+{% endblock %}

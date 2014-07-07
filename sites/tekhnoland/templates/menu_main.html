@@ -1,0 +1,26 @@
+{% load future %}
+{% load navtags %}
+
+<ul class='menu-tree'>
+    <li class='menu-item level-0 first {% active_url 'about' %}'>
+        <a class='menu-link level-0' href='{% url 'about' %}'>О компании</a>
+    </li>
+    <li class='menu-item level-0 {% active_url 'news:list' %}'>
+        <a class='menu-link level-0' href='{% url 'news:list' %}'>Новости</a>
+    </li>
+    <li class='menu-item level-0 {% active_url 'conditions' %}'>
+        <a class='menu-link level-0' href='{% url 'conditions' %}'>Как заказать</a>
+    </li>
+    <li class='menu-item level-0 {% active_url 'delivery' %}'>
+        <a class='menu-link level-0' href='{% url 'delivery' %}'>Доставка</a>
+    </li>
+    <li class='menu-item level-0 {% active_url 'account:register' %}'>
+        <a class='menu-link level-0' href='{% url 'account:register' %}'>Регистрация</a>
+    </li>
+    <li class='menu-item level-0 {% active_url 'feedback:show' %}'>
+        <a class='menu-link level-0' href='{% url 'feedback:show' %}'>Обратная связь</a>
+    </li>
+    <li class='menu-item level-0 {% active_url 'contacts' %}'>
+        <a class='menu-link level-0' href='{% url 'contacts' %}'>Контакты</a>
+    </li>
+</ul>

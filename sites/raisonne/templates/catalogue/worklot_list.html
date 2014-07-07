@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% load future %}
+{% load i18n %}
+{% load media_tags statictags catalogue_tags %}
+{% load dajaxice_templatetags %}
+
+{% block breadcrumbs %}
+    <div class='menu-item'><a href='{% url 'catalogue_home' %}'><span class='menu-item-content'>{% trans "Home" %}</span></a></div>
+    <div class='menu-item breadcrumb-delimiter'><span class='breadcrumb-content'>&rarr;</span></div>
+    <div class='menu-item'><span class='menu-item-content'>{% block breadcrumbs_title %}{% endblock %}</span></div>
+{% endblock %}
+
+{% block page-content %}
+    <div id='worklot-list' class='columns adaptive-390-560 same-height'>
+        {% for lot in lots %}
+            <div class='column'>
+                <div class='container full-height'>
+                    {% with work=lot.work %}
+                        {% include 'catalogue/worklot_detail_include.html' %}
+                    {% endwith %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class='columns full-height'>
+        <div class='container full-height'>
+            <div class='column elastic'><div class='container'>&nbsp;</div></div>
+            <div id='content-static' class='column fixed full-height content-static'>
+                <div class='container full-height'>
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+            <div class='column elastic'><div class='container'>&nbsp;</div></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block page-nav %}
+    {% show_filters %}
+    <div class='splitter'></div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type='text/javascript' src='{% static 'js/jquery.dajax.core.js' %}' charset='utf-8'></script>
+    {% dajaxice_js_import %}
+    <script type='text/javascript' src='{% static 'js/jquery.countdown/jquery.countdown.pack.js' %}' charset='utf-8'></script>
+    {% with countdown_locale='js/jquery.countdown/jquery.countdown-{}.js'|format:LANGUAGE_CODE %}
+        <script type='text/javascript' src='{% static countdown_locale %}' charset='utf-8'></script>
+    {% endwith %}
+
+    <script type="text/javascript">
+        $(function() {
+            $('.worklot-item').auction('{% url 'service_make_bid' %}', '{% trans "Server error encountered" %}');
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,14 @@
+[uwsgi]
+socket = 127.0.0.1:{{ 3030 + host.key }}
+threads = {{ host.threads }}
+workers = {{ host.workers }}
+master
+buffer-size = 16384
+uid = django
+gid = django
+env = DJANGO_SETTINGS_MODULE={{ host.project }}.settings_prod
+env = LANG='en_US.UTF-8'
+env = LC_ALL='en_US.UTF-8'
+module = django.core.handlers.wsgi:WSGIHandler()
+chdir = {{ root }}
+#stats = :{{ 3100 + host.key }}

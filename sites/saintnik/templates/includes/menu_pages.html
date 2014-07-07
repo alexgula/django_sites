@@ -1,0 +1,21 @@
+{% load future %}
+{% load i18n %}
+{% load mptt_tags %}
+{% load navtags %}
+
+{% full_tree_for_model content.InfoPage as pages %}
+
+<ul class='menu'>
+    {% recursetree pages %}
+        {% if node.active %}
+            <li class='level-{{ node.level }} {% active_model node %}'>
+                <a class='menu-link level-{{ node.level }} {% active_model node %} {% if node.is_leaf_node %}leaf{% else %}parent{% endif %}' href='{{ node.get_absolute_url }}#top'>{{ node }}</a>
+                {% if not node.is_leaf_node %}
+                    <ul class='submenu'>
+                        {{ children }}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endif %}
+    {% endrecursetree %}
+</ul>

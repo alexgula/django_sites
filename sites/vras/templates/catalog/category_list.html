@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% load future i18n thumbnail %}
+{% load url from future %}
+{% load markup %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block logo %}
+    {% thumbnail object.logo THUMBNAIL_SETTINGS.ICON_SIZE crop='center' as im %}
+        <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+    {% endthumbnail %}
+{% endblock %}
+
+{% block left-side %}
+    <ul class='production-menu'>
+        {% with first_in_list=category_list|first %}
+            {% if first_in_list.level == 0 %}
+                {% for category in category_list %}
+                    <li>
+                        <a href='{{ category.get_absolute_url }}' class='production-menu-link level-{{ category.level }}'>{{ category.title }}</a>
+                        <ul class='production-menu'>
+                            {% for category_child in category.get_children %}
+                                <li>
+                                    {% if category_child == category %}
+                                        <div class='production-menu-link level-{{ category_child.level }} selected '>{{ category_child.title }}</div>
+                                    {% else %}
+                                        <a href='{{ category_child.get_absolute_url }}' class='production-menu-link level-{{ category_child.level }}'>{{ category_child.title }}</a>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            {% else %}
+                {% for category in first_in_list.get_ancestors %}
+                    <li>
+                        <a href='{{ category.get_absolute_url }}' class='production-menu-link level-{{ category.level }}'>{{ category.title }}</a>
+                        <ul class='production-menu'>
+                            {% for category_child in category.get_children %}
+                                <li>
+                                    <a href='{{ category_child.get_absolute_url }}' class='production-menu-link level-{{ category_child.level }}'>{{ category_child.title }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </ul>
+    {% include 'includes/contact_us_button.html' %}
+{% endblock %}
+
+{% block content %}
+    <div class='right-side right'>
+        {% include 'includes/go_to_table_button.html' %}
+        {{ block.super }}
+        <h1>{{ title }}</h1>
+        <div class='content_render'>
+            {{ object.desc|restructuredtext }}
+        </div>
+        {% for category in category_list %}
+            <div class='category-item-preview'>
+                <a class='category-item-preview-title' href="{{ category.get_absolute_url }}">{{ category.title }}</a>
+                {% thumbnail category.first_image.image THUMBNAIL_SETTINGS.PREVIEW_IMG as im %}
+                    <img class="category-item-preview-img" src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+                {% endthumbnail %}
+                <div class='content_render'>
+                    {{ category.desc|restructuredtext|truncatewords_html:40 }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

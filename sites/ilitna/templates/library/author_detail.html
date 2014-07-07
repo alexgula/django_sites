@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load future i18n markup thumbnail %}
+
+{% block title %}{{ author.name }}{% endblock %}
+
+{% block content %}
+    <div class='wrapper main-panel'>
+        <div class='grids'>
+            <div class='grid-1'>
+                {% thumbnail author.portrait '242' upscale=False as thumb %}
+                    <div class='border author-block-portrait'>
+                        <div class='border-body' style="width: 242px">
+                            <img src='{{ thumb.url }}' width='{{ thumb.width }}' height='{{ thumb.height }}'
+                                 style='margin:{{ thumb|margin:'242' }}' alt='{{ author.title }}'/>
+                        </div>
+                    </div>
+                {% endthumbnail %}
+                <div class='delta author-block-title'>{{ author.full_name }}</div>
+                <div class='author-block-dates'>{{ author.date_born }}&ndash;{{ author.date_died }}</div>
+            </div>
+            <div class='grid-3'>
+                <h1 class='block-title'>{{ author.full_name }}</h1>
+                <a class='block-link' href='{% url 'library:author_list' %}'>
+                    <span class='list'></span>
+                    {% trans "All authors" %}
+                </a>
+                <hr class='clear'>
+                {% include 'includes/breadcrumbs.html' %}
+                <div class='grids'>
+                    {% for work in author.listed_works %}
+                        <div class='grid-1'>
+                            {% include 'library/includes/block_work.html' %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block admin_url %}{% url 'admin:library_author_change' author.id %}{% endblock %}

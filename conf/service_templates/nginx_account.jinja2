@@ -1,0 +1,52 @@
+{% for host in hosts %}{% if host.generate %}{% for domains_from, domain_to in host.redirects %}server {
+    listen {{ port }};
+    server_name{% for domain_from in domains_from %} {{ domain_from }}{% endfor %};
+    rewrite ^ $scheme://{{ domain_to }}$request_uri permanent;
+}
+
+{% endfor %}server {
+    listen {{ port }};
+    server_name{% for domain in host.primary_domains %} {{ domain }}{% endfor %};
+
+    if ($http_user_agent ~ METASpider )
+    {
+        return 404;
+    }
+
+    #access_log /web/logs/nginx.{{ host.name }}.access.log main;
+    #error_log /web/logs/nginx.{{ host.name }}.error.log;
+
+    {% if host.system == 'django' %}
+    location ~ ^/(favicon\.ico|favicon\.png|robots\.txt|[-\w\d_]+\.html)$ {
+        root /web/sites/django/sites/{{ host.project }}/wwwroot;
+        expires 1h;
+    }
+
+    location ~ ^/(media|static)/ {
+        root /web/sites/django/sites/{{ host.project }}/wwwroot;
+        expires 1h;
+    }
+
+    location / {
+        uwsgi_pass 127.0.0.1:{{ 3030 + host.key }};
+        include uwsgi_params;
+    }
+    {% else %}
+    location ~* \.(css|js|less|ico|jpg|jpeg|gif|png|zip|tgz|gz|rar|bz2|doc|xls|exe|pdf|ppt|tar|wav|bmp|rtf|swf|ico|flv|txt|xml|docx|xlsx)($|[\?#].*$) {
+        root {{ root }}{{ host.path }}/;
+        try_files $uri $uri/ @backend;
+        index index.html index.php;
+        access_log off;
+        expires 1h;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+
+    location / {% include 'nginx_backend.jinja2' %}
+
+    location @backend {% include 'nginx_backend.jinja2' %}
+    {% endif %}
+}
+{% endif %}{% endfor %}

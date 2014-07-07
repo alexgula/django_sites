@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load blocktags %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <h1>{{ title }}</h1>
+    <div class='contact-text address'>
+        <div class="sprites sprites-icon-home-png"></div>
+        {% text_block 'address' %}
+    </div>
+    <div class='contact-text telephone'>
+        <div class="sprites sprites-icon-phone-png"></div>
+        {% text_block 'phone' %}
+    </div>
+    <div class='contact-text email'>
+        <div class="sprites sprites-icon-mail-png"></div>
+        e-mail: {% text_block 'email' %}
+    </div>
+    <div>
+        {% text_block 'map' %}
+    </div>
+{% endblock %}

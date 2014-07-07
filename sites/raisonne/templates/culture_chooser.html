@@ -1,0 +1,22 @@
+{% load i18n %}
+{% load localeurl_tags %}
+{% load media_tags %}
+
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as langs %}
+
+<ul id='culture-chooser'>
+    {% for lang in langs %}
+        {% if lang.code == request.LANGUAGE_CODE %}
+            <li class="culture-current">
+                {% staticimage 'images/lang/icon_{}.png'|format:lang.code lang.name_local %}
+            </li>
+        {% else %}
+            <li class='culture-other'>
+                <a href="{{ request.get_full_path|chlocale:lang.code }}">
+                    {% staticimage 'images/lang/icon_{}.png'|format:lang.code lang.name_local %}
+                </a>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>

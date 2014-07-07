@@ -1,0 +1,21 @@
+{% load i18n %}
+{% load thumbnail %}
+{% load url from future %}
+
+
+<div class="grid category-popular">
+    <ul class="category-popular__list">
+        {% for category in top_categories %}
+            <li class="category-popular__item">
+                <a class="category-popular__item-link" href="{{ category.get_absolute_url }}">
+                    <span class="category-popular__item-label">{{ category.title }}</span>
+                    <div class="category-popular__item-picture">
+                        {% thumbnail category.logo '185x250' upscale=False as im %}
+                            <img src="{{ im.url }}" style="margin:{{ im|margin:"185x250" }}" alt="{{ category.title }}" width='{{ im.width }}' height='{{ im.height }}'/>
+                        {% endthumbnail %}
+                    </div>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

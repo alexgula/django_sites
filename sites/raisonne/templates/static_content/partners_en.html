@@ -1,0 +1,32 @@
+{% extends 'static_content_base.html' %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Partners" %}{% endblock %}
+
+{% block breadcrumbs_title %}{% trans "Partners" %}{% endblock %}
+
+{% block content %}
+    <h1>{% trans "Partners" %}</h1>
+
+    <div class='partner'>
+        <h3>Aromatika</h3>
+        <a href='http://aromatika.com.ua/aromatikaua/index.php' rel='nofollow' target='_blank'>
+            <img src='{{ MEDIA_URL }}partners/aromatika.png' title='Aromatika'>
+        </a>
+    </div>
+
+    <div class='partner'>
+        <h3>Dubolom</h3>
+        <a href='http://dubolom.com.ua/' rel='nofollow' target='_blank'>
+            <img src='{{ MEDIA_URL }}partners/dubolom.png' title='Dubolom'>
+        </a>
+    </div>
+
+    <div class='partner'>
+        <h3>Mansarda Plus</h3>
+        <a href='http://mansarda-plus.com.ua/' rel='nofollow' target='_blank'>
+            <img src='{{ MEDIA_URL }}partners/mansardaplus.png' title='Mansarda Plus'>
+        </a>
+    </div>
+{% endblock %}

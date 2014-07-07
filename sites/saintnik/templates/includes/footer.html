@@ -1,0 +1,38 @@
+{% load static from staticfiles %}{% load i18n localeurl_tags contenttags blocktags %}{% load future %}
+
+<ul class='advertising'>
+    <li><a href='{% url 'contacts' %}'><img src='{% static 'images/footer_1.jpg' %}' alt='' title=''/></a></li>
+    <li>
+        <div class='twelve_px_red'>{% trans 'Our address is:' %}</div>
+        <div>
+            {% text_block 'address' %}
+        </div>
+        <div class='telephone'>
+            {% text_block 'phone' %}
+        </div>
+        <div>
+            e-mail: {% text_block 'email' %}
+        </div>
+    </li>
+    <li><a href='#'><img src='{% static 'images/footer_3.jpg' %}' alt='' title=''/></a></li>
+    <li>
+        <div class='twelve_px_red'>{% trans 'For donations:' %}</div>
+        <p>
+            {% trans "bank account #" %}{% text_block 'account-no' %}
+        </p>
+        <p>
+            {% trans "in" %} {% text_block 'account-bank' %}
+        </p>
+        <p>
+            {% trans 'MFO' %} {% text_block 'account-mfo' %}
+        </p>
+        <p>
+            {% trans 'EDRPOU' %} {% text_block 'account-edrpou' %}
+        </p>
+    </li>
+</ul>
+
+<ul class='banners'>
+    <li><a href='http://www.lavra.ua' target='_blank'><img src='{% static 'images/footer_5.jpg' %}' alt='' title=''/></a></li>
+    <li><a href='http://orthodoxy.org.ua/' target='_blank'><img src='{% static 'images/footer_6.jpg' %}' alt='' title=''/></a></li>
+</ul>

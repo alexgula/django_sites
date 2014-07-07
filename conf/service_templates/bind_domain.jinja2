@@ -1,0 +1,56 @@
+$TTL 1h
+
+{{ domain.name }}.    86400    IN    SOA     ns1.picassoft.com.ua.    {{ env.zone_email.replace('@', '.') }}.    (
+                      {{ serial }} ; Serial Number
+                      2h    ; refresh [4h]
+                      1h    ; retry [1h]
+                      2w    ; expire [7d]
+                      1h    ; minimum [4h]
+)
+
+{{ domain.name }}.    1d    NS    ns3.picassoft.com.ua.
+{{ domain.name }}.    1d    NS    ns4.picassoft.com.ua.
+{% if domain.generate %}
+{{ domain.name }}.    1h    A        {{ domain.address }}
+www                   1h    CNAME    {{ domain.name }}.
+{% endif %}
+{% for name, address in domain.subdomains.iteritems() %}
+{{ name }}            1h    A    {{ address }}
+www.{{ name }}        1h    A    {{ address }}
+{% endfor %}
+
+{% if domain.mail == 'gmail' %}
+mail                  1h    CNAME    ghs.google.com.
+docs                  1h    CNAME    ghs.google.com.
+{{ domain.name }}.    1h    MX       1   aspmx.l.google.com.
+{{ domain.name }}.    1h    MX       5   alt1.aspmx.l.google.com.
+{{ domain.name }}.    1h    MX       5   alt2.aspmx.l.google.com.
+{{ domain.name }}.    1h    MX       10  aspmx2.googlemail.com.
+{{ domain.name }}.    1h    MX       10  aspmx3.googlemail.com.
+{{ domain.name }}.    1h    TXT      "v=spf1 a mx include:_spf.google.com include:picassoft.com.ua ~all"
+{{ domain.name }}.    1h    SPF      "v=spf1 a mx include:_spf.google.com include:picassoft.com.ua ~all"
+{% if domain.gmail_dkim %}google._domainkey     1h    TXT      "v=DKIM1; k=rsa; p={{ domain.gmail_dkim }}"{% endif %}
+{% elif domain.mail == 'hotmail' %}
+{{ domain.name }}.    1h    MX       10   {{ domain.hotmail_mx }}.
+{{ domain.name }}.    1h    TXT      "v=spf1 a mx include:hotmail.com include:picassoft.com.ua ~all"
+{{ domain.name }}.    1h    SPF      "v=spf1 a mx include:hotmail.com include:picassoft.com.ua ~all"
+{% elif domain.mail == 'local' %}
+{{ domain.name }}.    1h    TXT      "v=spf1 a mx ~all"
+{{ domain.name }}.    1h    SPF      "v=spf1 a mx ~all"
+{{ domain.name }}.    1h    MX       0   {{ domain.name }}.
+{% elif domain.mail %}
+mail                  1h    A        {{ domain.mail }}
+{{ domain.name }}.    1h    TXT      "v=spf1 mx ~all"
+{{ domain.name }}.    1h    MX       0   mail.{{ domain.name }}.
+{% endif %}
+
+{% for name, target in domain.cname %}
+{{ name }}            1h    CNAME    {{ target }}.
+www.{{ name }}        1h    CNAME    {{ target }}.
+{% endfor %}
+{% for name in domain.txt %}
+{{ domain.name }}.    1h    TXT    "{{ name }}"
+{% endfor %}
+{% for name in domain.mx %}
+{{ domain.name }}.    1h    MX       {{ name }}.
+{% endfor %}

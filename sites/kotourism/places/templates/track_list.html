@@ -1,0 +1,47 @@
+{% extends 'base_sidebar.html' %}
+
+{% load future %}
+{% load i18n markup %}
+{% load paging_extras thumbnail %}
+{% load statictags %}
+
+{% block title %}
+    {% trans "Holiday tours" %}
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel='stylesheet' href='{% static 'jquery-ui-datepicker/css/custom-theme/jquery-ui-1.8.9.custom.css' %}' type='text/css' media='all' charset='utf-8' />
+{% endblock %}
+
+{% block content %}
+    <h3>{% trans "Holiday tours" %}</h3>
+    {% paginate tracks from request as results per_page 10 %}
+    {% for track in results.objects %}
+        <div class='place paragraph'>
+            <div class='image single'>
+                {% thumbnail track.image_desc THUMBNAIL_SETTINGS.FULLSCREEN_SIZE upscale=False as im_big %}
+                    {% thumbnail track.image_desc THUMBNAIL_SETTINGS.ICON_SIZE upscale=False as im %}
+                        <div class='item' style='width: {{ im.width }}px; height: {{ im.height }}px'>
+                            <a class='colorbox' rel='places' href='{{ im_big.url }}'>
+                                <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'>
+                            </a>
+                        </div>
+                    {% endthumbnail %}
+                {% endthumbnail %}
+            </div>
+            <div class='head triple'>
+                <h4 class='name'><a href='{{ track.get_absolute_url }}'>{{ track.name }}</a></h4>
+            </div>
+            <div class='body triple'>
+                {% for place in track.get_siteseeing %}
+                    <div class='triple vblock'>{{ forloop.counter }}. {{ place.name }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    {% empty %}
+        <p>{% trans "Unfortunately, there is no content in this category" %}.</p>
+        <p>{% trans "Please visit later" %}.</p>
+    {% endfor %}
+    <div class='double shift-single'>{{ results.paging }}</div>
+{% endblock %}

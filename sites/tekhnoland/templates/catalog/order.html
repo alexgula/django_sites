@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% load future %}
+{% load statictags ordertags %}
+
+{% block title %}Оформление заказа{% endblock %}
+
+{% block basket %}{% endblock %}
+
+{% block content %}
+    {{ block.super }}
+    <h1>Оформление заказа</h1>
+
+    <table class='part-list'>
+        {% if stock_list_available %}
+            <tr class='part-list-header'>{% order_textrow '' "Товары в заказе" %}</tr>
+            <tr>{% order_headrow %}</tr>
+            {% for id, stock in stock_list_available.iteritems %}
+                <tr>{% order_textrow 'part-list-title' stock.name %}</tr>
+                {% for object in stock.objects %}
+                    <tr class='part-list-data'>{% order_datarow object %}</tr>
+                {% endfor %}
+            {% endfor %}
+            <tr class='part-list-total'>
+                <td class='part-list-title' colspan='4'>Всего</td>
+                <td class='part-list-title part-list-count'>{{ total_available_count|floatformat:'0' }}</td>
+                <td class='part-list-title part-list-price'>{{ total_available_sum|floatformat:'2' }}</td>
+                <td class='part-list-title'></td>
+            </tr>
+        {% endif %}
+        <tr class='part-list-header'>
+            <td colspan='7'>
+                <form action='{% url 'catalog:order' %}' method='POST' class='page-form'>{% csrf_token %}
+                    <table width='500px'>{{ form.as_table }}</table>
+                    <div id='part-list-order' class='submit-container sprites sprites-button_page_form_submit-png'>
+                        <input type='submit' name='order' value="Оформить заказ"/>
+                    </div>
+                </form>
+            </td>
+        </tr>
+    </table>
+    <div><a href='{% url 'catalog:basket' %}'>Вернуться к редактированию корзины</a></div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% load i18n %}
+{% load thumbnail %}
+{% load markup %}
+
+
+{% for slide in slides %}
+    <div class="slideshow__slide">
+        <div class="slideshow__info">
+            <div class="slideshow__text">
+                <h2 class="slideshow__ttl">{{ slide.title }}</h2>
+                <p class="slideshow__txt">{{ slide.desc|restructuredtext }}</p>
+                {% if slide.gotolink %}
+                    <a href="{{ slide.gotolink }}" class="slideshow__more"><span class="slideshow__more-holder">{% trans "Learn more" %}</span></a>
+                {% endif %}
+            </div>
+        </div>
+        {% thumbnail slide.image '860x350' upscale=True crop='center' as im %}
+            <img src="{{ im.url }}" alt="{{ slide.title }}" width='{{ im.width }}' height='{{ im.height }}'/>
+        {% endthumbnail %}
+    </div>
+{% endfor %}

@@ -1,0 +1,90 @@
+{% extends 'base_sidebar.html' %}
+
+{% load future %}
+{% load i18n markup %}
+{% load thumbnail %}
+{% load mediatags statictags %}
+
+{% block title %}
+    {{ track.name }}
+{% endblock %}
+
+{% block content %}
+    <h3>{{ track.name }}</h3>
+    <div class='content place'>
+        <div class='double vblock first'>
+            <div class='paragraph'><h4>{{ track.track }}</h4></div>
+            <div class='paragraph'>{% trans "Duration" %}: {{ track.duration }} {% trans "academic hours" %}</div>
+            <div class='paragraph'>{% trans "Track length" %}: {{ track.length }} {% trans "km" %}</div>
+            {% if track.video %}
+                <div class='paragraph'><a href='#track-video'>{% trans "Video" %}</a></div>
+            {% endif %}
+            <h4>{% trans "Places of interest" %}</h4>
+            {% for place in track.get_siteseeing %}
+                <div class='paragraph'>
+                    {{ forloop.counter }}. <a href='{{ place.get_absolute_url }}'>{{ place.name }}</a>
+                    {% if place.address %}<br/><span class='place-label'>{% trans "Address" %}</span>: {{ place.address }}{% endif %}
+                    {% if place.phone %}<br/><span class='place-label'>{% trans "Phones" %}</span>: {{ place.phone }}{% endif %}
+                    {% if place.timetable %}<br/><span class='place-label'>{% trans "Time table" %}</span>: {{ place.timetable }}{% endif %}
+                </div>
+            {% endfor %}
+            <div class='image'>
+                {% thumbnail track.image_track THUMBNAIL_SETTINGS.FULLSCREEN_SIZE upscale=False as im_big %}
+                    {% thumbnail track.image_track '390' upscale=False as im %}
+                        <div style='width: {{ im.width }}px; height: {{ im.height }}px; clear: both;'>
+                            <a class='colorbox' rel='places' href='{{ im_big.url }}'>
+                                <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'>
+                            </a>
+                        </div>
+                    {% endthumbnail %}
+                {% endthumbnail %}
+            </div>
+        </div>
+        <div class='double vblock'>
+            <div class='paragraph'>
+                {% thumbnail track.image_desc THUMBNAIL_SETTINGS.FULLSCREEN_SIZE upscale=False as im_big %}
+                    {% thumbnail track.image_desc '390' upscale=False as im %}
+                        <div style='width: {{ im.width }}px; height: {{ im.height }}px; clear: both;'>
+                            <a class='colorbox' rel='places' href='{{ im_big.url }}'>
+                                <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'>
+                            </a>
+                        </div>
+                    {% endthumbnail %}
+                {% endthumbnail %}
+            </div>
+            <h4>{% trans "Catering" %}</h4>
+            {% for place in track.get_catering %}
+                <div class='paragraph'>
+                    {{ forloop.counter }}. <a href='{{ place.get_absolute_url }}'>{{ place.name }}</a>
+                    {% if place.address %}<br/><span class='place-label'>{% trans "Address" %}</span>: {{ place.address }}{% endif %}
+                    {% if place.phone %}<br/><span class='place-label'>{% trans "Phones" %}</span>: {{ place.phone }}{% endif %}
+                    {% if place.timetable %}<br/><span class='place-label'>{% trans "Time table" %}</span>: {{ place.timetable }}{% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        {% if track.video %}
+            <div class='quad vblock first'>
+                <div id='track-video' style='margin: 35px 0 0 35px'>
+                    <object id='Object1' type='application/x-shockwave-flash' data='{% static 'swf/player_flv_maxi.swf' %}' width='720' height='576'>
+                    <param name='movie' value={% static 'swf/player_flv_maxi.swf' %} />
+                    <param name='wmode' value='opaque' />
+                    <param name='allowFullScreen' value='true' />
+                    <param name='allowScriptAccess' value='sameDomain' />
+                    <param name='quality' value='high' />
+                    <param name='menu' value='true' />
+                    <param name='autoplay' value='true' />
+                    <param name='autoload' value='true' />
+                    <param name='FlashVars' value='flv={{ track.video.url }}&width=720&height=576&autoplay=0&autoload=1&buffer=5&buffermessage={% trans "loading..." %}&playercolor=464646&loadingcolor=999898&buttoncolor=ffffff&buttonovercolor=dddcdc&slidercolor=ffffff&sliderovercolor=dddcdc&showvolume=1&showfullscreen=1&playeralpha=50&title={{ track.name }}&margin=0&buffershowbg=0' />
+                    </object>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block admin-actions %}
+    {{ block.super }}
+    <div class='admin-action'>
+        <a href='{% admin_url track %}' title='{% trans "Edit current record" %}'>{% trans "Edit" %}</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% load i18n markup %}
+{% load thumbnail %}
+{% load mediatags %}
+
+{% block title %}{% trans "Gallery" %}{% endblock %}
+
+{% block content %}
+<h1>{% trans "Gallery" %}</h1>
+    {% for child in gallerypage_list %}
+        <a href='{{ child.get_absolute_url }}' class='block-link'>
+            <div class='container'>
+                {% thumbnail child.image '150x150' crop='center' as thumb %}
+                    <img class='image-left' src='{{ thumb.url }}' width='{{ thumb.width }}' height='{{ thumb.height }}'/>
+                {% endthumbnail %}
+                <h3 class='child-title'>{{ child.title }}</h3>
+                {{ child.text|restructuredtext|truncatewords_html:50 }}
+            </div>
+        </a>
+    {% endfor %}
+{% endblock %}
+
+

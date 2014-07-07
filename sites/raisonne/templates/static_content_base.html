@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% load future %}
+{% load i18n %}
+{% load media_tags catalogue_tags %}
+
+{% block breadcrumbs %}
+    <div class='menu-item'><a href='{% url 'catalogue_home' %}'><span class='menu-item-content'>{% trans "Home" %}</span></a></div>
+    <div class='menu-item breadcrumb-delimiter'><span class='breadcrumb-content'>&rarr;</span></div>
+    <div class='menu-item'><span class='menu-item-content'>{% block breadcrumbs_title %}{% endblock %}</span></div>
+{% endblock %}
+
+{% block page-content %}
+    <div class='columns full-height'>
+        <div class='container full-height'>
+            <div class='column elastic'><div class='container'>&nbsp;</div></div>
+            {% block content-container %}
+                <div id='content-static' class='column fixed full-height content-static'>
+                    <div class='container full-height'>
+                        {% block content %}{% endblock %}
+                    </div>
+                </div>
+            {% endblock %}
+        <div class='column elastic'><div class='container'>&nbsp;</div></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block page-nav %}
+    {% show_filters %}
+    <div class='splitter'></div>
+{% endblock %}

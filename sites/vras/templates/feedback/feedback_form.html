@@ -1,0 +1,24 @@
+{% extends 'content/staticpage_detail.html' %}
+
+{% load future i18n %}
+
+{% block content %}
+    {{ block.super }}
+    <form id='feedback' class='page-form' action='/404/' method='POST'>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {{ form }}
+        <div>
+            <input class="send-feedback" type='submit' value="{% trans "Send feedback" %}"/>
+        </div>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type='text/javascript' charset='utf-8'>
+        $(function() {
+            $('#feedback').attr('action', '{% url 'feedback:show' %}');
+        });
+    </script>
+{% endblock %}

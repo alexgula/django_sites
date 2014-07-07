@@ -1,0 +1,33 @@
+{% load future %}
+{% load i18n %}
+{% load mptt_tags %}
+{% load navtags %}
+{% load contenttags %}
+
+<ul class='menu'>
+    <li class='menu-item level-0 {% url 'home' %}'>
+        <a class='menu-link level-0' href='{% url 'home' %}'>{% trans "Home" %}</a>
+    </li>
+    <li class='menu-item level-0 {% active_url 'news_list' %}'>
+        <a class='menu-link level-0' href='{% url 'news_list' %}'>{% trans "News" context 'plural' %}</a>
+    </li>
+    <li class='menu-item level-0 {% active_url 'gallery_list' %}'>
+        <a class='menu-link level-0' href='{% url 'gallery_list' %}'>{% trans "Gallery" %}</a>
+        {% full_tree_for_model content.GalleryPage as pages %}
+        <ul class='submenu'>
+            {% recursetree pages %}
+                {% if node.active %}
+                    <li class='menu-item level-1 {% active_model node %}'>
+                        <a href='{{ node.get_absolute_url }}'>{{ node }}</a>
+                    </li>
+                {% endif %}
+            {% endrecursetree %}
+        </ul>
+    </li>
+    <li class='menu-item level-0 {% active_url 'calendar' %}'>
+        <a class='menu-link level-0' href='{% url 'calendar' %}'>{% trans "Calendar" %}</a>
+    </li>
+    <li class='menu-item level-0 {% active_url 'contacts' %}'>
+        <a class='menu-link level-0' href='{% url 'contacts' %}'>{% trans "Contacts" %}</a>
+    </li>
+</ul>

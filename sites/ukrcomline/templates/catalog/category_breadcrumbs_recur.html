@@ -1,0 +1,12 @@
+{% load url from future %}
+{% load category_breadcrumbs_recur from categorytags %}
+{% for child_item in category_tree %}
+    <li>
+        <a href="{{ child_item.data.url }}{% if child_item.parent_index > 0 %}?cat={{ parent_item.key }}{% endif %}" class="category-link level-{{ level }}">{{ child_item.data.title }}</a>
+        {% if child_item.children %}
+            <ul>
+                {% category_breadcrumbs_recur child_item level|add:"1" %}
+            </ul>
+        {% endif %}
+    </li>
+{% endfor %}

@@ -1,0 +1,9 @@
+{% load future %}
+{% load i18n %}
+<p>{% trans "Hello" %}, {{ obj.name }}.</p>
+
+<p>{% trans "You registered on the site" %} {{ site.name }}!</p>
+
+<p>{% trans "To confirm registration please follow the link below" %}
+    <a href="http://{{ site.domain }}{% url 'photocontest_register_confirm' obj.activation_key %}">http://{{ site.domain }}{% url 'photocontest_register_confirm' obj.activation_key %}</a>
+</p>

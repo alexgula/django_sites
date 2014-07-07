@@ -1,0 +1,91 @@
+{% extends 'catalog/base.html' %}
+
+{% load future %}
+{% load statictags uploadtags %}
+
+{% block title %}Поиск товаров из файла{% endblock %}
+
+{% block basket %}{% endblock %}
+
+{% block content %}
+    <h1>Поиск товаров из файла</h1>
+
+    {% if stock_list %}
+        <form action='{% url 'catalog:upload_basket_save' %}' method='POST'>{% csrf_token %}
+            <table class='part-list page-form'>
+                {% if stock_list %}
+                    <tr class='part-list-header'>{% upload_textrow '' "Товары, доступные для заказа" %}</tr>
+                    <tr>{% upload_headrow %}</tr>
+                    {% for id, stock in stock_list.iteritems %}
+                        <tr>{% upload_textrow 'part-list-title' stock.name %}</tr>
+                        {% for object in stock.objects %}
+                            <tr class='part-list-data{% if object.is_replacement %} upload-replacement{% endif %}'>{% upload_datarow object %}</tr>
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %}
+
+                <tr class='part-list-header'>
+                    <td colspan='8'>
+                        <table class='submit-table-container'>
+                            <tr>
+                                <td>
+                                    <div id='part-list-calculate' class='submit-container sprites sprites-button_page_form_submit-png'>
+                                        <input type='submit' name='append' value="Добавить в корзину"/>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    {% else %}
+        <div>Ни одного товара не доступно для заказа.</div>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type='text/javascript' charset='utf-8'>
+        function define_checker(checkbox_selector, display_selector, class_normal, class_checked) {
+            $(display_selector).click(function() {
+                var cb = $(this).siblings(checkbox_selector);
+                if(cb.is(':checked'))
+                    cb.removeAttr('checked');
+                else
+                    cb.attr('checked', 'checked');
+                cb.change();
+            });
+            $(checkbox_selector).change(function () {
+                var disp = $(this).siblings(display_selector);
+                if($(this).attr('checked'))
+                    disp.removeClass(class_normal).addClass(class_checked);
+                else
+                    disp.removeClass(class_checked).addClass(class_normal);
+            });
+        }
+
+        define_checker('.part-list-deleted', '.part-list-deleted-display',
+                'sprites-button_delete-png', 'sprites-button_delete_grayed-png');
+
+        $('.part-list-deleted').change(function() {
+            if($(this).is(':checked'))
+                $(this).parents('tr').first().addClass('deleted');
+            else
+                $(this).parents('tr').first().removeClass('deleted');
+        });
+
+        $('#part-list-calculate').click(function() {
+            var basket = [];
+            $('.part-list-data').each(function() {
+                var row = $(this);
+                basket.push({
+                    'id': parseInt(row.find('.part-list-basket-count-order-container').attr('stock-unit-id')),
+                    'quantity': parseInt(row.find('.part-list-count-order').val()),
+                    'selected': row.find('.part-list-selected').is(':checked'),
+                    'deleted': row.find('.part-list-deleted').is(':checked')
+                });
+            });
+        });
+    </script>
+{% endblock %}

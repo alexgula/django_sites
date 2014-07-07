@@ -1,0 +1,24 @@
+{% extends 'base_sidebar.html' %}
+
+{% load future %}
+{% load i18n markup %}
+{% load thumbnail %}
+{% load mediatags statictags %}
+
+{% block title %}
+    {{ region }}
+{% endblock %}
+
+{% block content %}
+    <h3>{{ region }}</h3>
+    <div class='content region'>
+        {% block region %}{% endblock %}
+    </div>
+{% endblock %}
+
+{% block admin-actions %}
+    {{ block.super }}
+    <div class='admin-action'>
+        <a href='{% admin_url region %}' title='{% trans "Edit current record" %}'>{% trans "Edit" %}</a>
+    </div>
+{% endblock %}

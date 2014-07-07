@@ -1,0 +1,118 @@
+{% extends 'base_sidebar.html' %}
+
+{% load i18n %}
+{% load statictags mediatags %}
+{% load eventtags weathertags %}
+
+{% block title %}
+    {% trans "Tourists Guide" %}
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel='stylesheet' href='{% static 'jquery-ui-datepicker/css/custom-theme/jquery-ui-1.8.9.custom.css' %}' type='text/css' media='all' charset='utf-8' />
+{% endblock %}
+
+{% block content %}
+    <div id='tourguide'>
+        <h3>{% trans "Tourists Information Line" %}</h3>
+
+        <div class='first vblock double'>
+            {% include 'infoline-2012-10.html' %}
+        </div>
+        <div class='double vblock'>
+            <table class='contact double'>
+                <thead>
+                <tr><td colspan='2' class='contact-head'>{% trans "Tourists Information Line" %}</td></tr>
+                </thead>
+                <tbody>
+                <tr><td class='contact-label'>{% trans "phone" %}:</td><td class='contact-body'>+38 044 223-04-28</td></tr>
+                <tr><td class='contact-label'>email:</td><td class='contact-body'>kota@ko-tourism.gov.ua</td></tr>
+                <tr><td class='contact-label'>skype:</td><td class='contact-body'>tur_info</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class='first container quad'>
+            <h3>Туристичні інформаційні термінали</h3>
+            <div class='first vblock single'><img src='{% static 'tourguide/terminal-render.jpg' %}' alt='Термінал'></div>
+            <div class='vblock triple'>
+                <div class='terminal icon'></div>
+                <p><strong>Туристичний інформаційний термінал</strong> - інтерактивна електронна система надання інформації громадянам  за допомогою інфомату.</p>
+                <p><strong>Інфомат</strong> – своєрідний вандалозахищений комп'ютер у захищеному корпусі з установленим спеціальним програмним забезпеченням та
+                сенсорним екраном для спрощеного користування та термо принтером для друку інформації зі зворотнім зв’язком.
+                Туристичний інформаційний термінал надає інформацію 24 години на добу, 7 днів на тиждень.</p>
+                <p>На туристичному терміналі Ви можете безкоштовно отримати інформацію, про те як з задоволенням та користю провести вільний час,
+                отримаєте можливість оглянути: карту-схему Київської області та карти регіонів, місця розташування історичних пам'яток, музеїв, парків, закладів розміщення,
+                а також самостійно вибрати та відвідати область по туру вихідного дня, іншу цікаву інформацію.</p>
+            </div>
+
+            <div class='first container quad'>
+                <div class='shift-single vblock single-and-half'><h4>Київська обласна державна адміністрація</h4><br>01196, м. Київ, площа Лесі Українки, 1</div>
+                <div class='vblock single-and-half'><a href='#map'><img src='{% static 'tourguide/terminal-koda.jpg' %}' alt='КОДА'></a></div>
+            </div>
+        </div>
+
+        <div class='first container quad'>
+            <h3>Туристичні інформаційні пункти</h3>
+            <div class='first vblock single'><img src='{% static 'tourguide/infopoint-photo.jpg' %}' alt='Термінал'></div>
+            <div class='vblock triple'>
+                <div class='infopoint icon'></div>
+                <p><strong>Туристично-інформаційний пункт</strong> — це місце де надається інформація про туристично-рекреаційні
+                можливості Київської області, об’єкти культури та відпочинку в тому числі місця, ресурси,
+                обраного туристами регіону.</p>
+                <p>Ініціатором створення туристично-інформаційного пункту є <strong>Київський обласний центр розвитку туризму</strong>.</p>
+                <p><strong>Туристично-інформаційний пункт</strong> представляє з себе інформаційну стійку з поліграфічною продукцією,
+                що надана для безкоштовного розповсюдження та забезпечує інформацією туристів, сірого кольору з 4-му
+                похилими полицями розміром 1500х320х200 мм. та надписом на фризі «Київщина туристична».</p>
+            </div>
+            <div class='first container quad'>
+                <div class='shift-single vblock single-and-half'><h4>Державний дендрологічний парк «Олександрія» НАН України</h4><br>Київська область, 09113, м. Біла Церква, 13</div>
+                <div class='vblock single-and-half'><a href='#map'><img src='{% static 'tourguide/infopoint-bila-tserkva-oleksandria.jpg' %}' alt='Державний дендрологічний парк «Олександрія» НАН України'></a></div>
+                <div class='shift-single vblock single-and-half'><h4>Білоцерківський міський будинок органної та камерної музики (Костел Святого Іоанна Хрестителя)</h4><br>Київська область, 09100, м. Біла Церква, площа Соборна, 4</div>
+                <div class='vblock single-and-half'><a href='#map'><img src='{% static 'tourguide/infopoint-bila-tserkva-organ-hall.jpg' %}' alt='Білоцерківський міський будинок органної та камерної музики (Костел Святого Іоанна Хрестителя)'></a></div>
+                <div class='shift-single vblock single-and-half'><h4>Меморіальний музей Г.С. Сковороди</h4><br>Київська область, 08400, м. Переяслав-Хмельницький, вул. Сковороди, 52</div>
+                <div class='vblock single-and-half'><a href='#map'><img src='{% static 'tourguide/infopoint-perejaslav-skovoroda.jpg' %}' alt='Меморіальний музей Г.С. Сковороди'></a></div>
+                <div class='shift-single vblock single-and-half'><h4>Музей Заповіту Т.Г.Шевченка</h4><br>Київська область, 08400, м. Переяслав-Хмельницький, вул. Шевченка, 8</div>
+                <div class='vblock single-and-half'><a href='#map'><img src='{% static 'tourguide/infopoint-perejaslav-shevchenko.jpg' %}' alt='Музей Заповіту Т.Г.Шевченка'></a></div>
+                <div class='shift-single vblock single-and-half'><h4>Картинна галерея Яготинського історичного музею</h4><br>Київська обл., 07700, м. Яготин, вул. Незалежності, 59</div>
+                <div class='vblock single-and-half'><a href='#map'><img src='{% static 'tourguide/infopoint-yagotyn-historic-museum.jpg' %}' alt='Картинна галерея Яготинського історичного музею'></a></div>
+                <div class='shift-single vblock single-and-half'><h4>Вишгородський історико-культурний заповідник</h4><br>Київська обл., м. Вишгород, вул. Шкільна, 58</div>
+                <div class='vblock single-and-half'><a href='#map'><img src='{% static 'tourguide/infopoint-vyshgorod-historic-park.jpg' %}' alt='Вишгородський історико-культурний заповідник'></a></div>
+                <div class='shift-single vblock single-and-half'><h4>Національний музей-заповідник &laquo;Битва за Київ у 1943 році&raquo;</h4><br>Київська обл., Вишгородський район, с. Нові Петрівці, вул. Ватутіна, 67</div>
+                <div class='vblock single-and-half'><a href='#map'><img src='{% static 'tourguide/infopoint-vyshgorod-kyiv-1943-park.jpg' %}' alt='Національний музей-заповідник &laquo;Битва за Київ у 1943 році&raquo;'></a></div>
+            </div>
+        </div>
+
+        <div class='first container quad'>
+            <h3 id='map'>Карта розміщення туристичних інформаційних терміналів та пунктів</h3>
+            <div class='first vblock quad'>
+                <div id='visicom-viewport' style='width: 790px; height: 590px;'></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type='text/javascript' src='http://maps.visicom.ua/api/2.0.0/map/world_{{ COUNTRY_CODE }}.js' charset='utf-8'></script>
+
+    <script>
+        $(function() {
+            setup_visicom_map("{{ STATIC_URL }}", {
+                "terminal": {name: "terminal", icon: "tourguide/terminal-icon.png", places: [
+                    {name: "Київська обласна державна адміністрація", lat: 50.4277460549, lon: 30.5407114327}
+                ]},
+                "infopoint": {name: "infopoint", icon: "tourguide/infopoint-icon.png", places: [
+                    {name: "Державний дендрологічний парк «Олександрія» НАН України", lat: 49.81361, lon: 30.06847},
+                    {name: "Білоцерківський міський будинок органної та камерної музики", lat: 49.79121, lon: 30.10987},
+                    {name: "Меморіальний музей Г.С. Сковороди", lat: 50.07349, lon: 31.46141},
+                    {name: "Музей Заповіту Т.Г.Шевченка", lat: 50.07659, lon: 31.46425},
+                    {name: "Картинна галерея Яготинського історичного музею", lat: 50.26843, lon: 31.76256},
+                    {name: "Вишгородський історико-культурний заповідник", lat: 50.58334, lon: 30.48899},
+                    {name: "Національний музей-заповідник &laquo;Битва за Київ у 1943 році&raquo;", lat: 50.6252624, lon: 30.4200059}
+                ]}
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load future i18n paging_extras library %}
+
+{% block title %}{% trans "Work list" %}{% endblock %}
+
+{% block content %}
+    <div class='wrapper main-panel'>
+        <div class='grids'>
+            {% paginate work_list from request as results per_page 20 %}
+            <div class='grid-4'>
+                <h1 class='block-title'>{% trans "Work list" %}</h1>
+                <hr class='clear'>
+                {{ results.paging }}
+            </div>
+            {% for work in results.objects %}
+                <div class='grid-1'>
+                    {% include 'library/includes/block_work.html' %}
+                </div>
+            {% endfor %}
+            <div class='grid-4'>
+                {{ results.paging }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block admin_url %}{% url 'admin:library_work_changelist' %}{% endblock %}

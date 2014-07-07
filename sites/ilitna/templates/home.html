@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load future i18n library news %}
+
+{% block title %}{% trans "Home" %}{% endblock %}
+
+{% block content %}
+    <div class='wrapper main-panel'>
+        <div class='grids'>
+            <div class='grid-4'>
+                <h2 class='block-title'>{% trans "Popular authors and their works" %}</h2>
+                <a class='block-link' href='{% url 'library:author_list' %}'>
+                    <span class='list'></span>
+                    {% trans "All authors" %}
+                </a>
+                <hr class='clear'>
+            </div>
+            {% popular_authors 4 %}
+        </div>
+    </div>
+
+    <div class='wrapper clear'>
+        <div class='grids'>
+            <div class='grid-2'>
+                <div class='grids'>
+                    <div class='grid-2'>
+                        <h2 class='block-title'>{% trans "New books" %}</h2>
+                        <a class='block-link' href='{% url 'library:work_list' %}'>
+                            <span class='list'></span>
+                            {% trans "All books" %}
+                        </a>
+                        <hr class='clear'>
+                    </div>
+                    {% popular_works 2 %}
+                </div>
+            </div>
+
+            <div class='grid-2'>
+                <div class='grids'>
+                    <div class='grid-2'>
+                        <h2 class='block-title'>{% trans "Latest news" %}</h2>
+                        <a class='block-link' href='{% url 'news:list' %}'>
+                            <span class='list'></span>
+                            {% trans "All news" %}
+                        </a>
+                        <hr class='clear'>
+                    </div>
+                    {% latest_news 2 %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

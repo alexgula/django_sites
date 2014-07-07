@@ -1,0 +1,32 @@
+{% extends 'content_base.html' %}
+
+{% load statictags %}
+
+{% block content %}
+    {{ block.super }}
+    <div id='banner-main'><div id='banner-main-content'></div></div>
+    <p>
+        Наш интернет&ndash;магазин предлагает Вам автозапчасти ведущих производителей &mdash; TOYOTA, LEXUS, HYUNDAI, KIA.
+        На нашем складе в Киеве постоянно поддерживается в наличии большой ассортимент оригинальных автозапчастей.
+        Если Вам нужны запчасти по системе охлаждения (радиаторы, водяные насосы и др.),
+        а также оптика, автостекла и кузовные детали &mdash; их без проблем можно заказать в нашем интернет&ndash;магазине.
+        Работающие у нас профессионалы помогут Вам правильно подобрать необходимые автозапчасти для вашего автомобиля.
+    </p>
+    <p>
+        Мы с каждым днём расширяем наш сервис и стремимся сделать максимально удобными для клиента условия работы с нами.
+        Наш интернет&ndash;магазин автозапчастей &mdash; одно из наших усилий в направлении сделать поиск,
+        заказ и получение автозапчастей максимально удобным для Вас!
+    </p>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type='text/javascript' src='{% static 'js/swfobject.js' %}' charset='utf-8'></script>
+    <script type="text/javascript">
+        var flashvars = {};
+        var params = {};
+        params.wmode = "transparent";
+        var attributes = {};
+        swfobject.embedSWF("{{ STATIC_URL }}swf/main.swf", "banner-main-content", "750", "215", "9.0.0", false, flashvars, params, attributes);
+    </script>
+{% endblock %}

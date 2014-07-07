@@ -1,0 +1,17 @@
+{% load future %}
+{% load markup %}
+
+<div class='sprites sprites-sidebar_header-png'>
+    <div class='sideheader'>
+        <a class='sideblock-title-link' href='{% url 'news:list' %}'>Новости</a></div>
+</div>
+
+<div class='sidebody'>
+    {% for event in events %}
+        <div class='sideblock-last news-block'>
+            <div class='news-date'>{{ event.post_date|date:'d.m.Y' }}</div>
+            {{ event.text|restructuredtext|truncatewords_html:10 }}
+            <a class='news-link' href='{% url 'news:list' %}#{{ event.pk }}'>Подробнее</a>
+        </div>
+    {% endfor %}
+</div>

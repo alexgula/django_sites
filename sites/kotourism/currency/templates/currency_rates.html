@@ -1,0 +1,14 @@
+{% load i18n %}
+
+{% if current %}
+    {% trans "Currency rate" %}: <div class='current currency' title='{{ current.name }}'>1 {{ current.code }} = {{ current.rate }} UAH</div>
+{% endif %}
+<ul class='currencies'>
+    {% for currency in currencies %}
+        {% comment %}{% if currency.lang == LANGUAGE_CODE %}{% endcomment %}
+            <li class='currency' title='{{ currency.name }}'>
+                1 {{ currency.code }} = {{ currency.rate }} UAH
+            </li>
+        {% comment %}{% endif %}{% endcomment %}
+    {% endfor %}
+</ul>

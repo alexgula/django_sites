@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% load future markup %}
+{% load thumbnail %}
+{% load statictags %}
+
+{% block title %}{{ block.super }} | Список событий {% endblock %}
+
+{% block content %}
+
+    <div class="contents">
+        {% thumbnail book.cover "270" as im %}
+            <img src="{{ im.url }}" alt="{{ im.title }}">
+        {% endthumbnail %}
+        <div id="download-button">
+            <a  href="{{ book.file_pdf.url }}"> <h1> {{ book.author }} - {{ book.title }} </h1><span> Скачать файл </span>
+            </a>
+        </div>
+        <div class='contents-title'>Содержание</div>
+
+        {% comment %}
+        {% for everypart in book.part_set.all %}
+            <a class="level-{{ everypart.level }}" href="{% url 'book_details' book.slug everypart.page_num %}#part-{{ everypart.slug }}">
+                {{ everypart.title }}
+            </a>
+        {% endfor %}
+        {% endcomment %}
+
+        <ul>
+            {% for part in contents %}
+                {% if part.children %}
+                    <li class="level-{{ part.level }}">
+                        <a href="{% url 'book_details' book.slug part.page_num %}#part-{{ part.slug }}">
+                            {{ part.part_title }}
+                        </a>
+                        {% if part.children %}
+                            <ul>
+                                {% for ch_part in part.children %}
+                                    <li class="level-{{ ch_part.level }}">
+                                        <a href="{% url 'book_details' book.slug ch_part.page_num %}#part-{{ ch_part.slug }}">
+                                            {{ ch_part.part_title }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
+                {% else %}
+                    <li class="level-{{ part.level }}-no-children">
+                        <a href="{% url 'book_details' book.slug part.page_num %}#part-{{ part.slug }}">
+                            {{ part.part_title }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="book-pager">
+        <table>
+            <tr>
+                {% if prev_num == None %}
+                    {% if next_num == None %}
+                    {% else %}
+                        <td colspan="2" class="next"><a href="{% url 'book_details' book.slug next_num %}"> {{ next_num }} Следующая страница </a></td>
+                    {% endif %}
+                {% else %}
+                    {% if next_num == None %}
+                        <td colspan="2" class="previous"><a href="{% url 'book_details' book.slug prev_num %}"> Предыдущая страница {{ prev_num }} </a></td>
+                    {% else %}
+                        <td class="previous"><a href="{% url 'book_details' book.slug prev_num %}"> Предыдущая страница {{ prev_num }} </a></td>
+                        <td class="next"><a href="{% url 'book_details' book.slug next_num %}"> {{ next_num }} Следующая страница </a></td>
+                    {% endif %}
+                {% endif %}
+            </tr>
+        </table>
+    </div>
+
+    {% for part in parts %}
+    <div class="book-details">
+        {% if part.level == 1 %}
+            <h2 id="part-{{ part.slug }}"> {{ part.title|upper }} </h2>
+            {{ part.text_html|safe }}
+        {% else %}
+             <h3 id="part-{{ part.slug }}"> {{ part.title|upper }} </h3>
+            {{ part.text_html|safe }}
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <div class="book-pager">
+        <table>
+            <tr>
+                {% if prev_num == None %}
+                    {% if next_num == None %}
+                    {% else %}
+                        <td colspan="2" class="next"><a href="{% url 'book_details' book.slug next_num %}"> {{ next_num }} Следующая страница </a></td>
+                    {% endif %}
+                {% else %}
+                    {% if next_num == None %}
+                        <td colspan="2" class="previous"><a href="{% url 'book_details' book.slug prev_num %}"> Предыдущая страница {{ prev_num }} </a></td>
+                    {% else %}
+                        <td class="previous"><a href="{% url 'book_details' book.slug prev_num %}"> Предыдущая страница {{ prev_num }} </a></td>
+                        <td class="next"><a href="{% url 'book_details' book.slug next_num %}"> {{ next_num }} Следующая страница </a></td>
+                    {% endif %}
+                {% endif %}
+            </tr>
+        </table>
+    </div>
+
+{% endblock %}
+
+{% block element_edit %}
+    <a class="h-link" href="{% url 'admin:books_part_changelist' %}">Редактировать</a>
+{% endblock %}
+
+{% block scripts %}
+
+
+    <script type='text/javascript' src='{% static 'js/jquery.min.js' %}' charset='utf-8'></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var hash = window.location.hash;
+            var path = window.location.pathname;
+
+            $(".level-1 ul").hide();
+            $("a[href='" + path + hash + "']").closest("li.level-1 ul").show();
+            $("a[href='" + path + hash + "']").closest("li.level-2").addClass("active");
+            $("li.level-1>a").click(function(){
+                $(this).closest("li").find("ul").slideToggle("slow");
+                return false;
+            });
+            $("li.level-2").click(function(){
+                $("li.level-2").removeClass("active")
+                $(this).addClass("active");
+                //window.location=$(this).find("a").attr("href");
+                //return false;
+            });
+        });
+    </script>
+{% endblock %}

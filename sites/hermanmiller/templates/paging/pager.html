@@ -1,0 +1,68 @@
+{% load i18n %}
+
+{% if paginator.has_pages %}
+    <div class="paging">
+        {% if paginator.num_pages %}
+            <ul class="paging__list">
+                <li class="paging__item">
+                    {% if paginator.has_previous %}
+                        <a class="paging__prev" href="?{{ query_string|escape }}&amp;p={{ paginator.previous_page }}"><span>{% trans "Previous" %}</span></a>
+                    {% endif %}
+                </li>
+                {% for p in paginator.page_range %}
+                    {% if forloop.first and p > 1 %}
+                        <li class="paging__item paging-first">
+                            {% if not paginator.is_first %}
+                                <a class="paging__link" href="?{{ query_string|escape }}&amp;p=1"><span>1</span></a>
+                            {% endif %}
+                        </li>
+                        {% if p > 2 %}
+                            <li class="paging__item">&hellip;</li>
+                        {% endif %}
+                    {% endif %}
+                    {% if p == paginator.page %}
+                        <li class="paging__item">
+                            <span class="paging__active sprite-bg-paging">{{ p }}</span>
+                        </li>
+                    {% else %}
+                        <li class="paging__item">
+                            <a class="paging__link" href="?{{ query_string|escape }}&amp;p={{ p }}"><span>{{ p }}</span></a>
+                        </li>
+                    {% endif %}
+                    {% if paginator.num_pages and forloop.last and p < paginator.num_pages %}
+                        {% if p|add:"1" < paginator.num_pages %}
+                            <li class="paging__item">&hellip;</li>
+                        {% endif %}
+                        <li class="paging__item paging-last">
+                            {% if not paginator.is_last %}
+                                <a class="paging__link" href="?{{ query_string|escape }}&amp;p={{ paginator.num_pages }}"><span>{{ paginator.num_pages }}</span></a>
+                            {% endif %}
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                <li class="paging__item">
+                    {% if paginator.has_next %}
+                        <a class="paging__next" href="?{{ query_string|escape }}&amp;p={{ paginator.next_page }}"><span>{% trans "Next" %}</span></a>
+                    {% endif %}
+                </li>
+            </ul>
+        {% else %}
+            <ul class="paging-endless">
+                <li class="paging__item">
+                    {% if paginator.has_previous %}
+                        <a class="paging__prev" href="?{{ query_string|escape }}&amp;p={{ paginator.previous_page }}"><span>{% trans "Previous" %}</span></a>
+                    {% else %}
+                        <span>{% trans "Previous" %}</span>
+                    {% endif %}
+                </li>
+                <li class="paging__item">
+                    {% if paginator.has_next %}
+                        <a class="paging__next" href="?{{ query_string|escape }}&amp;p={{ paginator.next_page }}"><span>{% trans "Next" %}</span></a>
+                    {% else %}
+                        <span>{% trans "Next" %}</span>
+                    {% endif %}
+                </li>
+            </ul>
+        {% endif %}
+    </div>
+{% endif %}

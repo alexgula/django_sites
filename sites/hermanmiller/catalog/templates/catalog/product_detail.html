@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+
+{% load future i18n thumbnail %}
+{% load url from future %}
+{% load markup %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+    <h2 class="title">{{ product.title }}</h2>
+    <div class="grid goods">
+        <div class="grid-half-2">
+            <ul class="goods-small-img">
+                {% for image in product.images.all %}
+                    <li class="goods-small-img__item">
+                        {% thumbnail image.image settings.THUMBNAIL_SETTINGS.FULLSCREEN_SIZE upscale=False as im_fullscreen %}
+                            <a href="{{ im_fullscreen.url }}" class="goods-small-img__link colorbox">
+                                {% thumbnail image.image '100' upscale=False as im %}
+                                    <img src="{{ im.url }}" alt="{{ image.caption }}" width='{{ im.width }}' height='{{ im.height }}' />
+                                {% endthumbnail %}
+                            </a>
+                        {% endthumbnail %}
+                    </li>
+                {% endfor %}
+            </ul>
+            <ul class="goods-big-img">
+                <li class="goods-big-img__item">
+                    {% thumbnail product.logo '400x500' upscale=False as im %}
+                        <div class="goods-big-img__img">
+                            {% if  im.width < 500 and im.height < 400 %}
+                                <img src="{{ im.url }}" style="margin:{{ im|margin:"400x500" }}" alt="{% trans "Image for product" %}  {{ product.title }}" width='{{ im.width }}' height='{{ im.height }}' data-zoom-image="{{ product.logo.url }}" />
+                            {% else %}
+                                <img id="zoom" src="{{ im.url }}" style="margin:{{ im|margin:"400x500" }}" alt="{% trans "Image for product" %}  {{ product.title }}" width='{{ im.width }}' height='{{ im.height }}' data-zoom-image="{{ product.logo.url }}" />
+                            {% endif %}
+                        </div>
+                    {% endthumbnail %}
+                    <a href="#" class="configurator-link">Перейти в конфигуратор</a>
+                </li>
+            </ul>
+        </div>
+        <div class="grid-half-2 goods__info">
+            <div class="grid-half-2">
+                <div class="goods__social-links-holder">
+                {% comment %}
+                    <div class="goods__social-links">
+                        {% include "includes/addthis.html" %}
+                    </div>
+                    <span>КУПИТЬ БЫСТРО</span>
+                    <a href="#" class="logo-liqpay">liqpay$com</a>
+                {% endcomment %}
+                </div>
+                <div class="goods__section goods__price">
+                    <span class="catalog-list__price-1">{{ object.price_uah|floatformat:2 }}<span class="goods-currency"> грн.</span></span>
+                    <span class="catalog-list__price-2">{{ object.price_eur|floatformat:2 }}<span class="goods-currency"> EUR</span></span>
+                </div>
+                <div class="goods__section">
+                    <input class="js-product-number goods__count-number" data-bind="spinner: cartCurrentItem.quantity, spinnerOptions: { min: 1 }">
+                </div>
+                <div class="goods__section">
+                    <button class="js-product-buy btn-buy" data-bind="click: function() { cartAdd(); cartShow(); }">{% trans "Buy" %}</button>
+                </div>
+                <div class="goods__section goods__warranty-txt">
+                    <span>Официальная гарантия - 12 лет</span>
+                </div>
+            </div>
+            <div class="grid-half-2">
+                <div class="goods__characteristic-box">
+                    <div class="goods__characteristic-box-holder">
+                        <p class="goods__characteristic-txt">ОСНОВНЫЕ ХАРАКТЕРИСТИКИ:</p>
+                        <dl class="goods__characteristic">
+                            {% for name, value in object.properties_main %}
+                                <dt class="goods__characteristic-label-1">{{ name }}:</dt>
+                                <dd class="goods__characteristic-label-2">{{ value }}</dd>
+                            {% endfor %}
+                        </dl>
+                    </div>
+                </div>
+                <p class="goods__characteristic-txt">ПОСЛЕДНИЙ ОТЗЫВ:</p>
+                {% with review=object.reviews.active|first %}
+                    <div class="review">
+                        <div class="review__author-ico sprite-ico-review-author"></div>
+                        <div class="review__text-holder">
+                            <p class="review__author">{{ review.author }}</p>
+                            <p class="review__date">{{ review.created_on|date:"Y-m-d" }}</p>
+                            <p class="review__txt">{{ review.text }}</p>
+                        </div>
+                    </div>
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+    <div class="grid js-tabs product-info">
+        <ul>
+            <li class="tabs__item"><a href="#tab-product-properties" class="tabs__link">ХАРАКТЕРИСТИКИ</a></li>
+            <li class="tabs__item"><a href="#tab-product-description" class="tabs__link">ОПИСАНИЕ</a></li>
+            <li class="tabs__item"><a href="#tab-product-reviews" class="tabs__link">ОТЗЫВЫ</a></li>
+            <li class="tabs__item"><a href="#tab-product-video" class="tabs__link">ВИДЕО</a></li>
+        </ul>
+
+        <div id="tab-product-properties">
+            <dl class="product-properties">
+                {% for name, value in object.properties_other %}
+                    <dt class="product-properties-label-1">{{ name }}:</dt>
+                    <dd class="product-properties-label-2">{{ value }}</dd>
+                {% endfor %}
+            </dl>
+        </div>
+        <div id="tab-product-description">
+            {{ object.desc|restructuredtext }}
+        </div>
+        <div id="tab-product-reviews">
+            <ul class="review-list">
+                {% for review in object.reviews.active|slice:":10" %}
+                    <li class="review-list__item">
+                        <div class="review">
+                            <div class="review__author-ico sprite-ico-review-author"></div>
+                            <div class="review__text-holder">
+                                <p class="review__author">{{ review.author }}</p>
+                                <p class="review__date">{{ review.created_on|date:"Y-m-d" }}</p>
+                                <p class="review__txt">{{ review.text }}</p>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div id="review-form-container" class="review-form goods__characteristic-box">
+                <div class="goods__characteristic-box-holder">
+                    <p class="goods__characteristic-txt">ДОБАВИТЬ ОТЗЫВ:</p>
+                    <fieldset>
+                        <div class="review-form__row">
+                            <label for="review-author" class="review-form__label">{% trans "Name" %}:</label>
+                            <div class="review-form__text-field">
+                                <input type="text" id="review-author" class="review-form__txt" value="{{ review_author }}" />
+                            </div>
+                        </div>
+                        <div class="review-form__row">
+                            <label for="review-email" class="review-form__label">{% trans "Email" %}:</label>
+                            <div class="review-form__text-field">
+                                <input type="email" id="review-email" class="review-form__txt" value="{{ review_email }}" />
+                            </div>
+                        </div>
+                        <div class="review-form__row">
+                            <label for="review-text" class="review-form__label">{% trans "Feedback" %}:</label>
+                            <div class="review-form__text-field-textarea">
+                                <textarea id="review-text" class="review-form__textarea" style="resize:none;" cols="1" rows="1"></textarea>
+                            </div>
+                        </div>
+                        <div class="review-form__btn">
+                            <input id="review-send" type="submit" class="btn-send" value="{% trans "Post Feedback" %}" />
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+        <div id="tab-product-video"></div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        window.cart_product = {
+            id: {{ product.id }},
+            url: "{{ product.get_absolute_url }}",
+            name: "{{ product.title }}",
+            price_eur: parseFloat({{ product.price_eur }}),
+            price_uah: parseFloat({{ product.price_uah }}),
+            quantity: 1
+        };
+    </script>
+    {{ block.super }}
+    <script>
+        $(document).ready(function() {
+            $('.js-product-number').spinner({
+                min: 0
+            });
+
+            $('.js-product-buy').button({
+                icons: {
+                    primary: "ui-icon-cart"
+                }
+            });
+
+            $('#review-send').button().click(function() {
+                var author = $("#review-author");
+                var email = $("#review-email");
+                var text = $("#review-text");
+                $.post("{% url 'product_review' object.category.slug object.slug %}", {
+                    author: author.val(),
+                    email: email.val(),
+                    text: text.val()
+                }, function () {
+                    $("#review-form-container").fadeOut(function (){
+                        $(this)
+                            .html("<div class='review-form-thanks'>{% trans "Thank you for review. It will appear shortly after verifying by our staff." %}</div>")
+                            .fadeIn();
+                    });
+                });
+            });
+        });
+    </script>
+    <script>
+        $("#zoom").elevateZoom({tint:true, tintColour:'#fff', tintOpacity:0.5, zoomWindowWidth:500, zoomWindowHeight:500, borderColour: "#D21A08", lensBorderColour: "#929292", cursor:"move"});
+    </script>
+{% endblock %}

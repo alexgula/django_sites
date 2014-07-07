@@ -1,0 +1,12 @@
+{% load i18n %}{% load static from staticfiles %}
+<div style="width: 760px;">
+    <img src="http://{{ site.domain }}{% static 'img/header-for-email-760.jpg' %}" width="760" height="100">
+</div>
+
+<h2 style="width: 740px; padding: 10px; color:#d21907; border-top: 2px solid #d21907; border-bottom: 2px solid #d21907; font: 22px/24px 'microsoft_sans_serifregular', Arial, sans-serif;">{% trans "Your Review for product" %} {{ object.product }}:</h2>
+
+<p style="width: 740px; padding: 10px; margin: 0; color: #929292; font: 14px/17px 'microsoft_sans_serifregular', Arial, sans-serif;">{{ object.text }}</p>
+
+<h4 style="width: 740px; padding: 10px; font-weight: normal; font: 14px/17px 'microsoft_sans_serifregular', Arial, sans-serif;">{% trans "Your review is accepted. Our administrators will review it and make available on the site soon." %}</h4>
+
+<h4 style="width: 740px; padding: 10px; margin: 10px 0; border-top: 1px solid #929292; font-weight: normal; font: 14px/17px 'microsoft_sans_serifregular', Arial, sans-serif;">{% trans "Best regards" %}, <a style="color: #d21907;" href="http://{{ site.domain }}">hermanmiller</a></h4>

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load future i18n markup thumbnail %}
+
+{% block title %}
+    {{ news.title }}
+{% endblock %}
+
+{% block breadcrumbs %}
+{% endblock %}
+
+{% block content %}
+    <div class='wrapper main-panel'>
+        <div class='grids'>
+            <div class='grid-4'>
+                <h1 class='block-title'>{{ news.title }}</h1>
+                <a class='block-link' href='{% url 'news:list' %}'>
+                    <span class='list'></span>
+                    {% trans "All news" %}
+                </a>
+                <hr class='clear'>
+
+                <div class='border'>
+                    <div class='border-body'>
+                        {% thumbnail news.image '310x310' crop='center' as thumb %}
+                            <a rel='colorbox' href='{{ thumb.url }}' title='{{ news.title }}'>
+                                <img src='{{ thumb.url }}' width='{{ thumb.width }}' height='{{ thumb.height }}'/>
+                            </a>
+                        {% endthumbnail %}
+                    </div>
+                </div>
+                {{ news.text|restructuredtext }}
+
+                {% for content in news.content.main %}
+                    <div class='page-content'>
+                        {{ content.render }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block admin_url %}{% url 'admin:news_news_change' news.id %}{% endblock %}

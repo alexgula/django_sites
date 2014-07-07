@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% load future %}
+{% load markup %}
+{% load paging_extras %}
+
+{% block title %}Регистрация завершена{% endblock %}
+
+{% block content %}
+    <h1>Регистрация завершена</h1>
+    <p>Здравствуйте!</p>
+    <p>После того, как администратор подтвердит активирует вашу учётную запись, вы сможете
+        <a href='{% url 'account:login' %}'>войти на сайт</a>, используя свой логин и пароль.</p>
+{% endblock %}

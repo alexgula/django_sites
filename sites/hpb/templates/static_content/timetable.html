@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% load thumbnail %}
+
+{% block content %}
+    <div class="block-for-object-in-family-member-list">
+        <h1>Регламент работы</h1>
+    </div>
+    <div class="member-pictures">
+            <img src="{{ STATIC_URL }}images/museum-fasad-little.jpg" alt="Музейный центр Е. П. Блаватской и ее семьи">
+        <p>Музейный центр Е. П. Блаватской и ее семьи</p>
+    </div>
+    <div class="member-inform">
+        <h2>Режим работы:</h2>
+        <div class="member-text">
+            <table style="margin-left: 100px">
+                <tr style="background: #f2edff">
+                    <td colspan="2" class="h-datetime">
+                        <div style="width: 500px" class="h-data">Зима (с 15 октября по 01 мая)</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="h-datetime">
+                        <div class="h-time">
+                            <p>15 Октября -</p>
+                            <p>1 Мая</p>
+                        </div>
+                    </td>
+                    <td class="h-main-text">
+                        Экскурсионные дни по понедельникам и четвергам отменяются. Заявки на экскурсии по предварительной договоренности принимаются <br> по тел. (056) 374 - 39 - 52.
+                    </td>
+                </tr>
+                <tr >
+                    <td style="border: none" colspan="2">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr style="background: #f2edff">
+                    <td colspan="2" class="h-datetime">
+                        <div class="h-data">Лето (с 01 мая по 15 октября)</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="h-datetime">
+                        <div class="h-time">
+                            <p>ПОНЕДЕЛЬНИК</p>
+                            <p>13:00-17:00</p>
+                        </div>
+                    </td>
+                    <td class="h-main-text">
+                        Проводятся экскурсии. Работает библиотека.
+                    </td>
+                </tr>
+                <tr>
+                    <td class="h-datetime">
+                        <div class="h-time">
+                            <p>ЧЕТВЕРГ</p>
+                            <p>10:00-14:00</p>
+                        </div>
+                    </td>
+                    <td class="h-main-text">
+                        Проводятся экскурсии. Работает библиотека.
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <h2>По вопросам обращайтесь:</h2>
+        <div class="member-text">
+            <table style="margin-left: 100px">
+                <tr style="background: #f2edff">
+                    <td colspan="2" class="h-datetime">
+                        <div  style="width: 500px" class="h-data">Контактная информация</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="h-datetime">
+                        <div class="h-time">Тел.</div>
+                    </td>
+                    <td class="h-main-text">
+                        (056) 374-39-52
+                    </td>
+                </tr>
+                <tr>
+                    <td class="h-datetime">
+                        <div class="h-time">Адрес:</div>
+                    </td>
+                    <td class="h-main-text">
+                        г. Днепропетровск, ул. Ленинградская, 11
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <h2>График проведения круглых столов на летний период 2012 года:</h2>
+        <div class="member-text">
+            <p style="font-weight: bold">21 мая, 16:00</p>
+            <p>Тема 1. Индия.</p>
+            <p>Путешествие через века. (по книге  Е.П.Блаватской «Из пещер и дебрей Индостана»)</p>
+            <p style="font-weight: bold">04 июня, 16:00</p>
+            <p>Тема 2. Эволюция человечества в трудах Елены Петровны Блаватской.</p>
+            <p style="font-weight: bold">18 июня, 16:00</p>
+            <p>Тема 3. Пралайя современной науки.</p>
+            <p style="font-weight: bold">02 июля, 16:00</p>
+            <p>Тема 4. Человек – магнит природы. (по статье Е.П.Блаватской из сборника «Терра Инкогнита»)</p>
+            <p style="font-weight: bold">16 июля, 16:00</p>
+            <p>Тема 5. Мораль и ее источник в свете доктрин мудрости.</p>
+            <p style="font-weight: bold">30 июля, 16:00</p>
+            <p>Тема 6. Учение Калачакры.</p>
+        </div>
+    </div>
+
+{% endblock %}

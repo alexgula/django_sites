@@ -1,0 +1,13 @@
+{% if languages_count > 1 %}
+    <ul class='culture-list'>
+        {% for lang, url, current in languages %}
+            <li>
+                {% if current %}
+                    <div class='culture-item {{ lang.code }} culture-current' title="{{ lang.name_local }}"></div>
+                {% else %}
+                    <a class='culture-item {{ lang.code }}' href='{{ url }}' title="{{ lang.name_local }}"></a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% load i18n markup %}
+{% load thumbnail %}
+
+{% block title %}{{ gallerypage.title }}{% endblock %}
+
+{% block content %}
+    <h1>{{ gallerypage.title }}</h1>
+    {% thumbnail gallerypage.image '1200' upscale=False as image %}
+    {% thumbnail gallerypage.image '310x310' crop='center' as thumb %}
+        <a class='image-left' rel='colorbox' href='{{ image.url }}' title='{{ gallerypage.title }}'>
+            <img src='{{ thumb.url }}' width='{{ thumb.width }}' height='{{ thumb.height }}' alt='{{ gallerypage.title }}'/>
+        </a>
+    {% endthumbnail %}
+    {% endthumbnail %}
+    {{ gallerypage.text|restructuredtext }}
+
+    {% for content in gallerypage.content.main %}
+        <div class='gallerypage-content {% cycle 'first' 'second' 'last' %}'>
+            {{ content.render_condensed }}
+        </div>
+    {% endfor %}
+
+    <hr class='child-delim'>
+
+    {% for child in gallerypage.get_children %}
+        <a href='{{ child.get_absolute_url }}' class='block-link'>
+            <div class='container'>
+                {% thumbnail child.image '150x150' crop='center' as thumb %}
+                    <img class='image-left' src='{{ thumb.url }}' width='{{ thumb.width }}' height='{{ thumb.height }}'/>
+                {% endthumbnail %}
+                <h3 class='child-title'>{{ child.title }}</h3>
+                {{ child.text|restructuredtext|truncatewords_html:50 }}
+            </div>
+        </a>
+    {% endfor %}
+{% endblock %}

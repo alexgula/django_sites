@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% load future i18n thumbnail %}
+{% load url from future %}
+{% load markup %}
+
+{% block title %}
+    {{ object.title }}
+{% endblock %}
+
+{% block logo %}
+    {% thumbnail object.logo THUMBNAIL_SETTINGS.ICON_SIZE crop='center' as im %}
+        <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+    {% endthumbnail %}
+{% endblock %}
+
+{% block content %}
+    {{ block.super }}
+    <h1>{{ object.title }}</h1>
+    <div class='photo-slider'>
+        <div class='fotorama' data-width="570" data-height="430" data-nav="thumbs" data-allowfullscreen="true" data-transition="crossfade" data-loop="true" data-fit="scaledown">
+            {% for image in object.images.all %}
+                {% thumbnail image.image '570' upscale=False as im %}
+                    <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}' style='margin:{{ im|margin:"570x430" }}' data-full='{{ image.image.url }}' data-caption='{{ image.caption }}'/>
+                {% endthumbnail %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="news_date">
+        {{ news.created_on|date:"d.m.Y" }}
+    </div>
+
+    <div class='content_render'>
+        {{ object.desc|restructuredtext }}
+    </div>
+
+    <div><a href="{% url 'news_list' %}">&larr; {% trans "Back to News List" %}</a></div>
+{% endblock %}

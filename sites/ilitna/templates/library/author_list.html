@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load future i18n paging_extras library %}
+
+{% block title %}{% trans "Author list" %}{% endblock %}
+
+{% block content %}
+    <div class='wrapper main-panel'>
+        <div class='grids'>
+            <div class='grid-4'>
+                <h1 class='block-title'>{% trans "Author list" %}</h1>
+                <hr class='clear'>
+            </div>
+            {% paginate author_list from request as results per_page 10 %}
+            {% for author in results.objects %}
+                <div class='grid-1'>
+                    {% include 'library/includes/block_author.html' %}
+                </div>
+            {% endfor %}
+            {{ results.paging }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block admin_url %}{% url 'admin:library_author_changelist' %}{% endblock %}

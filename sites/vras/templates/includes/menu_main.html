@@ -1,0 +1,14 @@
+{% load future %}
+{% load i18n %}
+{% load mptt_tags %}
+{% load navtags %}
+{% load url from future %}
+
+<ul class='menu-tree'>
+    <li class='menu-item'><a class='menu-link' href="{% url 'home' %}">{% trans "About Us" %}</a></li>
+    <li class='menu-item'><a class='menu-link' href="{% url 'static_page' 'management' %}">{% trans "Management" %}</a></li>
+    <li class='menu-item'><a class='menu-link' href="{% url 'category_detail' 'potato' %}">{% trans "Production" %}</a></li>
+    <li class='menu-item'><a class='menu-link' href="{% url 'news_list' %}">{% trans "News" %}</a></li>
+    <li class='menu-item'><a class='menu-link' href="{% url 'static_page' 'career' %}">{% trans "Career" %}</a></li>
+    <li class='menu-item'><a class='menu-link' href="{% url 'feedback:show' %}">{% trans "Contacts" %}</a></li>
+</ul>

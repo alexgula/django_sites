@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% load future i18n thumbnail paging_extras %}
+{% load url from future %}
+{% load product liqpaytags %}
+
+{% block title %}
+    {% trans "Orders" %}
+{% endblock %}
+
+{% block content %}
+    <div class="grid">
+        <div class="grid-3">
+            <h2 class="title">{% trans "Orders" %}</h2>
+            <div class="order">
+                <h3 class="order-title">
+                    <span class="order-title__number">{% trans "Order Number" %}: {{ object.id }}</span>
+                    <span class="order-title__date">{{ object.date }}</span>
+                    <span class="order-title__total-sum">
+                        {% trans "Total" %}
+                        <span class="order-title__total-eur">{{ object.sum_eur|floatformat:2 }} EUR</span>
+                        <span>{{ object.sum_uah|floatformat:2 }}</span><span class="goods-currency"> грн.</span>
+                    </span>
+                    {% if object.get_status_display == "Created"%}
+                        <span class="order-title__status status-created">{{ object.get_status_display }}</span>
+                    {% elif object.get_status_display == "In progress" %}
+                        <span class="order-title__status status-in-progress">{{ object.get_status_display }}</span>
+                    {% elif object.get_status_display == "Ready" %}
+                        <span class="order-title__status status-ready">{{ object.get_status_display }}</span>
+                    {% elif object.get_status_display == "Delivered" %}
+                        <span class="order-title__status status-delivered">{{ object.get_status_display }}</span>
+                    {% elif object.get_status_display == "Cancelled" %}
+                        <span class="order-title__status status-cancelled">{{ object.get_status_display }}</span>
+                    {% else %}
+                        <span>{{ object.get_status_display }}</span>
+                    {% endif %}
+                </h3>
+                <div class="order-text">
+                    {% if object.payment_type == 2 %}
+                        {% if object.status == 0 %}
+                            <div class="cart__inner__box">
+                                <a href="{% url 'shop_order_invoice' order.pk %}" target="_blank">{% trans "Open invoice" %}</a>
+                            </div>
+                        {% else %}
+                            {% trans "Your order payment was confirmed. Please wait for order processing." %}
+                        {% endif %}
+                    {% endif %}
+                    {% if object.payment_type == 3 %}
+                        {% if object.status == 0 %}
+                            <div class="cart__inner__box">
+                                {% liqpay_form request object %}
+                            </div>
+                        {% else %}
+                            {% trans "Your order payment was confirmed. Please wait for order processing." %}
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class="order-detail">
+                    <table class="order-items-list">
+                        <tr class="order-items-header">
+                            <th class="order-items-header__column">{% trans "Product" %}</th>
+                            <th class="order-items-header__column">{% trans "Price (EUR)" %}</th>
+                            <th class="order-items-header__column">{% trans "Price (UAH)" %}</th>
+                            <th class="order-items-header__column">{% trans "Quantity" %}</th>
+                            <th class="order-items-header__column">{% trans "Sum (UAH)" %}</th>
+                        </tr>
+                        {% for item in object.items.all %}
+                            <tr class="order-item">
+                                <td class="order-item__column">{{ item.title }}</td>
+                                <td class="order-item__column">{{ item.price_eur|floatformat:2 }}</td>
+                                <td class="order-item__column">{{ item.price_uah|floatformat:2 }}</td>
+                                <td class="order-item__column">{{ item.quantity }}</td>
+                                <td class="order-item__column">{{ item.sum|floatformat:2 }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="grid-1 special-list-box">
+            <span class="special__ttl">{% trans "Special offer" %}</span>
+            {% products_special 2 %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function() {
+        });
+    </script>
+{% endblock %}

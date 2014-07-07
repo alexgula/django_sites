@@ -1,0 +1,7 @@
+<ul class='marquee'>
+    {% for announce in announces %}
+        <li>
+            <a href='{{ announce.get_absolute_url }}'>{{ announce }}</a>
+        </li>
+    {% endfor %}
+</ul>

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% load future %}
+{% load markup %}
+{% load paging_extras %}
+
+{% block title %}Ошибка регистрации{% endblock %}
+
+{% block content %}
+    <h1>Ошибка регистрации</h1>
+
+    <p>При подтверждении регистрации возникла ошибка! Обратитесь к администрации сайта.</p>
+    <p>Ошибка: {{ params.error }}</p>
+{% endblock %}

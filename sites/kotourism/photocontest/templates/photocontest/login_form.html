@@ -1,0 +1,16 @@
+{% extends 'base_sidebar.html' %}
+
+{% load future %}
+{% load i18n markup %}
+{% load paging_extras %}
+
+{% block title %}{% trans "Photo contest author login" %}{% endblock %}
+
+{% block content %}
+    <h3>{% trans "Photo contest author login" %}</h3>
+
+    <form class='double shift-single page-form' action='{% url 'photocontest_login' %}' method='POST'>{% csrf_token %}
+        {{ form }}
+        <div class=''><input type='submit' value='{% trans "Login" %}'/></div>
+    </form>
+{% endblock %}

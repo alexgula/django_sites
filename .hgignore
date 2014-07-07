@@ -1,0 +1,26 @@
+syntax: glob
+
+# Python
+*.pyc
+*.prof
+
+# PyCharm
+.idea
+
+# Visual Studio
+*.suo
+
+# Working data & output
+wwwroot/static
+wwwroot/media/cache
+wwwroot/media/*/*/dzi
+wwwroot/media/*/*/thumbnail*
+wwwroot/media/video
+sites/*/coverage
+sites/*/mailbox
+sites/*/index
+sites/*/tmp
+sites/*/dev
+conf/etc
+*.lock
+*.pkl

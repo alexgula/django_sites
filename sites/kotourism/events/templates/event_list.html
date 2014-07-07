@@ -1,0 +1,46 @@
+{% extends 'base_sidebar.html' %}
+
+{% load future %}
+{% load i18n markup %}
+{% load paging_extras thumbnail %}
+{% load statictags %}
+
+{% block title %}
+    {{ type }}{% if post_date %} - {{ post_date }}{% endif %}
+{% endblock %}
+
+{% block links %}
+    {{ block.super }}
+    <link href='{% url 'feed_events' slug %}' rel="alternate" type="application/atom+xml" title="{% trans "Subscribe" %}" />
+{% endblock %}
+
+{% block content %}
+    {% paginate events from request as results per_page 10 %}
+    <h3>{{ type }}{% if post_date %} - {{ post_date }}{% endif %}
+        <div class='head-addition'>
+            <a class='icon rss' href='{% url 'feed_events' slug %}' title="{% trans "Subscribe" %}">
+                <div class='sprite-icon_feed-png icon'></div>
+            </a>
+        </div>
+    </h3>
+    {% for event in results.objects %}
+        <div class='event paragraph'>
+            <div class='icon single image-icon'>
+                {% thumbnail event.icon THUMBNAIL_SETTINGS.FULLSCREEN_SIZE upscale=False as im_big %}
+                    {% thumbnail event.icon THUMBNAIL_SETTINGS.ICON_SIZE upscale=False as im %}
+                        <div class='image-content' style='width: {{ im.width }}px; height: {{ im.height }}px'>
+                            <a class='colorbox' rel='events-list' href='{{ im_big.url }}'>
+                                <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+                            </a>
+                        </div>
+                    {% endthumbnail %}
+                {% endthumbnail %}
+            </div>
+            <div class='head triple'>
+                <h4 class='name'><a href='{{ event.get_absolute_url }}'>{{ event.name }}</a></h4>
+            </div>
+            <div class='body double'>{{ event.desc|restructuredtext }}</div>
+        </div>
+    {% endfor %}
+    <div class='double shift-single'>{{ results.paging }}</div>
+{% endblock %}

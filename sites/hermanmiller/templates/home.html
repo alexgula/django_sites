@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load i18n staticfiles %}
+{% load url from future %}
+{% load product news slides top_categories%}
+
+{% block title %}
+    {% trans "Home" %}
+{% endblock %}
+
+{% block breadcrumbs %}
+{% endblock %}
+
+{% block description %}
+    {% trans "Home" %}
+{% endblock %}
+
+{% block keywords %}
+{% endblock %}
+
+{% block content %}
+    {% top_categories 4%}
+
+    <div class="grid slideshow-special">
+        <div class="grid-3">
+            <div class="slideshow">
+                {% slideshow %}
+            </div>
+            <div class="slideshow__btns">
+                <div class="slideshow__btns-holder">
+                    <span  class="slideshow__btn-prev"><a href="#" class="sprite-bg-slideshow-prev-next-btn">prev</a></span>
+                    <div class="slideshow__pager"></div>
+                    <span class="slideshow__btn-next"><a href="#" class="next-btn">next</a></span>
+                </div>
+            </div>
+        </div>
+        <div class="grid-1 special">
+            <span class="special__ttl">{% trans "Special offer" %}</span>
+            {% products_special 1 %}
+        </div>
+    </div>
+
+    <div class="grid">
+        {% news_latest 2 %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $("div.holder").jPages({
+            containerID : "itemContainer",
+            perPage: 3
+        });
+    </script>
+{% endblock %}

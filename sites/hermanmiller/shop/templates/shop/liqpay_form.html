@@ -1,0 +1,13 @@
+<form method="POST" action="https://www.liqpay.com/api/pay" accept-charset="utf-8">
+    <input type="hidden" name="public_key" value="{{ data.public_key }}" />
+    <input type="hidden" name="amount" value="{{ data.amount }}" />
+    <input type="hidden" name="currency" value="{{ data.currency }}" />
+    <input type="hidden" name="description" value="{{ data.description }}" />
+    <input type="hidden" name="order_id" value="{{ data.order_id }}" />
+    <input type="hidden" name="result_url" value="{{ data.result_url }}" />
+    <input type="hidden" name="server_url" value="{{ data.server_url }}" />
+    <input type="hidden" name="type" value="{{ data.type }}" />
+    <input type="hidden" name="signature" value="{{ data.signature }}" />
+    <input type="hidden" name="language" value="{{ lang }}" />
+    <input type="image" src="//static.liqpay.com/buttons/p1{{ lang }}.radius.png" name="btn_text" />
+</form>

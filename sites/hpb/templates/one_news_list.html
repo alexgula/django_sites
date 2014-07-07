@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% load future %}
+{% load thumbnail paging_extras %}
+
+{% block title %}{{ block.super }} | Новости {% endblock %}
+
+{% block content %}
+    <div class="block-for-object-in-family-member-list">
+        <h1> Новости</h1>
+    </div>
+    {% paginate object_list from request as results per_page 5 %}
+    {% for object in results.objects %}
+    <div class="block-for-object-in-family-member-list">
+        <div class="left-column">
+            {% thumbnail object.main_picture "270" as im %}
+                <a href="{{ object.get_absolute_url }}" ><img src="{{ im.url }}" alt="{{ im.title_for_main_picture }}"></a>
+            {% endthumbnail %}
+            <a href="{{ object.get_absolute_url }}"><p>{{ object.title_for_main_picture }}</p></a>
+        </div>
+        <div>
+            <h2><a href="{{ object.get_absolute_url }}" >{{ object.title }}</a></h2>
+            <p>{{ object.published_date }}</p>
+            <h3>{{ object.preview }}</h3>
+        </div>
+    </div>
+    <div class="divider"></div>
+    {% endfor %}
+    <div class="pager-line">{{ results.paging }}</div>
+{% endblock %}
+
+
+{% block element_edit %}
+    <a class="h-link" href="{% url 'admin:news_onenew_changelist' %}">Редактировать</a>
+{% endblock %}
+

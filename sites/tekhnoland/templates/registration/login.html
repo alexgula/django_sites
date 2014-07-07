@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% load future %}
+{% load markup %}
+{% load paging_extras %}
+
+{% block title %}Авторизация{% endblock %}
+
+{% block sidebar-user %}
+{% endblock %}
+
+{% block content %}
+    <h1>Авторизация</h1>
+
+    {% if form.errors %}
+        <p class='important'>Логин и пароль не подходят, попробуйте ещё раз.</p>
+    {% endif %}
+
+    <form id='form-login' action='{% url 'account:login' %}' method='POST'>{% csrf_token %}
+        <label for='login_name'>Логин</label>
+        <div class='sprites sprites-sidebar_input-png'>
+            <div class="login-input-wrapper">
+                <input id='login_name' class='login-input' type='text' name='username' maxlength='30'/>
+            </div>
+        </div>
+        <label for='login_password'>Пароль</label>
+        <div class='sprites sprites-sidebar_input-png'>
+            <div class="login-input-wrapper">
+                <input id='login_password' class='login-input' type='password' name='password' />
+            </div>
+        </div>
+        <div id='login-submit-container' class='sprites sprites-button_login-png'>
+            <input id='login-submit' type='submit' value='' />
+        </div>
+        <div id='login-links-container'>
+            <a href='{% url 'home' %}'>Забыли пароль?</a>
+            <a href='{% url 'home' %}'>Регистрация</a>
+        </div>
+        <input type='hidden' name='next' value='{{ next }}'>
+    </form>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% load i18n localeurl_tags contenttags mediatags future %}{% load static from staticfiles %}<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='{{ LANGUAGE_CODE }}' lang='{{ LANGUAGE_CODE }}'>
+<head>
+    <title>{% trans "Temple of Saint Nikolai" %} | {% block title %}{% endblock %}</title>
+
+    <link rel='shortcut icon' href='/favicon.ico' type='image/vnd.microsoft.icon'>
+
+    {% block styles %}
+        <link rel='stylesheet' href='{% static 'css/style.css' %}' type='text/css' media='all' charset='utf-8' />
+        <link rel='stylesheet' href='{% static 'css/sprites.css' %}' type='text/css' media='all' charset='utf-8' />
+    {% endblock %}
+</head>
+<body>
+    <div id='wrapper'>
+        <div id='top_line'></div>
+        <div id='top_bg'>
+            <div id='header'>
+                <a class="inscription" href="{% url 'home' %}">
+                    <img src="{% static 'images/inscription_{}.png'|format:LANGUAGE_CODE %}" alt="" title="">
+                </a>
+                <div id='top_menu'>
+                    {% include 'includes/menu_main.html' %}
+                    {% include 'includes/languages_switch.html' %}
+                </div>
+            </div>
+            <div id='top'>
+                {% include 'includes/top.html' %}
+            </div>
+            <div id='main'>
+                <div id='left_sidebar'>
+                    <div id='left_menu'>
+                        {% include 'includes/menu_pages.html' %}
+                    </div>
+                    <div id='news'>
+                        {% latest_news 3 %}
+                    </div>
+                    <div id='add_this'>
+                        {% include 'includes/add_this.html' %}
+                    </div>
+                </div>
+                <div id='content_wrapper'>
+                     <div id='content'>
+                        {% block content %}{% endblock %}
+                     </div>
+                </div>
+            </div>
+        </div>
+        <div class='clear'></div>
+        <div class='empty'></div>
+    </div>
+    <div id='footer_wrapper'>
+        <div id='bottom_line'></div>
+        <div id='bottom_bg'>
+            <div id='footer'>
+                {% include 'includes/footer.html' %}
+            </div>
+        </div>
+    </div>
+</body>
+
+{% block scripts %}
+    <script type='text/javascript' src='{% static 'js/jquery.min.js' %}' charset='utf-8'></script>
+    <script type='text/javascript' src='{% static 'js/jquery.colorbox-min.js' %}' charset='utf-8'></script>
+    <script type='text/javascript' src='{% static 'js/custom.js' %}' charset='utf-8'></script>
+{% endblock %}
+
+{% if not debug %}
+    {% include 'includes/counters.html' %}
+{% endif %}
+
+</html>

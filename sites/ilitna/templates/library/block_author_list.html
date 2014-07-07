@@ -1,0 +1,6 @@
+{% load thumbnail %}
+{% for author in author_list %}
+    <div class='grid-1'>
+        {% include 'library/includes/block_author.html' %}
+    </div>
+{% endfor %}

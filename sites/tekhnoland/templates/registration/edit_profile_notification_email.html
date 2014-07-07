@@ -1,0 +1,17 @@
+{% load statictags %}<p>На сайте были изменены настройки пользователя {{ obj.user.first_name }} {{ obj.father_name }} {{ obj.user.last_name }}.</p>
+
+<p>Логин: {{ obj.user.username }}<br/>
+    Логин 1C: {{ obj.username1c }}<br/>
+    Фамилия: {{ obj.user.last_name }}<br/>
+    Имя: {{ obj.user.first_name }}<br/>
+    Отчество: {{ obj.father_name }}<br/>
+    Email: {{ obj.user.email }}<br/>
+    Телефон: {{ obj.phone }}<br/>
+    Город: {{ obj.city }}<br/>
+    Адрес: {{ obj.address }}<br/>
+    Адрес доставки: {{ obj.delivery }}<br/>
+    Тип цены: {{ obj.price_type }}<br/>
+{% if obj.discount %}    Скидка: {{ obj.discount }}<br/>
+{% endif %}
+<p>Для проверки пользователя в админке, пожалуйста, перейдите по ссылке:
+    <a href="http://{{ site.domain }}{% admin_url obj.user %}">http://{{ site.domain }}{% admin_url obj.user %}</a></p>

@@ -1,0 +1,22 @@
+{% load thumbnail markup %}
+<div class='image-content'>
+    <div style='width: 270px'>
+        <a class='colorbox' rel='content' href='{{ image.url }}' title='{{ caption }}'>
+            <img src='{{ thumb.url }}' width='{{ thumb.width }}' height='{{ thumb.height }}' style='margin:{{ im|margin:"270" }}'/>
+        </a>
+    </div>
+    {% if url %}
+        {% if caption %}
+            <a class='img_caption' href='{{ url }}' title='{{ caption }}'>{{ caption }}</a>
+        {% else %}
+            <a class='img_caption' href='{{ url }}' title='{{ url }}'>{{ url }}</a>
+        {% endif %}
+    {% else %}
+        {% if caption %}
+            <div class='img_caption'>{{ caption }}</div>
+        {% endif %}
+    {% endif %}
+</div>
+{% if text %}
+    <div class='image-text'>{{ text|restructuredtext }}</div>
+{% endif %}

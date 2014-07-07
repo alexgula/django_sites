@@ -1,0 +1,6 @@
+-
+  format: sprite-{name}-{ext}
+  source: source\*.*
+  url: ../images/sprites.png
+  sprite_file: sprites.png
+  css_file: sprites.css

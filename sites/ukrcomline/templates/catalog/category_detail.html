@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% load future i18n thumbnail %}
+{% load url from future %}
+{% load markup %}
+{% load categorytags %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+    <div id='wrapper-content'>
+        <h1>{{ title }}</h1>
+        {% comment %}
+            <div class='production-menu'>
+                {% category_breadcrumbs object %}
+            </div>
+        {% endcomment %}
+        <div class='product-info'>
+            <div class='grids'>
+                <div class='grid-02'>
+                    {% if object.images.all %}
+                        <div class='photo-slider'>
+                            <div class='fotorama' data-width="570" data-height="420" data-nav="thumbs" data-allowfullscreen="true" data-transition="crossfade" data-loop="true" data-fit="scaledown">
+                                {% for image in object.images.all %}
+                                    {% thumbnail image.image '570' upscale=False as im %}
+                                        <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}' style='margin:{{ im|margin:"570x420" }}' data-full='{{ image.image.url }}' data-caption='{{ image.caption }}'/>
+                                    {% endthumbnail %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class='default-picture-for-product'></div>
+                    {% endif %}
+                    <div class='upload-files'>
+                        <h3 class='upload-files-title'>Файлы для скачивания:</h3>
+                        <div class='grids'>
+                            {% for file in object.files.all %}
+                                <div class='grid-01'>
+                                    <a class='upload-files-link' href="{{ file.file.url }}">{{ file.caption }}</a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class='grid-02'>
+                    <div class='product-description'>
+                        {{ object.desc|restructuredtext }}
+                    </div>
+                    <div id='see-all-description'>
+                        <span class='button'>{% trans "Expand" %} {% trans "text" %}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='product-info'>
+            {% for group, positions in object.position_groups %}
+                <h2>{{ group.title }}</h2>
+                <table class='nomenclature-group'>
+                    <thead>
+                        <tr class='table-header'>
+                            <th>{% trans "Order" %}</th>
+                            <th>{% trans "Name" %}</th>
+                            <th>{% trans "Description" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for position in positions %}
+                            <tr>
+                                <td>{{ position.order }}</td>
+                                <td>{{ position.title }}</td>
+                                <td>{{ position.desc }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var blockToWork = $(".product-description");
+            var button = $(".button");
+            var currentHeight = blockToWork.height();
+            var originalHeight = blockToWork.height();
+
+            function setButton() {
+                if (currentHeight > 465) {
+                    blockToWork.css('height', '465');
+                    currentHeight = blockToWork.height();
+                    originalHeight = blockToWork.height();
+                }
+                else {
+                    button.remove();
+                }
+            }
+
+            function setButtonState() {
+                var autoHeight = blockToWork.css('height', 'auto').height();
+
+                if (autoHeight > currentHeight) {
+                    blockToWork.height(currentHeight).animate({height: autoHeight});
+                    currentHeight = autoHeight;
+                    button.text('{% trans "Collapse" %} {% trans "text" %}');
+                }
+                else {
+                    currentHeight = originalHeight;
+                    blockToWork.animate({ height: currentHeight});
+                    button.text('{% trans "Expand" %} {% trans "text" %}');
+                }
+            }
+
+            setButton();
+            button.click(setButtonState);
+
+        });
+    </script>
+{% endblock %}

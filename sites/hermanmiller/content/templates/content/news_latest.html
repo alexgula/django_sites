@@ -1,0 +1,21 @@
+{% load url from future %}
+{% load i18n markup thumbnail %}
+<h2 class="title"><a href="{% url 'news_list' %}">{% trans "Latest News" %}</a></h2>
+<ul class="news">
+    {% for news in news_list %}
+        <li class="news__item">
+            {% if news.logo %}
+                {% thumbnail news.logo '270x190' upscale=True crop='center' as im %}
+                    <img class="news__al" src="{{ im.url }}" alt="{% trans "Image for news" %} {{ news.title }}" width='{{ im.width }}' height='{{ im.height }}'/>
+                {% endthumbnail %}
+            {% else %}
+                <div class="news-list__img-default"></div>
+            {% endif %}
+            <div class="news__text-holder">
+                <span class="news__date">{{ news.created_on|date:'d.m.Y' }}</span>
+                <h3 class="news__ttl"><a href="{{ news.get_absolute_url }}">{{ news.title }}</a></h3>
+                <div class="news__text">{{ news.desc|truncatewords:20|restructuredtext }}</div>
+            </div>
+        </li>
+    {% endfor %}
+</ul>

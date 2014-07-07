@@ -1,0 +1,62 @@
+{% load i18n %}
+{% load media_tags %}
+{% load future %}
+
+<div class='block'>
+    <div class='header'>
+        <h1>{% trans "Works Search" %}</h1>
+    </div>
+</div>
+
+{% for filter in filters %}
+    {% if filter.has_visible_terms %}
+        <div class='block'>
+            <div class='header'>
+                {% if filter.chosen_terms %}
+                    <a href='#' onclick='window.location = "{{ search_url }}{{ filter.build_clear_params }}"' class='filter-op'>
+                        {% staticimage 'images/filter_remove_5.png' _("Remove all filters") %}
+                    </a>
+                {% endif %}
+                <h2>{{ filter.name }}</h2>
+            </div>
+            <div class='items'>
+                <ul>
+                    {% for term in filter.terms %}
+                        {% if term.visible %}
+                            <li>
+                                <a href='{{ search_url }}{{ term.build_modify_params }}' class='filter-op'>
+                                    {% with remove=_("Remove {}") add=_("Add {}") %}
+                                        {% if term.chosen %}
+                                            {% staticimage 'images/filter_remove_4.png' remove|format:term.name %}
+                                        {% else %}
+                                            {% staticimage 'images/filter_add_3.png' add|format:term.name %}
+                                        {% endif %}
+                                    {% endwith %}
+                                </a>
+                                <a href='{{ search_url }}{{ term.build_select_params }}' class='filter-select' title='{% trans "Select only" %} "{{ term.name}}"'>
+                                    {{ term.name }} ({{ term.occurences }})
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class='splitter'></div>
+    {% endif %}
+{% endfor %}
+
+<div class='block'>
+    <div class='items'>
+        <ul>
+            <li>
+                <a href='{{ list_url }}' title='{% trans "All Works" %}' class='filter-op'>
+                    {% staticimage 'images/filter_all_2.png' _("All Works") %}
+                </a>
+                <a href='{{ list_url }}' title='{% trans "All Works" %}' class='filter-select'>
+                    {% trans "All Works" %}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

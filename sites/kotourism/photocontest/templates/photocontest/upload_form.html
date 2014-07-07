@@ -1,0 +1,18 @@
+{% extends 'base_sidebar.html' %}
+
+{% load future %}
+{% load i18n markup %}
+{% load paging_extras %}
+
+{% block title %}{% trans "Photo contest upload photo" %}{% endblock %}
+
+{% block content %}
+    <h3>{% trans "Photo contest upload photo" %}</h3>
+
+    <div>
+        <form class='double shift-single page-form' autocomplete='off' enctype='multipart/form-data' action='{% url 'photocontest_upload' %}' method='POST'>{% csrf_token %}
+            {{ form }}
+            <div class=''><input type='submit' value='{% trans "Send" %}'/></div>
+        </form>
+    </div>
+{% endblock %}

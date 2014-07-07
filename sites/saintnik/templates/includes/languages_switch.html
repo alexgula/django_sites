@@ -1,0 +1,30 @@
+{% load i18n %}
+{% load localeurl_tags %}
+{% load static from staticfiles %}
+
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as langs %}
+
+
+<div id='languages_switch'>
+    {% for lang in langs %}
+        {% if lang.code == request.LANGUAGE_CODE %}
+            <a class='selected {{ lang.code }}' href='#'>
+                {% if lang.code == 'uk' %}
+                    UA
+                {% else %}
+                    {{ lang.code|upper }}
+                {% endif %}
+            </a>
+        {% else %}
+            <a class='{{ lang.code }}' href='{{ request.get_full_path|chlocale:lang.code }}'>
+                {% if lang.code == 'uk' %}
+                    UA
+                {% else %}
+                    {{ lang.code|upper }}
+                {% endif %}
+            </a>
+        {% endif %}
+    {% endfor %}
+<img class="languages_separator" src='{% static 'images/top_menu_separator.png' %}' alt='' title='' />
+</div>

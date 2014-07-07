@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% load future i18n thumbnail paging_extras%}
+{% load url from future %}
+{% load product %}
+
+{% block title %}
+    {% trans "Orders" %}
+{% endblock %}
+
+{% block content %}
+    <div class="grid">
+        {% paginate object_list from request as results per_page 20 %}
+        <div class="grid-3">
+            <h2 class="title">{% trans "Orders" %}</h2>
+            <div class="orders">
+                {% for order in results.objects %}
+                    <a href="{{ order.get_absolute_url }}" class="order-title">
+                        <span class="order-title__number">{% trans "Order Number" %}: {{ order.id }}</span>
+                        <span class="order-title__date">{{ order.date }}</span>
+                        <span class="order-title__total-sum">
+                            {% trans "Total" %}
+                            <span class="order-title__total-eur">{{ order.sum_eur|floatformat:2 }} EUR</span>
+                            <span>{{ order.sum_uah|floatformat:2 }}</span><span class="goods-currency"> грн.</span>
+                        </span>
+                        {% if order.get_status_display == "Created"%}
+                            <span class="order-title__status status-created">{{ order.get_status_display }}</span>
+                        {% elif order.get_status_display == "In progress" %}
+                            <span class="order-title__status status-in-progress">{{ order.get_status_display }}</span>
+                        {% elif order.get_status_display == "Ready" %}
+                            <span class="order-title__status status-ready">{{ order.get_status_display }}</span>
+                        {% elif order.get_status_display == "Delivered" %}
+                            <span class="order-title__status status-delivered">{{ order.get_status_display }}</span>
+                        {% elif order.get_status_display == "Cancelled" %}
+                            <span class="order-title__status status-cancelled">{{ order.get_status_display }}</span>
+                        {% endif %}
+                    </a>
+                {% endfor %}
+            </div>
+            {{ results.paging }}
+        </div>
+        <div class="grid-1 special-list-box">
+            <span class="special__ttl">{% trans "Special offer" %}</span>
+            {% products_special 2 %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% load future %}
+{% load i18n markup %}
+{% load thumbnail %}
+
+<h3>{% trans "News" %}
+    <div class='head-addition'>
+        <a class='icon' href='{% url 'typed_event_list' 'news' %}'>{% trans "Go to the news list" %}</a>
+        <a class='icon rss' href='{% url 'feed_events' 'news' %}' title="{% trans "Subscribe" %}">
+            <div class='sprite-icon_feed-png icon'></div>
+        </a>
+    </div>
+</h3>
+{% for event in events %}
+    <div class='single vblock{% if forloop.first %} first{% endif %}'>
+        <div class='block-event'>
+            <div class='date'>{{ event.post_date }}</div>
+            {% if event.icon %}
+                {% thumbnail event.icon THUMBNAIL_SETTINGS.FULLSCREEN_SIZE upscale=False as im_big %}
+                    {% thumbnail event.icon '190x80' upscale=False as im %}
+                        <div class='image'>
+                            <div style='width: {{ im.width }}px; height: {{ im.height }}px; margin: {{ im|margin:"190x80" }}'>
+                                <a class='colorbox' rel='events-block' href='{{ im_big.url }}'>
+                                    <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+                                </a>
+                            </div>
+                        </div>
+                    {% endthumbnail %}
+                {% endthumbnail %}
+            {% endif %}
+            <div class='head single'>
+                <h4 class='name'><a class='name-link' href='{{ event.get_absolute_url }}'>{{ event.name }}</a></h4>
+            </div>
+        </div>
+    </div>
+{% endfor %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% load future i18n thumbnail %}
+{% load url from future %}
+{% load markup %}
+{% load product %}
+
+{% block title %}
+    {{ object.title }}
+{% endblock %}
+
+{% block content %}
+    <div class="grid">
+        <div class='grid-3'>
+            <h2 class="title">{{ object.title }}</h2>
+            <div class='page'>
+                <div class="news__date">
+                    {{ news.created_on|date:"d.m.Y" }}
+                </div>
+                {{ object.desc|restructuredtext }}
+                {% for content in object.content.main %}
+                    {{ content.render }}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="grid-1 special-list-box">
+            <span class="special__ttl">{% trans "Special offer" %}</span>
+            {% products_special 2 %}
+        </div>
+    </div>
+{% endblock %}

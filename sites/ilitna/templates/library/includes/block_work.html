@@ -1,0 +1,13 @@
+{% load future i18n markup thumbnail %}
+<a class='item work-item' href='{{ work.get_absolute_url }}'>
+    {% thumbnail work.cover '80x120' upscale=False crop='center' as thumb %}
+        <span class='border'><img class='img border-body' src='{{ thumb.url }}' width='{{ thumb.width }}' height='{{ thumb.height }}' alt='{{ work.name }}'/></span>
+    {% endthumbnail %}
+    <span class='label'>{% trans "Authors" %}</span>
+    {% for author in work.authors.all %}
+        <span class='name labeled'>{{ author.name }}</span>
+    {% endfor %}
+    <span class='label'>{% trans "Title" %}</span>
+    <span class='title labeled'>{{ work.title }}</span>
+    <span class='body'>{{ work.teaser|restructuredtext|truncatewords_html:35 }}</span>
+</a>

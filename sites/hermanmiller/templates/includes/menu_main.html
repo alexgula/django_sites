@@ -1,0 +1,62 @@
+{% load url from future %}
+{% load i18n category %}
+<nav class="grid nav">
+    <ul class="grid nav__list">
+        <li class="nav__item">
+            <a href="{% url 'home' %}" class="home-link sprite-ico-home">{% trans "Home" %}</a>
+        </li>
+        <li class="nav__item">
+            <a href="{% url 'category_list' %}" class="nav__link choosen">
+                <span class="nav__holder choosen"><span class="nav__frame choosen">{% trans "Catalog" %}</span></span>
+            </a>
+            <div class="nav__drop">
+                <div class="nav__drop-holder">
+                    <div class="nav__drop-frame">
+                        <ul class="nav__drop-list">
+                            {% category_menu %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li class="nav__item">
+            <a href="{% url 'static_page' 'warranty' %}" class="nav__link">
+                <span class="nav__holder"><span class="nav__frame">{% trans "Warranty" %}</span></span>
+            </a>
+        </li>
+        <!--
+        <li class="nav__item">
+            <a href="{# url 'static_page' 'guide' #}" class="nav__link">
+                <span class="nav__holder"><span class="nav__frame">{# trans "Buying guide" #}</span></span>
+            </a>
+        </li>
+        -->
+        <li class="nav__item">
+            <a href="{% url 'static_page' 'delivery' %}" class="nav__link">
+                <span class="nav__holder"><span class="nav__frame">{% trans "Delivery" %}</span></span>
+            </a>
+        </li>
+        <li class="nav__item">
+            <a href="{% url 'static_page' 'about' %}" class="nav__link">
+                <span class="nav__holder"><span class="nav__frame">{% trans "About" %}</span></span>
+            </a>
+        </li>
+        <li class="nav__item">
+            <a href="{% url 'news_list' %}" class="nav__link">
+                <span class="nav__holder"><span class="nav__frame">{% trans "News List" %}</span></span>
+            </a>
+        </li>
+        <!--
+        <li class="nav__item">
+            <a href="{# url 'static_page' 'school' #}" class="nav__link">
+                <span class="nav__holder"><span class="nav__frame">{% trans "Ergonomic School" %}</span></span>
+            </a>
+        </li>
+        -->
+        <li class="nav__item">
+            <a href="{% url 'static_page' 'contacts' %}" class="nav__link">
+                <span class="nav__holder"><span class="nav__frame">{% trans "Contacts" %}</span></span>
+            </a>
+        </li>
+    </ul>
+</nav>

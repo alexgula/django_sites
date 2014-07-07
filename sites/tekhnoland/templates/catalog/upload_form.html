@@ -1,0 +1,10 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}Загрузка заказа{% endblock %}
+
+{% block content %}
+    <form method='post' class='page-form' enctype='multipart/form-data'>{% csrf_token %}
+        {{ form }}
+        <div class='submit-container sprites sprites-button_page_form_submit-png'><input type='submit' name='submit' value='Загрузить' /></div>
+    </form>
+{% endblock %}

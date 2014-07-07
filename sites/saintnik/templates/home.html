@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load blocktags %}
+
+{% block title %}
+    {% trans "Home" %}
+{% endblock %}
+
+{% block content %}
+    <div id='homepage'>
+        <h2>{% trans "Home" %}</h2>
+        {% rst_block 'home' %}
+    </div>
+    <div id='calendar'>
+        <h2>{% trans "Calendar" %}</h2>
+        {% text_block 'calendar' %}
+    </div>
+{% endblock %}

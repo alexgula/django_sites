@@ -1,0 +1,18 @@
+{% load statictags %}<p>На сайте был зарегистрирован пользователь {{ obj.first_name }} {{ obj.father_name }} {{ obj.last_name }}.</p>
+
+<p>Логин: {{ obj.username }}<br/>
+    Логин 1C: {{ obj.username1c }}<br/>
+    Фамилия: {{ obj.last_name }}<br/>
+    Имя: {{ obj.first_name }}<br/>
+    Отчество: {{ obj.father_name }}<br/>
+    Email: {{ obj.email }}<br/>
+    Телефон: {{ obj.phone }}<br/>
+    Город: {{ obj.city }}<br/>
+    Адрес: {{ obj.address }}<br/>
+    Адрес доставки: {{ obj.delivery }}<br/>
+    Источник, откуда вы о нас узнали: {{ obj.source }}<br/>
+    Дата регистрации: {{ obj.post_date }}<br/>
+    Ключ активации: {{ obj.activation_key }}</p>
+
+<p>Для проверки регистрации в админке, пожалуйста, перейдите по ссылке:
+    <a href="http://{{ site.domain }}{% admin_url obj %}">http://{{ site.domain }}{% admin_url obj %}</a></p>

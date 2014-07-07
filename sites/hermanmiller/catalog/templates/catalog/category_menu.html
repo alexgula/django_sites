@@ -1,0 +1,6 @@
+{% load url from future %}
+{% for category_item in category_menu %}
+    <li class="nav__drop-item">
+        <a href="{{ category_item.get_absolute_url }}" class="nav__drop-link">{{ category_item.title }}</a>
+    </li>
+{% endfor %}

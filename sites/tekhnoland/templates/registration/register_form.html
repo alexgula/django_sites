@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% load future %}
+{% load markup %}
+{% load paging_extras %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+    <h1>Регистрация</h1>
+
+    <p>Для регистрации на сайте заполните, пожалуйста, поля формы.</p>
+    <p>После регистрации вы получите <strong>РОЗНИЧНУЮ</strong> цену и возможность формировать заказы.</p>
+    <p><span class='important'>Обратите внимание!</span> Для регистрации Вам придётся подтвердить введённый
+        email, поэтому вводите адрес электронной почты, к которому у вас есть доступ.</p>
+
+    <div>
+        <form class='page-form' autocomplete='off' action='{% url 'account:register' %}' method='POST'>{% csrf_token %}
+            {{ form }}
+            <div class='submit-container sprites sprites-button_page_form_submit-png'><input type='submit' value='Отправить'/></div>
+        </form>
+    </div>
+
+    <p>Если у вас возникли проблемы с регистрацией, напишите нам в <a href='{% url 'feedback:show' %}'>форме обратной связи</a>
+        о вашей проблеме и мы постараемся её решить.</p>
+{% endblock %}

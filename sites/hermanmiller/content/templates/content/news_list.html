@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% load future i18n thumbnail markup paging_extras %}
+{% load url from future %}
+{% load product %}
+
+{% block title %}
+    {% trans "News list" %}
+{% endblock %}
+
+{% block content %}
+    <div class="grid">
+        {% paginate news_list from request as results per_page 10 %}
+        <div class="grid-3">
+            <h2 class="title">{% trans "News list" %}</h2>
+            <ul class="news-list">
+                {% for news in results.objects %}
+                    <li class='news-list__item'>
+                        {% if news.logo %}
+                            {% thumbnail news.logo '270x190' upscale=True crop='center' as im %}
+                                <div class="grid-1 news-list__img">
+                                    <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+                                </div>
+                            {% endthumbnail %}
+                        {% else %}
+                            <div class="grid-1 news-list__img-default"></div>
+                        {% endif %}
+                        <div class="grid-half-2 news-list__text-holder">
+                            <div class="news-list__text-frame">
+                                <span class="news__date">{{ news.created_on|date:"d.m.Y" }}</span>
+                                <h3 class="news-list__ttl">
+                                    <a href="{{ news.get_absolute_url }}">{{ news.title }}</a>
+                                </h3>
+                                <div class="news-list__text">{{ news.desc|restructuredtext|truncatewords_html:50 }}</div>
+                                <a href="{{ news.get_absolute_url }}" class="sprite-bg-news-list-more"></a>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            {{ results.paging }}
+        </div>
+        <div class="grid-1 special-list-box">
+            <span class="special__ttl">{% trans "Special offer" %}</span>
+            {% products_special 2 %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,14 @@
+<table class='basket-stats-table'>
+    <tr>
+        <td class='basket-label'>Позиций:</td>
+        <td id='basket-stats-total' class='basket-content'><div class='basket-content-wrapper'>{{ basket_items.count|floatformat:'0' }}</div></td>
+    </tr>
+    <tr>
+        <td class='basket-label'>Товаров:</td>
+        <td id='basket-stats-count' class='basket-content'><div class='basket-content-wrapper'>{{ basket_count|floatformat:'0' }}</div></td>
+    </tr>
+    <tr>
+        <td class='basket-label'>Сумма:</td>
+        <td id='basket-stats-sum' class='basket-content'><div class='basket-content-wrapper'>{{ basket_sum|floatformat:'2' }} грн</div></td>
+    </tr>
+</table>

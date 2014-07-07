@@ -1,0 +1,29 @@
+{% load url from future %}
+{% load i18n thumbnail %}
+{% for product in objects %}
+    <li class="grid-1 catalog-list__item">
+        <a href="{{ product.get_absolute_url }}" class="catalog-list__link">
+            <span class="catalog-list__hover"></span>
+            <div class="goods-name">{{ product.title }}</div>
+            {% thumbnail product.logo '270x180' upscale=False as im %}
+                <div class="goods-img">
+                    <img  src="{{ im.url }}" style="margin:{{ im|margin:"270x180" }}" alt="{% trans "Image for product" %}  {{ product.title }}" width='{{ im.width }}' height='{{ im.height }}' />
+                </div>
+            {% endthumbnail %}
+            <span class="grid-1 catalog-list__price-box-holder">
+                <span class="grid-half">
+                    <span class="catalog-list__price-box">
+                        <span class="catalog-list__price-1">{{ product.price_uah|floatformat:2 }}<span class="goods-currency"> грн.</span></span>
+                        <span class="catalog-list__price-2">{{ product.price_eur|floatformat:2 }}<span class="goods-currency"> EUR</span></span>
+                    </span>
+                </span>
+                <span class="grid-half">
+                    <span class="catalog-list__price-box catalog-list__button-box">
+                        <button class="js-product-buy btn-buy">{% trans "Buy" %}</button>
+                    </span>
+                </span>
+            </span>
+            <span class="catalog-list__reviews">{% trans "Reviews" %} ({{ product.review_count }})</span>
+        </a>
+    </li>
+{% endfor %}

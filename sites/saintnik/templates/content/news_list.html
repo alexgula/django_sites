@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% load i18n markup paging_extras %}
+
+{% block title %}{% trans "News" %}{% endblock %}
+
+{% block content %}
+    <h1>{% trans "News" context 'plural' %}</h1>
+    {% paginate news_list from request as results per_page 10 %}
+    {% for news in results.objects %}
+        <div class='news'>
+            <div class='date'>
+                <div class='day_month'>
+                    {{ news.pub_date|date:'d.m' }}
+                </div>
+                <div class='year'>
+                    {{ news.pub_date|date:'Y' }}
+                </div>
+            </div>
+
+            <h2 class='description'>
+                <a href='{{ news.get_absolute_url }}'>{{ news.title }}</a>
+            </h2>
+            <div class='text'>{{ news.text|truncatewords:30|restructuredtext }}</div>
+        </div>
+    {% endfor %}
+    {{ results.paging }}
+{% endblock %}

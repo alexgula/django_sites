@@ -1,0 +1,16 @@
+{% extends 'polls/polls.html' %}
+
+{% block polls %}
+    <div class='sideblock-last'>
+        <div class='polls-question'>{{ poll.question }}</div>
+
+        <table id='polls-result'>
+        {% for choice in poll.choice_set.all %}
+            <tr>
+                <td class='polls-choice'>{{ choice.choice }}</td>
+                <td class='polls-votes'>{{ choice.votes }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+{% endblock %}

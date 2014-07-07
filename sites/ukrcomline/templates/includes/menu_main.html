@@ -1,0 +1,15 @@
+{% load url from future %}
+{% load categorytags %}
+<ul class='menu-tree'>
+    <li class='menu-item'><a class='menu-link' href="{% url 'news_list' %}">Новости</a></li>
+    <li class='menu-item'><a class='menu-link' href="{% url 'static_page' 'company' %}">О компании</a></li>
+    <li class='menu-item level-0'>
+        <a class='menu-link' href="{% url 'category_list' %}">Продукция</a>
+        <div class='all-categories'>
+            <div class='grids'>{% category_menu %}</div>
+        </div>
+    </li>
+    <li class='menu-item'><a class='menu-link' href="{% url 'portfolio_list' %}">Примеры монтажа</a></li>
+    <li class='menu-item'><a class='menu-link' href="{% url 'certificate_list' %}">Сертификаты</a></li>
+    <li class='menu-item'><a class='menu-link' href="{% url 'static_page' config.FEEDBACK_PAGE_SLUG %}">Контакты</a></li>
+</ul>

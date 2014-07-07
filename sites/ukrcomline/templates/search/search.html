@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% load i18n markup highlight paging_extras %}
+
+{% block content %}
+    {% if search_query %}
+        {% paginate object_list from request as results per_page 20 %}
+        {% for result in results.objects %}
+            <h2 class='search-title'><a href='{{ result.url }}'>{{ result.title }}</a></h2>
+            <div class='search-desc'>
+                {% if result.desc %}
+                    {% highlight result.desc|restructuredtext with search_query html_tag 'span' css_class 'highlight' %}
+                {% else %}
+                    &hellip;
+                {% endif %}
+            </div>
+        {% empty %}
+            <p>Ничего не найдено.</p>
+        {% endfor %}
+    {% endif %}
+    {{ results.paging }}
+{% endblock %}

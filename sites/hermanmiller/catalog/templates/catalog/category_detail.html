@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% load future i18n thumbnail %}
+{% load url from future %}
+{% load markup %}
+{% load product %}
+
+{% block title %}
+    {{ object.title }}
+{% endblock %}
+
+{% block description %}
+    {{ object.meta_description }}
+{% endblock %}
+
+{% block keywords %}
+    {{ object.meta_keywords }}
+{% endblock %}
+
+{% block content %}
+    <div class="grid">
+        <div class="grid-3">
+            <h2 class="title">{{ object.title }}</h2>
+            <ul class="catalog-list">
+                {% products object.products.all %}
+            </ul>
+            <div class="js-tabs product-info">
+                <ul>
+                    <li class="tabs__item"><a href="#tab-category-description" class="tabs__link">ОПИСАНИЕ</a></li>
+                    <!--<li class="tabs__item"><a href="#" class="tabs__link">ЦВЕТА</a></li>-->
+                    <li class="tabs__item"><a href="#tab-category-settings" class="tabs__link">КАК НАСТРОИТЬ</a></li>
+                    <li class="tabs__item"><a href="#tab-category-history" class="tabs__link">ИСТОРИЯ СОЗДАНИЯ</a></li>
+                </ul>
+                <div id="tab-category-description">
+                    {{ object.desc|restructuredtext }}
+                </div>
+                <div id="tab-category-settings"><p>settings</p></div>
+                <div id="tab-category-history"><p>history</p></div>
+            </div>
+        </div>
+        <div class="grid-1 special-list-box">
+            <span class="special__ttl">{% trans "Special offer" %}</span>
+            {% products_special 2 %}
+        </div>
+    </div>
+{% endblock %}

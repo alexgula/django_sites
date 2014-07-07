@@ -1,0 +1,136 @@
+{% extends 'base_sidebar.html' %}
+
+{% load future %}
+{% load i18n markup %}
+{% load paging_extras thumbnail thumbnail_margin %}
+{% load statictags %}
+
+{% block title %}{% trans "Photo Contest Terms and Conditions" %}{% endblock %}
+
+{% block content %}
+<h3>Regulations on photo contest «Year of active recreation in Kyiv region»</h3>
+<ol>
+    <li>
+        <h4>Terms:</h4>
+        <ol>
+            <li>Travel photo contest "Year of leisure in the Kiev region" (hereinafter - Photo Contest) is held by
+                municipal institution of Kyiv oblast Rada «Kyiv regional center of tourism development».
+            </li>
+            <li>The Photo Contest is aimed at amateur photographers and professional photographers and also all
+                those who involved in photography and has its own travel photos on topics that reflect the tourism
+                potential of the Kyiv region.
+            </li>
+            <li>This regulations on Photo Contest «Year of active recreation in Kyiv region (hereinafter -
+                Regulations) defines the competitive selection process and regulate issues that arise during its
+                implementation.
+            </li>
+        </ol>
+    </li>
+    <li>
+        <h4>Aim of the Photo Contest:</h4>
+        <ul>
+            <li>creating an attractive image of the Kyiv region and its historical and cultural tourism potential;
+            </li>
+            <li>to attract public attention to the historical and cultural heritage and new recreation opportunities
+                in the Kyiv region;
+            </li>
+            <li>promotion of the tourist centers of Kyiv region;</li>
+            <li>attract the attention of the general public and government agencies to the historical, cultural and
+                tourist potential of Kyiv region, that need urgent attention of issues;
+            </li>
+            <li>emphasizing the positive interest of Ukrainian citizens to the tourism potential of the Kyiv region;
+            </li>
+            <li>enhance the prestige and image of Ukrainian tourism.</li>
+        </ul>
+    </li>
+    <li>
+        <h4>Participants of the Photo Contest:</h4>
+        <ol>
+            <li>In the Photo Contest may participate professional photographers and amateur photographers who have
+                photographs on tourism topics.
+            </li>
+            <li>On the contest are accepted work of tourism topics that reflect active recreatin in Kiyv region
+                (during festivals, fairs, holidays and other events).
+            </li>
+            <li>If you want to participate in the Photo Contest need to register on the official travel site of Kyiv
+                region www.ko-tourism.gov.ua (hereinafter - site). Registration on the site is confirmation for the
+                contest and consent to the terms of its implementation, giving consent to the organizers for
+                processing personal data submitted by the participant of Photo Contest. Registration on the website
+                allows you to put your work on the web site of Photo Contest.
+            </li>
+            <li>Participant must indicate its real name in the registration form on the site.</li>
+        </ol>
+    </li>
+    <li>
+        <h4>Requirements for work:</h4>
+        <ol>
+            <li>For the participation on the Photo Contest are accepted photos made during the years 2012-2013,
+                owned by participants of Photo Contest. For the participation on the Photo Contest are accepted no
+                more than 10 works from each participant submitted digitally formatted «PNG» or «JPG». If the author
+                has given more than 10 works, the administration of the Photo Contest decides choice to publish in
+                its discretion, but in an amount not more than 10. If the author has already published 10 works, the
+                new works are not published.
+            </li>
+            <li>At the request of the Organizer original file provided by the author in the form of «TIF» or «JPG»
+                extension at least 72 dpi in the form of electronic files that are sent to the email address of the
+                Organizer, which is responsible for the Photo Contest: reklama@ko-tourism.gov.ua.
+            </li>
+            <li>Photos sent to the organizers free of charge for non-commercial use and promotion of active
+                recreation in Kyiv region. Photo is accompanied by a short name.
+            </li>
+            <li>Conditions of the Photo Contest do not restrict the choice of topic work: it may be some
+                photographs, picture stories that reflect the tourism potential of Kyiv region, development active
+                forms of tourism.
+            </li>
+            <li>Work does not include installation with any design software and graphics editors. Participants are
+                allowed only original photos.
+            </li>
+        </ol>
+    </li>
+    <li>
+        <h4>Conditions of implementation:</h4>
+        <ol>
+            <li>The contest will be held from 01.06.2013 till 31.08.2013. Deadline of works - 25.08.2013 (12-00 pm).
+            </li>
+            <li>Winner of the Photo Contest is determined by public voting at the official tourism site of Kyiv
+                region. For photos can vote only once a day.
+            </li>
+            <li>Winners is considered a participant whose photo has the most votes.
+            </li>
+            <li>The winner of the Photo Contest is awarded by prizes.</li>
+            <li>Nominations: three best work of the Photo Contest will receive consolation prizes.</li>
+            <li>Fifteen of the best works of participants will be presented on the official travel site «Kyiv oblast
+                for tourists» and in the manufacture of tourism calendar printing products travel topics.
+            </li>
+            <li>The cost and size of security and prizes will be announced further on during the Photo Contest.
+            </li>
+            <li>On the Photo Contest is a function of "Like" for social networking. Participant of the photos has
+                the greatest commitment to social networking audience will get a special prize from the organizers.
+                More information about the special prize will be announced on the site during the photo contest.
+            </li>
+            <li>If you have any problems and technical issues associated with the use of features on the web site of
+                Photo Contest, please contact us in the form of a letter to the email address of the Organizer who
+                is responsible for Contest: reklama@ko-tourism.gov.ua.
+            </li>
+        </ol>
+    </li>
+    <li>
+        <h4>Prizes:</h4>
+        <ol class='photocontest-prize-list'>
+            <li>
+                <img src="{% static 'images/photocontest/photocontest_2013_06_partner_logo_1.png' %}" title="Auto Sound Base"/>
+                Main prize &mdash; <a href="http://avtozvuk.ua/info/22360" target="_blank">GPS navigator Prology iMap-7020M</a>, by Photo Contest partner <a href="http://avtozvuk.ua/" target="_blank">«Auto Sound Base»</a>.
+            </li>
+            <li>
+                <img src="{% static 'images/photocontest/photocontest_2013_06_partner_logo_2.png' %}" title="Ukrainian Adventure and Ecotourism Association"/>
+                Prize &mdash; sleeping bag "Pharaon", by Photo Contest partner <a href="http://uaeta.org/" target="_blank">«Ukrainian Adventure and Ecotourism Association»</a>.
+            </li>
+            <li>
+                <img src="{% static 'images/photocontest/photocontest_2013_06_partner_logo_3.png' %}" title="Park Kyiv Rus"/>
+                Social prize &mdash; invitation for two persons to "Park Kyiv Rus", by Photo Contest partner <a href="http://www.parkkyivrus.com/" target="_blank">«Park Kyiv Rus»</a>.
+            </li>
+        </ol>
+    </li>
+</ol>
+<p><a href='{% url 'photocontest_list' %}'>{% trans "Return to the photo contest" %}.</a></p>
+{% endblock %}

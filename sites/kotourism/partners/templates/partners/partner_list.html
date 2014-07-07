@@ -1,0 +1,46 @@
+{% extends 'base_sidebar.html' %}
+
+{% load future %}
+{% load i18n markup %}
+{% load paging_extras thumbnail thumbnail_margin %}
+{% load statictags %}
+
+{% block title %}{% trans "Partners" %}{% endblock %}
+
+{% block content %}
+    {% paginate partner_list from request as results per_page 20 %}
+    <h3>{% trans "Partners" %}</h3>
+    {% for partner in results.objects %}
+        <div class='partner paragraph'>
+            <div class='icon single image-icon'>
+                {% if partner.banner %}
+                    {% if '.gif' in partner.banner.url %}
+                        {% thumbnail partner.banner '190x190' format='GIF' upscale=False as im %}
+                            <div class='image'>
+                                <div style='width: {{ im.width }}px; height: {{ im.height }}px; margin: {{ im|hmargin:"190" }}'>
+                                    <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+                                </div>
+                            </div>
+                        {% endthumbnail %}
+                    {% else %}
+                        {% thumbnail partner.banner '190x190' format='PNG' upscale=False as im %}
+                            <div class='image'>
+                                <div style='width: {{ im.width }}px; height: {{ im.height }}px; margin: {{ im|hmargin:"190" }}'>
+                                    <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+                                </div>
+                            </div>
+                        {% endthumbnail %}
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class='shift-single triple'>
+                <div class='head triple'>
+                    <h4 class='name'><a href='{{ partner.url }}' target='_blank'>{{ partner.name }}</a></h4>
+                    <div class='subheader'><a href='{{ partner.url }}' target='_blank'>{{ partner.url }}</a></div>
+                </div>
+                <div class='body double'>{{ partner.desc|restructuredtext }}</div>
+            </div>
+        </div>
+    {% endfor %}
+    <div class='double shift-single'>{{ results.paging }}</div>
+{% endblock %}

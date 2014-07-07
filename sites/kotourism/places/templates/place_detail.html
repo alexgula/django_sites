@@ -1,0 +1,89 @@
+{% extends 'base_sidebar.html' %}
+
+{% load future %}
+{% load i18n markup %}
+{% load thumbnail %}
+{% load mediatags statictags %}
+
+{% block title %}
+    {{ place.name }}
+{% endblock %}
+
+{% block content %}
+    <h3>{{ place.name }}</h3>
+    <div class='content place'>
+        {% if place.audio_index %}
+            <div class='single label'>{% trans "Audio Guide" %}:</div>
+            <div class='triple vblock paragraph'>
+                <audio controls="controls" height="50px" width="590px">
+                    <source src="{% static place.audio_url %}" type="audio/mpeg" />
+                    <embed height="50px" width="590px" src="song.mp3" />
+                </audio>
+            </div>
+        {% endif %}
+        {% if place.exposition %}
+            <div class='single label'>{% trans "Exposition" %}:</div>
+            <div class='triple vblock paragraph'>{{ place.exposition }}</div>
+        {% endif %}
+        {% if place.address %}
+            <div class='single label'>{% trans "Address" %}:</div>
+            <div class='triple vblock paragraph'>{{ place.address }}</div>
+        {% endif %}
+        {% if place.transport %}
+            <div class='single label'>{% trans "Transport" %}:</div>
+            <div class='triple vblock paragraph'>{{ place.transport }}</div>
+        {% endif %}
+        {% if place.type.show_extra and place.phone %}
+            <div class='single label'>{% trans "Phones" %}:</div>
+            <div class='triple vblock paragraph'>{{ place.phone }}</div>
+        {% endif %}
+        {% if place.timetable %}
+            <div class='single label'>{% trans "Time table" %}:</div>
+            <div class='triple vblock paragraph'>{{ place.timetable }}</div>
+        {% endif %}
+        {% if place.url %}
+            <div class='single label'>{% trans "Site" %}:</div>
+            <div class='triple vblock paragraph'><a href='{{ place.url }}' target='_blank'>{{ place.url }}</a></div>
+        {% endif %}
+        {% if place.is_child_node %}
+            <div class='single label'>{% trans "Part of" %}:</div>
+            <div class='triple vblock paragraph'>
+                <ul class='node-list'>
+                    {% for node in place.get_ancestors %}
+                        <li><a href='{{ node.get_absolute_url }}'>{{ node }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        {% if not place.is_leaf_node %}
+            <div class='single label'>{% trans "Contains" %}:</div>
+            <div class='triple vblock paragraph'>
+                <ul class='node-list'>
+                    {% for node in place.get_descendants %}
+                        <li><a href='{{ node.get_absolute_url }}'>{{ node }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        {% if place.desc %}
+            <div class='single label'>{% trans "Description" %}:</div>
+            <div class='triple vblock'>{{ place.desc|restructuredtext }}</div>
+        {% endif %}
+        {% thumbnail place.image THUMBNAIL_SETTINGS.FULLSCREEN_SIZE upscale=False as im_big %}
+            {% thumbnail place.image '790' upscale=False as im %}
+                <div style='width: {{ im.width }}px; height: {{ im.height }}px; clear: both; margin: 0 auto;'>
+                    <a class='colorbox' rel='places' href='{{ im_big.url }}'>
+                        <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'>
+                    </a>
+                </div>
+            {% endthumbnail %}
+        {% endthumbnail %}
+    </div>
+{% endblock %}
+
+{% block admin-actions %}
+    {{ block.super }}
+    <div class='admin-action'>
+        <a href='{% admin_url place %}' title='{% trans "Edit current record" %}'>{% trans "Edit" %}</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% load i18n markup %}
+{% load media_tags %}
+{% load future %}
+
+<div id='lot-{{ lot.pk }}' class='worklot-item'>
+    <div class='work-name'>
+        <h2>{{ work }}</h2>
+        <h3>{{ work.author.name }}</h3>
+    </div>
+    <div class='work-item'>
+        <a href='{% url 'catalogue_work_detail' work.author.slug work.slug %}'>
+            <span class='work-image'>
+                {% image work.preview work %}
+            </span>
+        </a>
+    </div>
+    <div class='worklot-fields'>
+        <div class='worklot-desc lot-estimate_price'>
+            <h4>{% trans "Estimate price" %}</h4>
+            {% if lot.estimate_price_start == lot.estimate_price_end %}
+                <div class='price details'>{{ lot.estimate_price_start }}</div>
+            {% else %}
+                <div class='price details'>{{ lot.estimate_price_start }} &mdash; {{ lot.estimate_price_end }}</div>
+            {% endif %}
+        </div>
+        {% if lot.can_bid and lot.start_date and lot.close_date %}
+            <div class='worklot-desc lot-countdown'>
+                <h4>{% trans "Until closing" %}</h4>
+                <div class='countdown details'></div>
+            </div>
+        {% endif %}
+        {% if lot.can_bid %}
+            <div class='worklot-desc worklot-prices'>
+                <input class="object-id" type="hidden" value="{{ lot.pk }}">
+                <div class='lot-buyout-price'>
+                    {% if lot.can_buyout and lot.can_bid %}
+                        <h4>{% trans "Buyout price" %}</h4>
+                        <div class='price details'>{{ lot.buyout_price }}</div>
+                    {% endif %}
+                </div>
+                <div class='lot-next-price'>
+                    <h4>{% trans "Next possible price" %}</h4>
+                    <div class='price details'>{{ lot.next_price }}</div>
+                </div>
+                <div class='lot-bid-count'>
+                    {% if lot.bid_count == 0 %}
+                        <h4>{% trans "There are no bids yet. Your might be the first." %}</h4>
+                    {% else %}
+                        <h4>{% trans "Bids already made" %}</h4>
+                        <div class='count details'>{{ lot.bid_count }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class='worklot-desc worklot-commands'>
+                <div class='message'></div>
+                <input class='worklot-pk' type='hidden' value='{{ lot.pk }}'/>
+                <input class='make-bid' value='{% trans "Make Bid" %}' type="button">
+                {% if lot.can_buyout %}
+                    <input value='{% trans "Make Buyout" %}' type="button">
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $('#lot-{{ lot.pk }} .countdown').countdown({
+            until: new Date({{ lot.close_date.year }}, {{ lot.close_date.month }}-1, {{ lot.close_date.day }}),
+            compact: true,
+            description: ''
+        });
+    });
+</script>

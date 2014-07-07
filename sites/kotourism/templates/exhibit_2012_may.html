@@ -1,0 +1,17 @@
+{% load i18n %}
+{% load statictags %}
+
+<h3>{% trans "Exhibition Title" %}</h3>
+
+<div id='banner-exhibit'>
+    <a href='/exhibit/2012-may/'>{% trans "Exhibition Title" %}</a>
+</div>
+
+<script type='text/javascript' src='{% static 'js/swfobject.js' %}' charset='utf-8'></script>
+<script type='text/javascript'>
+    var flashvars = {};
+    var params = {};
+    params.wmode = "transparent";
+    var attributes = {};
+    swfobject.embedSWF("{% static 'swf/exhibit_2012_may.swf' %}", "banner-exhibit", "590", "260", "9.0.0", false, flashvars, params, attributes);
+</script>

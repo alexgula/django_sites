@@ -1,0 +1,31 @@
+{% extends 'region_detail.html' %}
+
+{% load i18n markup %}
+{% load thumbnail %}
+
+{% block region %}
+    <div class='content paragraph'>
+        {{ region.desc|restructuredtext }}
+    </div>
+    <div class='double vblock first'>
+        <div class='icon single image-center'>
+            {% thumbnail region.icon THUMBNAIL_SETTINGS.FULLSCREEN_SIZE upscale=False as im_big %}
+                {% thumbnail region.icon '290' upscale=False as im %}
+                    <div class='image-content' style='width: {{ im.width }}px; height: {{ im.height }}px'>
+                        <a class='colorbox' rel='places' href='{{ im_big.url }}'>
+                            <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+                        </a>
+                    </div>
+                {% endthumbnail %}
+            {% endthumbnail %}
+        </div>
+        {% for content in region.content.main %}
+            {{ content.render }}
+        {% endfor %}
+    </div>
+    <div class='double vblock'>
+        {% for content in region.content.side %}
+            {{ content.render }}
+        {% endfor %}
+    </div>
+{% endblock %}

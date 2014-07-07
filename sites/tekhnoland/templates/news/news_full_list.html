@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% load future %}
+{% load markup %}
+{% load paging_extras %}
+
+{% block title %}Новости{% endblock %}
+
+{% block sidebar-news %}
+{% endblock %}
+
+{% block content %}
+    <h1>Новости</h1>
+    {% paginate news from request as results per_page 5 %}
+    {% for event in results.objects %}
+        <div id='{{ event.pk }}' class='news-paragraph'>
+            <div class='news-date'>{{ event.post_date|date:'d.m.Y' }}</div>
+            <div class='news-text'>{{ event.text|restructuredtext }}</div>
+        </div>
+    {% endfor %}
+    <div>{{ results.paging }}</div>
+{% endblock %}

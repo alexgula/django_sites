@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block title %}
+    {{ object.name }}
+{% endblock %}
+
+{% block page-nav %}
+    <div class='block'>
+        <div class='header'>
+            {% trans "Top" %}
+        </div>"
+    </div>
+    <div class='splitter'></div>
+    {{ block.super }}
+{% endblock %}

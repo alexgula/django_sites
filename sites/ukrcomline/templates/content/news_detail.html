@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% load future i18n thumbnail %}
+{% load url from future %}
+{% load markup %}
+
+{% block title %}
+    {{ object.title }}
+{% endblock %}
+
+{% block content %}
+    <div id='wrapper-content'>
+        <h1>{{ object.title }}</h1>
+        <div class='content_render'>
+        {% if news.logo %}
+            {% thumbnail news.logo THUMBNAIL_SETTINGS.CONTENT_PICTURE_NEWS upscale=True crop='center' as im %}
+                <div class='news_logo'>
+                    <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+                </div>
+            {% endthumbnail %}
+        {% else %}
+            <div class='news_logo_default'></div>
+        {% endif %}
+        <div class="news_date">
+            <span class="news-dd-mm">{{ news.created_on|date:"d.m" }}</span>
+            <span class="news-yyyy">{{ news.created_on|date:"Y" }}</span>
+        </div>
+        {{ object.desc|restructuredtext }}
+        {% for content in object.content.main %}
+            {{ content.render }}
+        {% endfor %}
+        </div>
+    </div>
+{% endblock %}

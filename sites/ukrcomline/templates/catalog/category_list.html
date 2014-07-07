@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% load future i18n thumbnail %}
+{% load url from future %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+    <div id='wrapper-content'>
+        <h1>{{ title }}</h1>
+        <div class='grids'>
+            <div id="itemContainer">
+                {% for category in children.all %}
+                    <a class="grid-01 product-item" href="{{ category.get_absolute_url }}">
+                        <span class='product-img'>
+                            {% thumbnail category.logo THUMBNAIL_SETTINGS.ICON_SIZE upscale=False crop='center' as im %}
+                                <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+                            {% empty %}
+                                <div class='default-picture-for-category'></div>
+                            {% endthumbnail %}
+                            <span class='product-title'>{{ category.title }}</span>
+                        </span>
+                    </a>
+                {% endfor %}
+                {% for category in more_children.all %}
+                    <a class="grid-01 product-item" href="{{ category.get_absolute_url }}?cat={{ object.id }}">
+                        <span class='product-img'>
+                            {% thumbnail category.logo THUMBNAIL_SETTINGS.ICON_SIZE upscale=False crop='center' as im %}
+                                <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+                            {% empty %}
+                                <div class='default-picture-for-category'></div>
+                            {% endthumbnail %}
+                            <span class='product-title'>{{ category.title }}</span>
+                        </span>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class='slaider'>
+            <div class="holder"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $("div.holder").jPages({
+            containerID : "itemContainer",
+            perPage: 8
+        });
+    </script>
+{% endblock %}

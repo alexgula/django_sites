@@ -1,0 +1,78 @@
+{% extends "content_base.html" %}
+
+{% load future %}
+{% load i18n markup %}
+{% load localeurl_tags disqus_tags %}
+{% load media_tags catalogue_tags %}
+
+{% block branding-page %}
+    {% image object.sign.url %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <div class='menu-item'><a href='{% url 'catalogue_home' %}'><span class='menu-item-content'>{% trans "Home" %}</span></a></div>
+    <div class='menu-item breadcrumb-delimiter'><span class='breadcrumb-content'>&rarr;</span></div>
+    <div class='menu-item'><span class='menu-item-content'>{{ object.name }}</span></div>
+{% endblock %}
+
+{% block page-content %}
+    <div id='author-container'>
+        <div id='author-info'>
+            <div id='author-portrait'>
+                {% image object.portrait.url %}
+            </div>
+            <div id='author-detail'>
+                <h1 id='author-name'>{{ object.name }}</h1>
+                <div id='author-desc'>{{ object.desc|restructuredtext }}</div>
+                <div id='author-life-dates'>{{ object.date_birth|date:"SHORT_DATE_FORMAT" }} - {{ object.date_death|date:"SHORT_DATE_FORMAT" }}</div>
+            </div>
+            <div id='author-linked-authors'>
+            </div>
+            <div id='author-like'>
+                {% include 'catalogue/social_panel.html' %}
+            </div>
+            <div id='author-comments'>
+                {% set_disqus_identifier object.author.slug %}
+                {% set_disqus_url 'http://' site.domain request.path|rmlocale %}
+                {% set_disqus_title object.author.name %}
+                {% disqus_show_comments %}
+            </div>
+        </div>
+        <div class='auction'>
+            <!-- Here goes internet-auction link -->
+        </div>
+
+        <div id='author-related-info'>
+            {% for work in object.work_set.top %}
+                {% if forloop.first %}
+                    <a href='{% url 'catalogue_work_detail' work.author.slug work.slug %}'>
+                        <h2>{% trans "Top Work" %}</h2>
+                        <h3>{{ work.name }}</h3>
+                    </a>
+                    {% dzi work.dzi %}
+                {% endif %}
+            {% endfor %}
+            <h2 class="clear">{% trans "Top Works" %}</h2>
+            <div id='work-list' class='columns adaptive-190-300 same-height'>
+                {% for work in object.work_set.top %}
+                    {% if not forloop.first %}
+                        {% include 'catalogue/work_detail_include.html' %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block page-nav %}
+    {% show_filters %}
+    <div class='splitter'></div>
+{% endblock %}
+
+{% block page-footer-actions %}
+    {% if user.is_staff %}
+        <div class='admin-action'>
+            <a href={{ object.get_admin_url }}>{% trans "Edit" %}</a>
+        </div>
+    {% endif %}
+{% endblock %}

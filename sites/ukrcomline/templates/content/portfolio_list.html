@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% load future i18n thumbnail markup paging_extras %}
+{% load url from future %}
+
+{% block title %}
+    {% trans "Portfolio" %}
+{% endblock %}
+
+{% block content %}
+    {% paginate portfolio_list from request as results per_page 20 %}
+    <div id='wrapper-content'>
+        <h1>{% trans "Portfolio" %}</h1>
+        <div class='grids'>
+            {% for object in results.objects %}
+                {% if forloop.counter0|divisibleby:"4" %}
+                <div class="grid-01" style="clear: both;">
+                    <a class="portfolio_item" href="{{ object.get_absolute_url }}">
+                        {% thumbnail object.logo THUMBNAIL_SETTINGS.CONTENT_PICTURE upscale=True crop='center' as im %}
+                            <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+                        {% endthumbnail %}
+                        <div class="portfolio_date">
+                            {{ object.created_on|date:"d.m.Y"}}
+                        </div>
+                        <div class="portfolio_title">
+                            {{ object.title }}
+                        </div>
+                        {{ object.desc|restructuredtext }}
+                    </a>
+                </div>
+                {% else %}
+                    <div class="grid-01">
+                        <a class="portfolio_item" href="{{ object.get_absolute_url }}">
+                            {% thumbnail object.logo THUMBNAIL_SETTINGS.CONTENT_PICTURE upscale=True crop='center' as im %}
+                            <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+                            {% endthumbnail %}
+                            <div class="portfolio_date">
+                                {{ object.created_on|date:"d.m.Y"}}
+                            </div>
+                            <div class="portfolio_title">
+                                {{ object.title }}
+                            </div>
+                            <div class="portfolio_text">
+                                {{ object.desc|restructuredtext }}
+                            </div>
+                        </a>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class=''>{{ results.paging }}</div>
+{% endblock %}

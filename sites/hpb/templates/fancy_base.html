@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% load statictags %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type='text/javascript' src='{% static 'js/custom.js' %}' charset='utf-8'></script>
+    <script type='text/javascript' src='{% static 'js/fancybox/jquery.fancybox-1.3.4.pack.js' %}' charset='utf-8'></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+    	$(".fancy-image a").fancybox();
+        });
+    </script>
+{% endblock %}

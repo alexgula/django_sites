@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% load i18n markup highlight paging_extras thumbnail %}
+{% load product %}
+
+{% block content %}
+    <h2 class="title">{% trans "Search result" %}</h2>
+    <div class="grid-3">
+        {% if search_query %}
+            <div class="search__found">{% trans "Found" %}: {{ object_list.count }}</div>
+            {% paginate object_list from request as results per_page 10 %}
+            {% for result in results.objects %}
+                <div class="grid-3 search__elem">
+                    <a href='{{ result.url }}'>
+                        <div class="grid-1 search__img">
+                            {% thumbnail result.logo "270x180" upscale=False as im %}
+                                <img src="{{ im.url }}" style="margin:{{ im|margin:"270x180" }}" width='{{ im.width }}' height='{{ im.height }}'>
+                            {% endthumbnail %}
+                        </div>
+                        <div class="grid-2">
+                            <h2 class='search__title'>{% highlight result.title with search_query html_tag 'span' css_class 'highlight' %}</h2>
+                            <div class='search__desc'>
+                                {% if result.desc %}
+                                    {% highlight result.desc|restructuredtext with search_query html_tag 'span' css_class 'highlight' %}
+                                {% else %}
+                                    &hellip;
+                                {% endif %}
+                            </div>
+                            <div class="search__see-more sprite-bg-news-list-more"></div>
+                        </div>
+                    </a>
+                </div>
+            {% empty %}
+                <p>{% trans "Nothing found" %}</p>
+            {% endfor %}
+        {% endif %}
+        {{ results.paging }}
+    </div>
+    <div class="grid-1 special-list-box">
+        <span class="special__ttl">{% trans "Special offer" %}</span>
+        {% products_special 2 %}
+    </div>
+
+{% endblock %}

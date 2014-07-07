@@ -1,0 +1,44 @@
+{% extends 'base_sidebar.html' %}
+
+{% load i18n %}
+{% load statictags mediatags %}
+{% load eventtags weathertags %}
+
+{% block title %}
+    {% trans "Tourists Map" %}
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel='stylesheet' href='{% static 'jquery-ui-datepicker/css/custom-theme/jquery-ui-1.8.9.custom.css' %}' type='text/css' media='all' charset='utf-8' />
+{% endblock %}
+
+{% block content %}
+    <div id='tourmap'>
+        <h3>{% trans "Tourists Map" %}</h3>
+        <div class='first vblock quad'>
+            <div id='visicom-viewport' style='width: 790px; height: 590px;'></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type='text/javascript' src='http://maps.visicom.ua/api/2.0.0/map/world_{{ COUNTRY_CODE }}.js' charset='utf-8'></script>
+
+    <script>
+        $(function() {
+            $.ajax({
+                url: '/{{ LANGUAGE_CODE }}/service/places/tourmap/',
+                dataType: 'json',
+                success: function(data) {
+                    setup_visicom_map("{{ MEDIA_URL }}", data);
+                },
+                error: function(data) {
+                }
+            });
+
+
+        });
+    </script>
+{% endblock %}

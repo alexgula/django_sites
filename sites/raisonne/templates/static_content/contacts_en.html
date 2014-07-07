@@ -1,0 +1,57 @@
+{% extends 'static_content_base.html' %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Contacts" %}{% endblock %}
+
+{% block breadcrumbs_title %}{% trans "Contacts" %}{% endblock %}
+
+{% block content %}
+    <h1>{% trans "Contacts" %}</h1>
+    <dl>
+        <dt>
+            If there are any questions that occured in connection with placing pictures on raisonne.info, works expertising, buying works that are for sale on raisonne.info,
+            offering to give the work of your collection for sale and general questions regarding the project, please, contact:
+            а также по общим вопросам, касающимся проекта, обращайтесь:
+        </dt>
+        <dd>
+            <div class='phone' title={% trans "Phone" %}>(044) 223-61-31</div>
+            <div class='mail' title={% trans "E-Mail" %}>info@raisonne.info</div>
+        </dd>
+        <dt>
+            Technical questions:
+        </dt>
+        <dd>
+            <div class='mail' title={% trans "E-Mail" %}>support@raisonne.info</div>
+        </dd>
+    </dl>
+    <!--<div id='viewport' style='width: 100%; height: 500px;'>
+    </div>-->
+{% endblock %}
+
+{% block scripts %}
+    <script type='text/javascript' src='http://maps.visicom.ua/api/2.0.0/map/world_ru.js'></script>
+
+    <script type='text/javascript'>
+        var map;
+        function createVisicomMap() {
+            map = new VMap(document.getElementById('viewport'));
+            var point = {lng: 30.54958, lat: 50.43443};
+            map.center(point, 15);
+
+            var desc = '<a href="http://raisonne.info">raisonne.info</a> - первый онлайн музей<br/>ул. Лейпцигская, 3а, оф. 107<br/>тел. (044) 223-61-31';
+
+            /*
+            var marker = new VMarker(point);
+            marker.hint('Raisonne');
+            marker.info('Raisonne', desc);
+            map.add(marker);
+            */
+
+            var info = new VInfoWindow(point, desc, {alwaysOpen: true, canClose: false });
+            map.add(info);
+
+            map.repaint();
+        }
+    </script>
+{% endblock %}

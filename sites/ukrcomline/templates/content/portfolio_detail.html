@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% load future i18n thumbnail %}
+{% load url from future %}
+{% load markup %}
+
+{% block title %}
+    {{ object.title }}
+{% endblock %}
+
+{% block content %}
+    <div id='wrapper-content'>
+        <h1>{{ object.title }}</h1>
+        <div class='content_render'>
+            {% comment %}
+            {% if object.logo %}
+                {% thumbnail object.logo THUMBNAIL_SETTINGS.ICON_SIZE as im %}
+                    <img class='portfolio_logo' src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+                {% endthumbnail %}
+            {% else %}
+                <div class='portfolio_logo_default'></div>
+            {% endif %}
+            {% endcomment %}
+            <div class="portfolio_date">{{ object.created_on|date:"d.m.Y" }}</div>
+            {{ object.desc|restructuredtext }}
+            {% for content in object.content.main %}
+                {{ content.render }}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

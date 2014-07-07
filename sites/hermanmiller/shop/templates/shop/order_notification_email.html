@@ -1,0 +1,38 @@
+{% load i18n %}{% load static from staticfiles %}
+<div style="width: 760px;">
+    <img src="http://{{ site.domain }}{% static 'img/header-for-email-760.jpg' %}" width="760" height="100">
+</div>
+
+<h2 style="width: 740px; padding: 10px; color:#d21907; border-top: 2px solid #d21907; border-bottom: 2px solid #d21907; font: 22px/24px 'microsoft_sans_serifregular', Arial, sans-serif;">{% trans "Your Order" %} {{ object }}</h2>
+
+<h4 style="width: 740px; padding: 10px; border-bottom: 1px solid #929292; font-weight: normal; font: 14px/17px 'microsoft_sans_serifregular', Arial, sans-serif;">{% trans "Your application is accepted. To confirm the order, our Manager will contact you soon." %}</h4>
+
+<table style="margin: 20px 0; width: 740px; border-collapse: collapse;">
+    <tr style="border-bottom: #ECECEC solid 2px; font: 14px/17px 'microsoft_sans_serifregular', Arial, sans-serif; text-transform: uppercase; text-align: left; vertical-align: top; color:#929292;">
+        <th style="padding: 10px; font-weight: normal;">{% trans "Title" %}</th>
+        <th style="padding: 10px; font-weight: normal; width: 100px;">{% trans "Price (EUR)" %}</th>
+        <th style="padding: 10px; font-weight: normal; width: 100px; color:#d21907;">{% trans "Price (UAH)" %}</th>
+        <th style="padding: 10px; font-weight: normal; width: 110px;">{% trans "Quantity" %}</th>
+    </tr>
+    {% for item in object.items.all %}
+        <tr style="border-bottom: #ECECEC solid 1px;">
+            <td style="padding: 10px; font: 16px/20px 'microsoft_sans_serifregular', Arial, sans-serif; vertical-align: middle;">{{ item.title }}</td>
+            <td style="padding: 10px; color:#929292; vertical-align: middle;">{{ item.price_eur|floatformat:'2' }}</td>
+            <td style="padding: 10px; font:16px/20px 'microsoft_sans_serifregular', Arial, sans-serif; color:#d21907; vertical-align: middle;">{{ item.price_uah|floatformat:'2' }}</td>
+            <td style="padding: 10px; vertical-align: middle;">{{ item.quantity }}</td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <td style="padding: 10px; font: 16px/20px 'microsoft_sans_serifregular', Arial, sans-serif; text-transform: uppercase; text-align: left; vertical-align: top;">{% trans "Total" %}:</td>
+        <td style="padding: 10px; font:12px/14px 'microsoft_sans_serifregular', Arial, sans-serif; color:#929292; vertical-align: top;">{{ object.sum_eur|floatformat:'2' }}</td>
+        <td style="padding: 10px; font:16px/20px 'microsoft_sans_serifregular', Arial, sans-serif; color:#d21907; vertical-align: top;">{{ object.sum_uah|floatformat:'2' }}</td>
+        <td style="padding: 10px;"></td>
+    </tr>
+</table>
+
+{% if object.comment %}
+<h4 style="width: 740px; padding: 10px 10px 0 10px;">{% trans "Comments" %}:</h4>
+<p style="width: 740px; padding: 10px; margin: 0;">{{ object.comment }}</p>
+{% endif %}
+
+<h4 style="width: 740px; padding: 10px; margin: 10px 0; border-top: 1px solid #929292; font-weight: normal; font: 14px/17px 'microsoft_sans_serifregular', Arial, sans-serif;">{% trans "Best regards" %}, <a style="color: #d21907;" href="http://{{ site.domain }}">hermanmiller</a></h4>

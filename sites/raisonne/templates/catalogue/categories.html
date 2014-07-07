@@ -1,0 +1,21 @@
+{% load future %}
+
+{% regroup terms by category as categories %}
+
+{% for category in categories %}
+    {% if forloop.counter > 1 %}
+        <div class='splitter'></div>
+    {% endif %}
+    <div class='block'>
+        <div class='header'>{{ category.grouper.name }}</div>
+        <div class='items'>
+            <ul>
+                {% for term in category.list %}
+                    <li>
+                        <a href='{% url 'catalogue_search' %}'>{{ term.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endfor %}

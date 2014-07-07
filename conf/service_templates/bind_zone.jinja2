@@ -1,0 +1,6 @@
+{% for domain, target_path in domains %}
+zone "{{ domain.name }}" {
+    type master;
+    file "{{ target_path }}";
+};
+{% endfor %}

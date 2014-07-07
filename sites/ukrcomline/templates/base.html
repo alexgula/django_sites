@@ -1,0 +1,125 @@
+{% load future i18n capture content %}{% load url from future %}{% load static from staticfiles %}{% load navtags %}<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="description" content="{% block description %}{% endblock %}">
+    <meta name="viewport" content="width=device-width">
+
+    {% block styles %}
+        <link rel="stylesheet" href="{% static 'css/jPages.css' %}">
+        <link rel="stylesheet" href="{% static 'css/colorbox.css' %}">
+        <link rel="stylesheet" href="{% static 'css/fotorama.css' %}">
+        <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+        <link rel="stylesheet" href="{% static 'css/grid.css' %}">
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <link rel="stylesheet" href="{% static 'css/catalog.css' %}">
+        <link rel="stylesheet" href="{% static 'css/helper.css' %}">
+        <link rel="stylesheet" href="{% static 'css/media.css' %}">
+        <link rel="stylesheet" href="{% static 'css/print.css' %}">
+
+    {% endblock %}
+    <script src="{% static 'js/vendor/modernizr-2.6.2.min.js' %}"></script>
+</head>
+<body>
+    <!--[if lt IE 7]>
+        <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+    <![endif]-->
+
+    <nav>
+        {% include 'includes/menu_main.html' %}
+    </nav>
+
+    <div id='wrapper-center'>
+        <header>
+            <a class='logo' href="{% url 'home' %}"></a>
+            <div class='contacts'>
+                <span class='phone-code'>[044]</span><span class='phone'>205-55-53</span>
+                <span class='mail'>office@ukrcomline.com</span>
+            </div>
+            <div class='search'>
+                <form class='search-form' method="GET" name="search" action="{% url 'search' %}">
+                    <input class="search-text" type="text" value="{{ search_query }}" name="q">
+                    <input class="search-submit" type="submit" value="">
+                </form>
+            </div>
+        </header>
+    </div>
+    <div id='wrapper-bottom'>
+        <div id='breadcrumbs'>
+            {% block breadcrumbs %}
+                {% breadcrumbs " | " %}
+            {% endblock %}
+        </div>
+        {% block content %}
+        {% endblock %}
+        <div id='page-bottom'>
+            <div class='grids'>
+                <div class='grid-02'>{% latest_news 2 %}</div>
+                <div class='grid-02'>{% latest_portfolio 3 %}</div>
+            </div>
+        </div>
+        <footer>
+            {% include 'includes/menu_main.html' %}
+            <div class="copyright">Разработка сайта - <a href="http://picassoft.biz">веб студия Picassoft</a></div>
+        </footer>
+    </div>
+
+{% comment %}
+    <div class='admin'>
+        {% if user.is_staff %}
+            <a href='{% url 'admin:index' %}' title='{% trans "Go to admin site" %}'>{% trans "Admin area" %}</a>
+            {% capture as admin_url %}{% block admin_url %}{% endblock %}{% endcapture %}
+            {% if admin_url %}
+                <a href='{{ admin_url }}' title='{% trans "Go to edit node" %}'>{% trans "Edit node" %}</a>
+            {% endif %}
+        {% endif %}
+    </div>
+    <p class='copyright'>&copy; Picassoft, 2013</p>
+{% endcomment %}
+
+    {% include 'includes/counters.html' %}
+
+    {% block scripts %}
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="{% static 'js/vendor/jquery-1.9.1.min.js' %}"><\/script>')</script>
+        <script src="{% static 'js/plugins.js' %}"></script>
+        <script src="{% static 'js/vendor/jPages.js' %}"></script>
+        <script src="{% static 'js/vendor/jquery.colorbox.js' %}"></script>
+        <script src="{% static 'js/vendor/fotorama.js' %}"></script>
+        <script src="{% static 'js/infinitecarousel/jquery.infinitecarousel3.min.js' %}"></script>
+        <script src="{% static 'js/main.js' %}"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+                window.setTimeout(function () {
+                    $("nav .level-0").hover(function() {
+                    $(this).find("div").animate({opacity: "show", top: "57"}, "medium");
+                    var link = $("nav li.menu-item.level-0 > a");
+                    link.addClass("choosen-item");
+                    link.removeClass("menu-link");
+                }, function() {
+                    $(this).find("div").stop(true, true);
+                    $(this).find("div").animate({opacity: "hide", top: "57"}, "medium");
+                    var link = $("nav li.menu-item.level-0 > a");
+                    link.removeClass("choosen-item");
+                    link.addClass("menu-link");
+                })}, 1000);
+
+                $('#gallery').infiniteCarousel({
+                    imagePath: "{% static 'img/infinitecarousel/' %}",
+                    thumbnailType: 'images'
+                });
+
+                $('a.colorbox').colorbox({rel:'content'});
+
+            });
+        </script>
+    {% endblock %}
+</body>
+</html>

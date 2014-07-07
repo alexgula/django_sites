@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load future i18n markup thumbnail %}
+
+{% block title %}{{ page.title }}{% endblock %}
+
+{% block content %}
+    <h1>{{ page.title }}</h1>
+
+    {% for content in page.content.main %}
+        <div>
+            {{ content.render }}
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block admin_url %}{% url 'admin:page_page_change' page.id %}{% endblock %}

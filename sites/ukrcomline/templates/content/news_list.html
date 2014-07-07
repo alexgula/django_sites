@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% load future i18n thumbnail markup paging_extras %}
+{% load url from future %}
+
+{% block title %}
+    {% trans "News list" %}
+{% endblock %}
+
+{% block content %}
+    {% paginate news_list from request as results per_page 20 %}
+    <div id='wrapper-content'>
+        <h1>{% trans "News list" %}</h1>
+        {% for news in results.objects %}
+            <div class='news_item'>
+                {% if news.logo %}
+                    {% thumbnail news.logo THUMBNAIL_SETTINGS.CONTENT_PICTURE_NEWS upscale=True crop='center' as im %}
+                        <div class='news_logo'>
+                            <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+                        </div>
+                    {% endthumbnail %}
+                {% else %}
+                    <div class='news_logo_default'></div>
+                {% endif %}
+                <div class="news_date">
+                    <span class="news-dd-mm">{{ news.created_on|date:"d.m" }}</span>
+                    <span class="news-yyyy">{{ news.created_on|date:"Y" }}</span>
+                </div>
+                <a class="news_title" href="{{ news.get_absolute_url }}">
+                    {{ news.title }}
+                </a>
+                {{ news.desc|restructuredtext }}
+            </div>
+        {% endfor %}
+    </div>
+    {{ results.paging }}
+{% endblock %}

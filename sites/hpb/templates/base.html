@@ -1,0 +1,209 @@
+{% load future %}
+{% load statictags %}
+{% load eventtags %}
+{% load i18n %}
+
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='ru' lang='ru'>
+
+<head>
+    <meta charset='utf-8'/>
+    <meta name="google-site-verification" content="BF2Xl7rpOW20uNlV_uujxK7Ix1iH1wDMgRvb7X68Fi4" />
+    <title>Музейный центр Е.П. Блаватской и ее семьи {% block title %}{% endblock %}</title>
+
+    <link rel='shortcut icon' href='/favicon.ico' type='image/vnd.microsoft.icon'>
+
+    {% block styles %}
+        <link rel='stylesheet' href='{% static 'css/sen.css' %}' type='text/css' media='all' charset='utf-8' />
+        <link rel='stylesheet' href='{% static 'css/style.css' %}' type='text/css' media='all' charset='utf-8' />
+        <link rel="stylesheet" href='{% static 'js/fancybox/jquery.fancybox-1.3.4.css' %}' type="text/css" media="screen" />
+    {% endblock %}
+</head>
+
+<body>
+    <!-- Begin Wrapper -->
+    <div id="wrapper">
+        <div id="wrapper-top">
+            <div id="wrapper-bottom">
+                <!-- Begin Header -->
+                <div id="header">
+                    <a id="logo" href="{% url 'home' %}"></a>
+                    <div id="device"></div>
+                    <div id="menu">
+                        <ul id="main-menu">
+                        <li><a href="{% url 'home' %}">Главная</a></li>
+                        <li><a href="{% url 'epbpage' %}">Е.П. Блаватская</a></li>
+                        <li><a href="{% url 'family_member_list' %}">Семья</a></li>
+                        <li><a href="{% url 'fond_tasks' %}">Музей</a></li>
+                        <li><a href="{% url 'scicenter_page_list' %}">Научный центр</a></li>
+                        <li><a href="{% url 'book_list' %}">Библиотека</a></li>
+                        <li><a href="">Друзья музея</a></li>
+                        <li><a href="{% url 'one_news_list' %}">Новости</a></li>
+                    </ul>
+                    </div>
+                </div>
+                <!-- Begin Content -->
+                <div id="content">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+                <div id="footer">
+                    <div id="inform-block">
+                        {% latest_event %}
+                        <div class="inform-element">
+                            <table class="inform-block-events">
+                                <tr>
+                                    <td class="img-timetable"></td>
+                                    <td><h2><a href="{% url 'time_table' %}">Регламент работы</a></h2></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="h-datetime">
+                                        <div class="h-data">Зима (с 15 октября по 01 мая)</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <!--
+                                    <td class="h-datetime">
+                                        <div class="h-time">
+                                            <p>1 ноября -</p>
+                                            <p>1 апреля</p>
+                                        </div>
+                                    </td>
+                                    -->
+                                    <td class="h-main-text" colspan="2">
+                                        Экскурсионные дни по понедельникам и четвергам отменяются. Заявки на экскурсии по предварительной договоренности принимаются по тел. (056) 374 - 39 - 52.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="h-datetime">
+                                        <div class="h-data">Лето (с 01 мая по 15 октября)</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="h-datetime">
+                                        <div class="h-time">ПОНЕДЕЛЬНИК <br>13:00-17:00</div>
+                                    </td>
+                                    <td class="h-main-text">
+                                        Проводятся экскурсии. Работает библиотека.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="h-datetime">
+                                        <div class="h-time">ЧЕТВЕРГ <br>10:00-14:00</div>
+                                    </td>
+                                    <td class="h-main-text">
+                                        Проводятся экскурсии. Работает библиотека.
+                                    </td>
+                                </tr>
+
+                                <tr class="h-main-text">
+                                    <td colspan="2"><a href="{% url 'time_table' %}">Просмотреть детальное расписание</a></td>
+                                </tr>
+                                <!-- Информация о круглых столах
+                                <tr style="background: #310460; color: #ffffff;">
+                                    <td colspan="2">
+                                        <div style="font-size: 12px; font-weight: bold; text-align: center;">На время летнего периода 2012 года проводятся тематические круглые столы.
+                                            <br>Справка по телефону <br> +38 (056) 374-39-52 - муз.центр <br> +38 (067) 741-04-37 - Ю.Д. Родина
+                                            <a href="http://museum-blavatsky.com.ua/ru/events/10/" style="display: block; font-size: 10px; font-weight: normal; text-align: center; color: #ffffff;">
+                                                Подробнее
+                                                </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                -->
+
+                            </table>
+                        </div>
+                        <div class="inform-contacts">
+                            <table class="inform-block-events">
+                                <tr>
+                                    <td class="img-contacts"></td>
+                                    <td><h2><a href="{% url 'contact' %}">Контакты</a></h2></td>
+                                </tr>
+                                <tr>
+                                    <td class="h-time">
+                                        <div class="h-data">Адрес:</div>
+                                    </td>
+                                    <td class="h-main-text">
+                                        49000, Украина, <br> г. Днепропетровск, <br>ул. Ленинградская, 11
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="h-time">
+                                        <div class="h-time">Тел:</div>
+                                    </td>
+                                    <td class="h-main-text">
+                                        (056) 374-39-52
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="h-time">
+                                        <div class="h-time">E-mail:</div>
+                                    </td>
+                                    <td class="h-main-text">
+                                        info@museum-blavatsky.com.ua
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="h-time">
+                                        <div class="h-time">Адрес для корреспонденции:</div>
+                                    </td>
+                                    <td class="h-main-text">
+                                        49000, Украина, Днепропетровск,<br> пр. Карла Маркса, 64,<br> музей «Литературное Приднепровье»,<br> Е.В.Аливанцевой
+                                    </td>
+                                </tr>
+                                <tr class="h-main-text">
+                                    <td colspan="2"><a href="{% url 'contact' %}">Просмотреть детальные контакты</a></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="social-nets">
+                        <div class="footer-info">
+                            <span class='copy'>&copy;</span>
+                            <span> Музейный центр Е.П. Блаватской и ее семьи,<br> 2004 &mdash; 2011 <br></span>
+                            <span class='copy'>&copy;</span>
+                            <a href='http://picassoft.com.ua/site/info' target='_blank' class='hidden-link'>
+                                Создание информационного сайта.
+                            </a>
+                            <a href='http://picassoft.com.ua/site/info' target='_blank'>
+                            Picassoft
+                            </a>
+                            , 2011
+                        </div>
+                        <div class="footer-info">
+                            <iframe src="http://www.facebook.com/widgets/like.php?href=http://museum-blavatsky.com.ua" scrolling="no" frameborder="0" style="border:none;height:70px; width: 300px;"></iframe>
+                        </div>
+                        <div class="footer-last" >
+                            <div id="vk_like"></div>
+                        </div>
+                    </div>
+                    <div id="door">
+                        <a style="text-decoration: none" href="{% url 'admin:index'  %}"><img align="left" src="{{ STATIC_URL }}images/login_door.png">&nbsp;</a>
+                        {% block element_edit %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+{% block scripts %}
+    <script type='text/javascript' src='{% static 'js/jquery.min.js' %}' charset='utf-8'></script>
+    <script type='text/javascript' src='{% static 'js/custom.js' %}' charset='utf-8'></script>
+    <script type="text/javascript" src="http://userapi.com/js/api/openapi.js?23"></script>
+    <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            VK.init({apiId: 2453063, onlyWidgets: true});
+            VK.Widgets.Like("vk_like", {type: "full", pageUrl: "museum-blavatsky.com.ua"});
+        });
+    </script>
+{% endblock %}
+
+{% if not debug %}
+    {% include 'counters.html' %}
+{% endif %}
+
+</html>

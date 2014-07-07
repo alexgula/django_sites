@@ -1,0 +1,29 @@
+{% load l10n %}
+{% load mediatags %}
+
+<div class='slides'></div>
+<div class='loading'></div>
+<div class='captions'></div>
+<div class='controls'></div>
+
+<ul class='thumbs noscript row'>
+    {% for slide in slides %}
+        <li class='thumb-container'>
+            <a class='thumb' name='{{ slide.pk }}' href='{{ slide.slide.url }}' title='{{ slide }}'>
+                <img src='{{ slide.icon.url }}' alt='{{ slide }}' title='{{ slide }}'
+                     width='{{ slide.icon.width }}px' height='{{ slide.icon.height }}px'/>
+            </a>
+            <div class='caption' x='{{ slide.map_x|unlocalize }}' y='{{ slide.map_y|unlocalize }}'>
+                <h3>{{ slide }}</h3>
+                {% if slide.desc %}
+                    <div class='desc'>{{ slide.desc }}</div>
+                {% endif %}
+            </div>
+        </li>
+    {% endfor %}
+</ul>
+
+<div class='slide-map'>
+    <div class='slide-map-background sprite-map_ko-png'></div>
+    <div class='slide-map-pointer sprite-icon_map_pointer-png'></div>
+</div>

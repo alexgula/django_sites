@@ -1,0 +1,16 @@
+{% load url from future %}
+{% load i18n thumbnail%}
+{% load product %}
+{% for product in objects %}
+    <a class="special__item" href="{{ product.get_absolute_url }}">
+        <div class="special__label">{% trans "Special" %}</div>
+        <div class="special__name">{{ product.title }}</div>
+        {% thumbnail product.logo '270x200' upscale=False as im %}
+            <div class="special__img">
+                <img src='{{ im.url }}' alt="{% trans "Image for product" %}  {{ product.title }}" style="margin:{{ im|margin:"270x200" }}" width='{{ im.width }}' height='{{ im.height }}'/>
+            </div>
+        {% endthumbnail %}
+        <span class="special__price-uah">{{ product.price_uah|floatformat:2 }}<span class="goods-currency"> грн.</span></span>
+        <span class="special__price-eur">{{ product.price_eur|floatformat:2 }}<span class="goods-currency"> EUR</span></span>
+    </a>
+{% endfor %}

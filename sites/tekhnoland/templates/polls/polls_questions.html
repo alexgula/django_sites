@@ -1,0 +1,25 @@
+{% extends 'polls/polls.html' %}
+
+{% load future %}
+
+{% block polls %}
+    <div class='sideblock-last-half'>
+        <div class='polls-question'>{{ poll.question }}</div>
+
+        <form action='{% url 'polls:vote' poll.id %}' method='post'>
+            {% csrf_token %}
+            <table id='polls-questions'>
+                {% for choice in poll.choice_set.all %}
+                    <tr class='polls-choice'>
+                        <td class='polls-choice-input'><input type='radio' name='choice' id='polls-choice-{{ choice.id }}' value='{{ choice.id }}' /></td>
+                        <td class='polls-choice-label'><label for='polls-choice-{{ choice.id }}'>{{ choice.choice }}</label></td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <input type='hidden' name='next' value='{{ next }}'>
+            <div id='polls-submit' class='sprites sprites-button_sidebar_submit-png'>
+                <input type='submit' value='Отдать голос' />
+            </div>
+        </form>
+    </div>
+{% endblock %}

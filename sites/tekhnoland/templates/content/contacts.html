@@ -1,0 +1,84 @@
+{% extends 'content_base.html' %}
+
+{% block content %}
+    {{ block.super }}
+
+    <table width='100%'>
+        <tr>
+            <td colspan='2'><h2>Компания «ТЕХНО ЛЕНД»</h2></td>
+        </tr>
+        <tr>
+            <td><strong>Адрес:</strong></td>
+            <td>03151, г. Киев, ул. Очаковська, д. 5/6</td>
+        </tr>
+        <tr>
+            <td><strong>Телефоны:</strong></td>
+            <td>+38 (044) 496-01-02<br/>+38 (044) 496-01-03<br/>+38 (067) 417-89-47<br/>+38 (050) 911-17-75</td>
+        </tr>
+        <tr>
+            <td><strong>Режим работы:</strong></td>
+            <td>
+                Пн. &ndash; Пт. с 9.00 до 18.00<br/>
+                Суббота с 9.00 до 15.00<br/>
+                Воскресенье &mdash; выходной.
+            </td>
+        </tr>
+        <tr>
+            <td><strong>E-mail:</strong></td>
+            <td>
+                <span class='etech' val='info'>Для того, чтобы увидеть email, необходимо включить Javascript в браузере. Если не получается включить, совместите info и имя сайта - получите email.</span><br/>
+                <span class='etech' val='manager'>Для того, чтобы увидеть email, необходимо включить Javascript в браузере. Если не получается включить, совместите manager и имя сайта - получите email.</span><br/>
+                <span class='etech' val='alexeenko'>Для того, чтобы увидеть email, необходимо включить Javascript в браузере. Если не получается включить, совместите alexeenko и имя сайта - получите email.</span>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>ICQ:</strong></td>
+            <td>
+                <img src='http://status.icq.com/online.gif?icq=417942683&amp;img=5' height='18' width='18'>417942683
+                <strong>Менеджер</strong>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Skype:</strong></td>
+            <td>
+                <a href='skype:andrey-alexeenko?call'><img src='http://mystatus.skype.com/smallclassic/andrey-alexeenko' style='border: none;' width='114' height='20' alt='My status' /></a>
+                (<em>можно позвонить прямо с сайта. <strong>Skype</strong> должен быть включен</em>).
+            </td>
+        </tr>
+    </table>
+    <hr>
+    <div id='viewport' style='width: 750px; height: 600px;'></div>
+
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type='text/javascript' src='http://download.skype.com/share/skypebuttons/js/skypeCheck.js'></script>
+    <script type='text/javascript' src='http://maps.visicom.ua/api/2.0.0/map/world_ru.js'></script>
+
+    <script type='text/javascript'>
+        var map;
+        function createVisicomMap() {
+            map = new VMap(document.getElementById('viewport'));
+            var point = {lng: 30.45312, lat: 50.42809};
+            map.center(point, 16);
+
+            var marker = new VMarker(point);
+            marker.hint('Техноленд');
+            map.add(marker);
+            map.repaint();
+        }
+    </script>
+
+    <script type='text/javascript'>
+        function format_etech(val) {
+            return val + '@' + 'tekhnoland' + '.' + 'com';
+        }
+        $(function() {
+            $('.etech').each(function(index) {
+                var email = format_etech($(this).attr('val'));
+                $(this).html('<a href="mailto:' + email + '">' + email + '</a>');
+            });
+        });
+    </script>
+{% endblock %}

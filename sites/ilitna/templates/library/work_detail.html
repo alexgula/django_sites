@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load future i18n markup thumbnail mptt_tags %}
+
+{% block title %}{{ work.title }}{% endblock %}
+
+{% block content %}
+    <div class='wrapper main-panel'>
+        <div class='grids'>
+            <div class='grid-1'>
+                {% thumbnail work.present_cover '250' upscale=False as thumb %}
+                    <div class='media'>
+                        <img src='{{ thumb.url }}' width='{{ thumb.width }}' height='{{ thumb.height }}'
+                             style='margin:{{ thumb|margin:'250' }}' alt='{{ work.title }}'/>
+                    </div>
+                {% endthumbnail %}
+                <h3>
+                    {% if root == work %}
+                        {{ root.title }}
+                    {% else %}
+                        <a href='{{ root.get_absolute_url }}'>{{ root.title }}</a>
+                    {% endif %}
+                </h3>
+
+                {% if not root.is_leaf_node %}
+                    <h4>{% trans "Contents" %}</h4>
+                {% endif %}
+                {% for node, structure in root.get_descendants|tree_info %}
+                    {% if structure.new_level %}<ul class='contents level-{{ node.level }}'><li>{% else %}</li><li>{% endif %}
+                    {% if node == work %}
+                        <strong>{{ node.title }}</strong>
+                    {% else %}
+                        <a href='{{ node.get_absolute_url }}'>{{ node.title }}</a>
+                    {% endif %}
+                    {% for level in structure.closed_levels %}</li></ul>{% endfor %}
+                {% endfor %}
+            </div>
+
+            <div class='grid-3'>
+                <h1 class='block-title' id='page-top'>{{ work.title }}</h1>
+                <hr class='clear'>
+                {% include 'includes/breadcrumbs.html' %}
+                <div class="grids">
+                    <div class="grid-1">
+                        {% if work.level %}
+                            <a class="work-pager prev-page" href="{{ prev.get_absolute_url }}">{% trans "Previous page" %}</a>
+                        {% else %}
+                            &nbsp;
+                        {% endif %}
+                    </div>
+                    <div class="grid-1">
+                        &nbsp;
+                    </div>
+                    <div class="grid-1">
+                        {% if next.level %}
+                            <a class="work-pager next-page" href="{{ next.get_absolute_url }}">{% trans "Next page" %}</a>
+                        {% else %}
+                            &nbsp;
+                        {% endif %}
+                    </div>
+                </div>
+                <div class='content'>
+                    {% if work.teaser %}<blockquote>{{ work.teaser|restructuredtext }}</blockquote>{% endif %}
+                    {% if work != root and has_children %}
+                        <strong>В этом разделе</strong>
+                        {% for node, structure in work.get_descendants|tree_info %}
+                            {% if structure.new_level %}<ul class='level-{{ node.level }}'><li>{% else %}</li><li>{% endif %}
+                            {% if node == work %}
+                                <strong>{{ node.title }}</strong>
+                            {% else %}
+                                <a href='{{ node.get_absolute_url }}'>{{ node.title }}</a>
+                            {% endif %}
+                            {% for level in structure.closed_levels %}</li></ul>{% endfor %}
+                        {% endfor %}
+                    {% endif %}
+                    <div class='main-content'>
+                        {% for content in work.content.main %}
+                            {{ content.render }}
+                        {% endfor %}
+                    </div>
+                    {% if work.content.main %}
+                        <div class="grids">
+                            <div class="grid-1">
+                                {% if work.level %}
+                                    <a class="work-pager prev-page" href="{{ prev.get_absolute_url }}">{% trans "Previous page" %}</a>
+                                {% else %}
+                                    &nbsp;
+                                {% endif %}
+                            </div>
+                            <div class="grid-1">
+                                <a class="work-pager go-to-top" href="#page-top">{% trans "Go to top" %}</a>
+                            </div>
+                            <div class="grid-1">
+                                {% if next.level %}
+                                    <a class="work-pager next-page" href="{{ next.get_absolute_url }}">{% trans "Next page" %}</a>
+                                {% else %}
+                                    &nbsp;
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block admin_url %}{% url 'admin:library_work_change' work.id %}{% endblock %}

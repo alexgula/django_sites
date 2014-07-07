@@ -1,0 +1,12 @@
+{% load future %}
+{% load i18n %}
+{% load mptt_tags %}
+{% load navtags %}
+{% load url from future %}
+
+<div class='right'>
+    <a class='button-link go-to-table' href="{% url 'static_page' 'table' %}">
+    <div class='button-icon go-to-table'>&nbsp;</div>
+    <div class='button-text go-to-table'>{% trans "See comparison table of plant kinds" %}</div>
+</a>
+</div>

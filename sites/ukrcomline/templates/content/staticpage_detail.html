@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% load future i18n thumbnail %}
+{% load url from future %}
+{% load markup %}
+
+{% block title %}
+    {{ object.title }}
+{% endblock %}
+
+{% block content %}
+    <div id='wrapper-content'>
+        <h1>{{ object.title }}</h1>
+        <div class='content_render'>
+            {% thumbnail object.logo THUMBNAIL_SETTINGS.ONE_COLUMN_ICON_SIZE as im %}
+                <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+            {% endthumbnail %}
+            {{ object.desc|restructuredtext }}
+            {% for content in object.content.main %}
+                {{ content.render }}
+            {% endfor %}
+        </div>
+        {% block content-additional %}
+        {% endblock %}
+    </div>
+{% endblock %}

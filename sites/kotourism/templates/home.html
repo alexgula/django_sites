@@ -1,0 +1,127 @@
+{% extends 'base_sidebar.html' %}
+
+{% load future i18n %}
+{% load statictags mediatags %}
+{% load eventtags weathertags %}
+
+{% block title %}
+    {% trans "Home" %}
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel='stylesheet' href='{% static 'jquery-ui-datepicker/css/custom-theme/jquery-ui-1.8.9.custom.css' %}' type='text/css' media='all' charset='utf-8' />
+{% endblock %}
+
+{% block links %}
+    {{ block.super }}
+    <link href='{% url 'feed_events' 'news' %}' rel="alternate" type="application/atom+xml" title="{% trans "Subscribe" %}" />
+{% endblock %}
+
+{% block breadcrumbs %}
+    {% trans "Home" %}
+{% endblock %}
+
+{% block content %}
+    <div id='event-calendar' class='block single top'>
+        <h3>{% trans "Event Calendar" %}</h3>
+        <div class='event-calendar-pick'></div>
+        <div class='events-link'></div>
+    </div>
+    <div class='block splitter top'></div>
+    <div class='block single top'>
+        <h3>{% trans "Photo Contest" %}</h3>
+        <div id='banner-photocontest' class='fill'></div>
+    </div>
+{#    <div class='block single top'>#}
+{#        <h3>{% trans "Tourists InfoLine" %}</h3>#}
+{#        <div id='banner-til-{{ request.LANGUAGE_CODE }}' class='fill'>#}
+{#        </div>#}
+{#    </div>#}
+    <div class='block splitter top'></div>
+    <div id='banner-partners-official' class='block single top'>
+        <h3>{% trans "Official Partners" %}</h3>
+        <div class='vblock first single'>
+            <a class='partner partner-4' style='width: 160px; height: 82px; margin-top: 0;' target='_blank'
+               href='http://mtu.gov.ua/' title='Міністерство інфраструктури України'></a>
+            <a class='partner partner-5' style='width: 160px; height: 82px; margin-top: 6px;' target='_blank'
+               href='http://www.tourism.gov.ua/' title='Державне агенство України з туризму та курортів'></a>
+            <a class='partner partner-3' style='width: 160px; height: 82px; margin-top: 6px;' target='_blank'
+               href='http://www.kyiv-obl.gov.ua/' title='Київська обласна державна адміністрація'></a>
+        </div>
+    </div>
+    <div class='block splitter top'></div>
+    <div id='banner-partners' class='block single top'>
+        {% include 'partners.html' %}
+    </div>
+
+    <div id='banner-home' class='block double'>
+        <h3>{% trans "Tourists InfoLine" %}</h3>
+        {% include 'infoline-2012-10.html' %}
+    </div>
+    <div class='block splitter'></div>
+    <div id='banner-welcome' class='block double'>
+        {% include 'welcome.html' %}
+    </div>
+{% endblock %}
+
+{% block main %}
+    {{ block.super }}
+
+    <div class='hblock'>
+        <div id='weather' class='first block single'>
+            <h3>{% trans "Weather" %}</h3>
+            {% comment %}
+            <!-- full town list -->
+            {% meteoprog 'Ukraine' 'Kyiv, BilaTserkva, Boryspil, Brovary, Bucha, Vasilkov, Irpen, Obuhov, PereyaslavHmelnickij, Rzhyshchiv, Slavutych, Fastiv' '7fb0d7' 'e38636' 'ffffff' %}
+            {% endcomment %}
+            {% meteoprog COUNTRY_CODE 'Ukraine' 'Kyiv, BilaTserkva, Boryspil, Bucha, Obuhov, PereyaslavHmelnickij, Fastiv' '7fb0d7' 'e38636' 'ffffff' %}
+        </div>
+        <div class='block splitter'></div>
+        <div id='news' class='block quad'>
+            {% latest_news 4 %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type='text/javascript' src='{% static 'jquery-ui-datepicker/js/jquery-ui-1.8.9.custom.min.js' %}' charset='utf-8'></script>
+    <script type='text/javascript' src='{% static 'jquery-ui-datepicker/js/jquery.ui.datepicker-locale.js' %}' charset='utf-8'></script>
+
+    <script>
+        $(function() {
+            var banner_width = 195;
+            var total_banners_width = ($('#banner-partners .banner-partners-block').length - 1) * banner_width;
+
+            $('#banner-partners .banner-partners-block').each(function(idx) {
+                $(this).css({left: idx * banner_width});
+            });
+
+            function banner_loop(){
+                $('#banner-partners .banner-partners-block').each(function() {
+                    if ($(this).position().left < 0){
+                        $(this).css({left: total_banners_width});
+                    }
+                });
+                $('#banner-partners .banner-partners-block').animate({left: '-=195'}, 2000);
+            }
+            setInterval(banner_loop, 6000);
+
+            var calendar = $('#event-calendar .event-calendar-pick').event_calendar(
+                '{{ LANGUAGE_CODE }}',
+                function(year, month) {
+                    return 'service/events/{0}/{1}/'.format(year, month);
+                },
+                function(year, month, day) {
+                    return 'events/event/' + $.datepicker.formatDate('yy/mm/dd/', new Date(year, month, day));
+                },
+                function(year, month) {
+                    return 'events/event/' + $.datepicker.formatDate('yy/mm/', new Date(year, month, 1));
+                },
+                '{% trans "Events of the month" %}',
+                '#event-calendar .events-link'
+            );
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'event_detail.html' %}
+
+{% load i18n markup %}
+{% load thumbnail %}
+
+{% block region %}
+    {{ block.super }}
+    <div class='double vblock first'>
+        <div class='icon single image-center'>
+            {% thumbnail event.icon THUMBNAIL_SETTINGS.FULLSCREEN_SIZE upscale=False as im_big %}
+                {% thumbnail event.icon '290' upscale=False as im %}
+                    <div class='image-content' style='width: {{ im.width }}px; height: {{ im.height }}px'>
+                        <a class='colorbox' rel='content' href='{{ im_big.url }}'>
+                            <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+                        </a>
+                    </div>
+                {% endthumbnail %}
+            {% endthumbnail %}
+        </div>
+        {% for content in event.content.main %}
+            {{ content.render }}
+        {% endfor %}
+    </div>
+    <div class='double vblock'>
+        {% for content in event.content.side %}
+            {{ content.render }}
+        {% endfor %}
+    </div>
+{% endblock %}

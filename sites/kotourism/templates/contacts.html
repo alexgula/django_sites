@@ -1,0 +1,98 @@
+{% extends "base_sidebar.html" %}
+
+{% load i18n %}
+
+{% block content %}
+    <h3>{% trans "Contacts" %}</h3>
+
+    <div class='contacts content'>
+        <table class='contact double vblock first'>
+            <thead>
+            <tr><td colspan='2' class='contact-head'>{% trans "Address" %}</td></tr>
+            </thead>
+            <tbody>
+            <tr><td class='contact-label'>{% trans "town" %}:</td><td class='contact-body'>{% trans "Kyiv Oblast" %}, 09100, {% trans "Bila Tserkva" %}</td></tr>
+            <tr><td class='contact-label'>{% trans "street" %}:</td><td class='contact-body'>{% trans "Yaroslava Mudrogo" %}, 17</td></tr>
+            <tr><td class='contact-label'>{% trans "office" %}:</td><td class='contact-body'>121</td></tr>
+            <tr><td class='contact-label'>{% trans "phone/fax" %}:</td><td class='contact-body'>+38 04563 5-13-25</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class='contacts content'>
+        <table class='contact double vblock first'>
+            <thead>
+            <tr><td colspan='2' class='contact-head'>{% trans "Director" %}</td></tr>
+            </thead>
+            <tbody>
+            <tr><td class='contact-label'>{% trans "phone" %}:</td><td class='contact-body'>+38 044 223-04-98</td></tr>
+            <tr><td class='contact-label'>email:</td><td class='contact-body'>director@ko-tourism.gov.ua</td></tr>
+            </tbody>
+        </table>
+
+        <table class='contact double vblock'>
+            <thead>
+            <tr><td colspan='2' class='contact-head'>{% trans "Finances" %}</td></tr>
+            </thead>
+            <tbody>
+            <tr><td class='contact-label'>{% trans "phone" %}:</td><td class='contact-body'>+38 044 227-79-32</td></tr>
+            <tr><td class='contact-label'>email:</td><td class='contact-body'>finansy@ko-tourism.gov.ua</td></tr>
+            </tbody>
+        </table>
+
+        <table class='contact double vblock first'>
+            <thead>
+            <tr><td colspan='2' class='contact-head'>{% trans "Tourists activities development" %}</td></tr>
+            </thead>
+            <tbody>
+            <tr><td class='contact-label'>{% trans "phone" %}:</td><td class='contact-body'>+38 044 227-79-31</td></tr>
+            <tr><td class='contact-label'>email:</td><td class='contact-body'>rozvytok@ko-tourism.gov.ua</td></tr>
+            </tbody>
+        </table>
+
+        <table class='contact double vblock'>
+            <thead>
+            <tr><td colspan='2' class='contact-head'>{% trans "Advertisement and information" %}</td></tr>
+            </thead>
+            <tbody>
+            <tr><td class='contact-label'>{% trans "phone" %}:</td><td class='contact-body'>+38 044 227-79-31</td></tr>
+            <tr><td class='contact-label'>email:</td><td class='contact-body'>reklama@ko-tourism.gov.ua</td></tr>
+            </tbody>
+        </table>
+
+        <table class='contact double vblock first'>
+            <thead>
+            <tr><td colspan='2' class='contact-head'>{% trans "Tourists Information Line" %}</td></tr>
+            </thead>
+            <tbody>
+            <tr><td class='contact-label'>{% trans "phone" %}:</td><td class='contact-body'>+38 044 223-04-28</td></tr>
+            <tr><td class='contact-label'>email:</td><td class='contact-body'>kota@ko-tourism.gov.ua</td></tr>
+            <tr><td class='contact-label'>skype:</td><td class='contact-body'>tur_info</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id='visicom-viewport' style='width: 790px; height: 590px;'></div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type='text/javascript' src='http://maps.visicom.ua/api/2.0.0/map/world_{{ COUNTRY_CODE }}.js' charset='utf-8'></script>
+
+    <script>
+        var map;
+        function createVisicomMap() {
+            map = new VMap(document.getElementById('visicom-viewport'));
+
+            var point = {lng: 30.11764, lat: 49.79653};
+
+            var marker = new VMarker(point);
+            marker.hint('{% trans "Kyiv regional center of tourism development" %}');
+            marker.info('{% trans "Kyiv regional center of tourism development" %}', '{% trans "Kyiv Oblast" %}, 09100, {% trans "Bila Tserkva" %}<br/>{% trans "street" %} {% trans "Yaroslava Mudrogo" %}, 17, {% trans "office" %}121<br/>{% trans "phone/fax" %}: +38 04563 5-13-25');
+            map.add(marker);
+
+            map.center(point, 16);
+            map.repaint();
+        }
+    </script>
+{% endblock %}

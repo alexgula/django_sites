@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% load future %}
+{% load i18n %}
+{% load paging_extras %}
+{% load catalogue_tags %}
+
+{% block title %}
+    {% paginate works from request as paging per_page 20 %}
+    {% if author %}{{ author.name }} | {% endif %}{% trans "Works Search" %} | {{ filters_title }}{% if paging.page > 1 %} | {{ paging.page }}{% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <div class='menu-item'><a href='{% url 'catalogue_home' %}'><span class='menu-item-content'>{% trans "Home" %}</span></a></div>
+    <div class='menu-item breadcrumb-delimiter'><span class='breadcrumb-content'>&rarr;</span></div>
+    <div class='menu-item'><span class='menu-item-content'>{% trans "Search" %}</span></div>
+{% endblock %}
+
+{% block page-content %}
+    {% paginate works from request as paging per_page 20 %}
+    {{ paging.paging }}
+    <div id='work-list' class='columns adaptive-190-300 same-height'>
+        {% for work in paging.objects %}
+            {% include 'catalogue/work_detail_include.html' %}
+        {% endfor %}
+    </div>
+    <div style='padding-bottom: 50px;'>{{ paging.paging }}</div>
+{% endblock %}
+
+{% block page-nav %}
+    {% show_filters %}
+    <div class='splitter'></div>
+{% endblock %}

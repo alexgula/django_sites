@@ -1,0 +1,12 @@
+{% extends 'base_sidebar.html' %}
+
+{% load future %}
+{% load i18n %}
+
+{% block title %}{% trans "Registration error" %}{% endblock %}
+
+{% block content %}
+    <h3>{% trans "Registration error" %}</h3>
+
+    <p>{{ error }}</p>
+{% endblock %}

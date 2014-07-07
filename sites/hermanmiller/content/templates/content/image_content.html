@@ -1,0 +1,56 @@
+{% load thumbnail markup %}
+
+{% if text %}
+    <div class="image-content_block-image-text">
+        <div class='image-content image-content_{{ position }}'>
+            <div class="image-content_{{ size }}">
+                <a class='colorbox' rel='content' href='{{ image.url }}' title='{{ caption }}' style="display: block;">
+                    {% if size == '270' %}
+                        <img src='{{ thumb.url }}' width='{{ thumb.width }}' height='{{ thumb.height }}' style='margin:{{ im|margin:"270" }}'/>
+                    {% elif size == '570' %}
+                        <img src='{{ thumb.url }}' width='{{ thumb.width }}' height='{{ thumb.height }}' style='margin:{{ im|margin:"570" }}'/>
+                    {% else %}
+                        <img src='{{ thumb.url }}' width='{{ thumb.width }}' height='{{ thumb.height }}' style='margin:{{ im|margin:"870" }}'/>
+                    {% endif %}
+                </a>
+            </div>
+            {% if url %}
+                {% if caption %}
+                    <a class='img_caption image-content_{{ size }}' href='{{ url }}' title='{{ caption }}'>{{ caption }}</a>
+                {% else %}
+                    <a class='img_caption image-content_{{ size }}' href='{{ url }}' title='{{ url }}'>{{ url }}</a>
+                {% endif %}
+            {% else %}
+                {% if caption %}
+                    <div class='img_caption image-content_{{ size }}'>{{ caption }}</div>
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class='image-text'>{{ text|restructuredtext }}</div>
+    </div>
+{% else %}
+    <div class='image-content image-content_{{ position }}'>
+        <div class="image-content_{{ size }}">
+            <a class='colorbox' rel='content' href='{{ image.url }}' title='{{ caption }}' style="display: block;">
+                {% if size == '270' %}
+                    <img src='{{ thumb.url }}' width='{{ thumb.width }}' height='{{ thumb.height }}' style='margin:{{ im|margin:"270" }}'/>
+                {% elif size == '570' %}
+                    <img src='{{ thumb.url }}' width='{{ thumb.width }}' height='{{ thumb.height }}' style='margin:{{ im|margin:"570" }}'/>
+                {% else %}
+                    <img src='{{ thumb.url }}' width='{{ thumb.width }}' height='{{ thumb.height }}' style='margin:{{ im|margin:"870" }}'/>
+                {% endif %}
+            </a>
+        </div>
+        {% if url %}
+            {% if caption %}
+                <a class='img_caption image-content_{{ size }}' href='{{ url }}' title='{{ caption }}'>{{ caption }}</a>
+            {% else %}
+                <a class='img_caption image-content_{{ size }}' href='{{ url }}' title='{{ url }}'>{{ url }}</a>
+            {% endif %}
+        {% else %}
+            {% if caption %}
+                <div class='img_caption image-content_{{ size }}'>{{ caption }}</div>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endif %}

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% load future i18n thumbnail %}
+{% load url from future %}
+{% load markup %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block logo %}
+    {% thumbnail object.logo THUMBNAIL_SETTINGS.ICON_SIZE crop='center' as im %}
+        <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+    {% endthumbnail %}
+{% endblock %}
+
+{% block left-side %}
+    <ul class='production-menu'>
+        {% for ancestor in object.get_ancestors %}
+            <li>
+                <a href='{{ ancestor.get_absolute_url }}' class='production-menu-link level-{{ ancestor.level }}'>{{ ancestor.title }}</a>
+                <ul class='production-menu'>
+                    {% for ancestor_child in ancestor.get_children %}
+                        <li>
+                            {% if ancestor_child == object %}
+                                <div class='production-menu-link level-{{ ancestor_child.level }} selected '>{{ ancestor_child.title }}</div>
+                            {% else %}
+                                <a href='{{ ancestor_child.get_absolute_url }}' class='production-menu-link level-{{ ancestor_child.level }}'>{{ ancestor_child.title }}</a>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <div class='right-side right'>
+        {% block comparison-table-button %}{% include 'includes/go_to_table_button.html' %}{% endblock %}
+        {{ block.super }}
+        <h1>{{ title }}</h1>
+        {% if object.images.all %}
+            <div class='photo-slider'>
+                <div class='fotorama' data-width="370" data-height="320" data-nav="thumbs" data-allowfullscreen="true" data-transition="crossfade" data-loop="true" data-fit="scaledown">
+                    {% for image in object.images.all %}
+                        {% thumbnail image.image '370' upscale=False as im %}
+                            <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}' style='margin:{{ im|margin:"370x320" }}' data-full='{{ image.image.url }}' data-caption='{{ image.caption }}'/>
+                        {% endthumbnail %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <div class='default-picture-for-product'></div>
+        {% endif %}
+        <div class='content_render'>
+            {{ object.desc|restructuredtext }}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends 'base_sidebar.html' %}
+
+{% load future %}
+{% load i18n markup localeurl_tags %}
+{% load paging_extras thumbnail thumbnail_margin %}
+{% load statictags %}
+
+{% block title %}{% trans "Photo Contest" %}{% endblock %}
+
+{% block content %}
+    {% paginate photo_list from request as results per_page 16 %}
+    <h3>
+        {% trans "Photo Contest" %} &laquo;{{ contest.name }}&raquo;
+    </h3>
+    <h4>{% trans "Contest dates" %}: {{ contest.date_from }} - {{ contest.date_to }}</h4>
+    <div class='photocontest-toolbar'>
+        <div class='photocontest-toolbar-panel-left photocontest-toolbar-panel-sorter'>
+            <div class='photocontest-toolbar-header'>{% trans "Order by:" %}</div>
+            <div class='photocontest-toolbar-block{% if sort_order == 'post' or sort_order == '-post' %} photocontest-toolbar-block-active{% endif %}'>
+                <a href='{% url 'photocontest_list' %}?order={% if sort_order != '-post' %}-post{% endif %}{% if sort_order == '-post' %}post{% endif %}'>{% trans "Post Date" %}</a>
+                <div class='photocontest-sorter-arrow{% if sort_order == 'post' %} sprite-icon_arrow_asc-png{% endif %}{% if sort_order == '-post' %} sprite-icon_arrow_desc-png{% endif %}'></div>
+            </div>
+            <div class='photocontest-toolbar-block{% if sort_order == 'author' or sort_order == '-author' %} photocontest-toolbar-block-active{% endif %}'>
+                <a href='{% url 'photocontest_list' %}?order={% if sort_order != 'author' %}author{% endif %}{% if sort_order == 'author' %}-author{% endif %}'>{% trans "Author" %}</a>
+                <div class='photocontest-sorter-arrow{% if sort_order == '-author' %} sprite-icon_arrow_asc-png{% endif %}{% if sort_order == 'author' %} sprite-icon_arrow_desc-png{% endif %}'></div>
+            </div>
+            <div class='photocontest-toolbar-block{% if sort_order == 'votes' or sort_order == '-votes' %} photocontest-toolbar-block-active{% endif %}'>
+                <a href='{% url 'photocontest_list' %}?order={% if sort_order != '-votes' %}-votes{% endif %}{% if sort_order == '-votes' %}votes{% endif %}'>{% trans "Votes" %}</a>
+                <div class='photocontest-sorter-arrow{% if sort_order == 'votes' %} sprite-icon_arrow_asc-png{% endif %}{% if sort_order == '-votes' %} sprite-icon_arrow_desc-png{% endif %}'></div>
+            </div>
+        </div>
+        <div class='photocontest-toolbar-panel-right photocontest-toolbar-panel-actions'>
+            {% if author %}
+                <div class='photocontest-toolbar-block'>
+                    <div class='photocontest-action-icon sprite-icon_upload-png'></div>
+                    <a href='{% url 'photocontest_upload' %}'>{% trans "Upload" %}</a>
+                </div>
+                <div class='photocontest-toolbar-block'>
+                    <div class='photocontest-action-icon sprite-icon_login_key-png'></div>
+                    <a href='{% url 'photocontest_logout' %}'>{% trans "Logout" %}</a>
+                </div>
+            {% else %}
+                <div class='photocontest-toolbar-block'>
+                    <div class='photocontest-action-icon sprite-icon_login_key-png'></div>
+                    <a href='{% url 'photocontest_login' %}'>{% trans "Login" %}</a>
+                </div>
+                <div class='photocontest-toolbar-block'>
+                    <div class='photocontest-action-icon sprite-icon_registration-png'></div>
+                    <a href='{% url 'photocontest_register' %}'>{% trans "Register" %}</a>
+                </div>
+            {% endif %}
+            <div class='photocontest-toolbar-block'>
+                <div class='photocontest-action-icon sprite-icon_rules-png'></div>
+                <a href='{% url 'photocontest_terms' %}'>{% trans "Terms" %}</a>
+            </div>
+        </div>
+    </div>
+    <div class='block-container'>
+        {% for photo in results.objects %}
+            <div class='block-item photo-block single' title='{{ photo.name }}'>
+                <div class='photo-caption photo-name'>{{ photo.name }}</div>
+                <div class='photo-caption photo-author'>{{ photo.author.name }}</div>
+                {% thumbnail photo.image THUMBNAIL_SETTINGS.FULLSCREEN_SIZE upscale=False as im_big %}
+                    {% thumbnail photo.image THUMBNAIL_SETTINGS.SQUARE_ICON_SIZE upscale=False crop='center' as im %}
+                        <div style='width: {{ im.width }}px; height: {{ im.height }}px;'>
+                            <a class='colorbox' href='{{ im_big.url }}'>
+                                <img id='photo-{{ photo.id }}' src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+                            </a>
+                        </div>
+                    {% endthumbnail %}
+                {% endthumbnail %}
+                <div class='photo-social'>
+                    <div class="addthis_toolbox addthis_default_style addthis_16x16_style"
+                         addthis:url="http://{{ site.domain }}{{ request.path|rmlocale }}#photo-{{ photo.id }}">
+                        <a class="addthis_button_facebook"></a>
+                        <a class="addthis_button_vk"></a>
+                        <a class="addthis_button_twitter"></a>
+                        <a class="addthis_button_google_plusone_share"></a>
+                        <a class="addthis_button_compact"></a>
+                        <a class="addthis_counter addthis_bubble_style"></a>
+                    </div>
+                </div>
+                <div>
+                    <div class='photo-vote' photo-id='{{ photo.id }}'>{% trans "Vote" %}</div>
+                    <div class='photo-results'><span class='photo-votes' title='{% trans "Votes" %}'>{{ photo.votes }}</span></div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class='double shift-single'>{{ results.paging }}</div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $(function() {
+            $(".photo-vote").click(function(e) {
+                var self = $(this);
+                var photo_id = self.attr("photo-id");
+                $.post("{% url 'photocontest_vote' %}", { id: photo_id }, function(data) {
+                    self.parent().find(".photo-votes").html(data.votes);
+                });
+            });
+        });
+    </script>
+{% endblock %}

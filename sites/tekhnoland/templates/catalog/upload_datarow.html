@@ -1,0 +1,16 @@
+{% load future %}
+
+<td><a href='{% url 'catalog:search' %}?part_number={{ object.part_number }}'>{{ object.part_number }}</a></td>
+<td><div class='upload-part-list-replacement'>{% if object.is_replacement %}Замена{% endif %}</div></td>
+<td>{{ object.name }}</td>
+<td class='part-list-price'>{{ object.price|floatformat:'2' }}</td>
+<td class='part-list-price'>{{ object.user_price|floatformat:'2' }}</td>
+<td class='part-list-quantity-reserved'>{{ object.quantity_reserved|floatformat:'0' }}</td>
+<td class='part-list-marker'>{% if object.pending %}{{ object.pending|date:"Y-m-d" }}{% else %}{% if object.stock_quantity > 0 %}+{% else %}-{% endif %}{% endif %}</td>
+<td>
+    <div stock-unit-id='{{ object.stock_unit_id }}' class='upload-part-list-input-container'>
+        <div class='part-list-search-count-order-container'>
+            <input name='item__{{ object.stock_unit_id }}__{% if object.is_replacement %}replacement{% endif %}' class='part-list-count-order' type='text' value='{{ object.quantity|floatformat:'0' }}' maxvalue='{{ object.stock_quantity|floatformat:'0' }}'/>
+        </div>
+    </div>
+</td>

@@ -1,0 +1,12 @@
+{% extends "catalogue/search.html" %}
+
+{% load future %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+    <div class='menu-item'><a href='{% url 'catalogue_home' %}'><span class='menu-item-content'>{% trans "Home" %}</span></a></div>
+    <div class='menu-item breadcrumb-delimiter'><span class='breadcrumb-content'>&rarr;</span></div>
+    <div class='menu-item'><a href='{% url 'catalogue_author_detail' author.slug %}'><span class='menu-item-content'>{{ author.name }}</span></a></div>
+    <div class='menu-item breadcrumb-delimiter'><span class='breadcrumb-content'>&rarr;</span></div>
+    <div class='menu-item'><span class='menu-item-content'>{% trans "Search" %}</span></div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base_sidebar.html' %}
+
+{% load i18n markup localeurl_tags highlight paging_extras fieldtranslation %}
+
+{% block content %}
+    {% if query %}
+        <h3>{% trans "Search results for" %} "{{ query }}"</h3>
+        {% paginate object_list from request as results per_page 10 %}
+        {% for result in results.objects %}
+            <div class='paragraph'>
+                <div class='vblock first triple search-title'>
+                    <h4><a href="{{ result.url|chlocale:request.LANGUAGE_CODE }}">{{ result.name|translate }}</a></h4>
+                </div>
+                <div class='vblock single'>
+                    <div class='search-type'>{{ result.type|translate }}</div>
+                </div>
+                {% if result.desc %}
+                    <div class='vblock double shift-single search-text paragraph'>
+                        {% highlight result.desc|translate|restructuredtext with query html_tag 'span' css_class 'highlight' %}
+                    </div>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p>{% trans "No results found." %}</p>
+        {% endfor %}
+    {% else %}
+        <h3>{% trans "Search" %}</h3>
+        {% trans "Please make a query." %}
+    {% endif %}
+    <div class='double shift-single'>{{ results.paging }}</div>
+{% endblock %}

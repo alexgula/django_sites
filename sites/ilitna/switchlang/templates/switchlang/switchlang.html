@@ -1,0 +1,13 @@
+{% if languages_count > 1 %}
+    <ul class='languages'>
+        {% for lang, url, current in languages %}
+            <li class='language'>
+                {% if current %}
+                    <span title="{{ lang.name_local }}">{{ lang.code|upper }}</span>
+                {% else %}
+                    <a class='lang-{{ lang.code }}' href='{{ url }}' title="{{ lang.name_local }}">{{ lang.code|upper }}</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

@@ -1,0 +1,77 @@
+{% extends "content_base.html" %}
+
+{% load future %}
+{% load i18n markup %}
+{% load localeurl_tags disqus_tags %}
+{% load media_tags catalogue_tags %}
+{% load dajaxice_templatetags %}
+
+{% block branding-page %}
+    {% image object.author.sign.url %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <div class='menu-item'><a href='{% url 'catalogue_home' %}'><span class='menu-item-content'>{% trans "Home" %}</span></a></div>
+    <div class='menu-item breadcrumb-delimiter'><span class='breadcrumb-content'>&rarr;</span></div>
+    <div class='menu-item'><a href='{% url 'catalogue_author_detail' object.author.slug %}'><span class='menu-item-content'>{{ object.author.name }}</span></a></div>
+    <div class='menu-item breadcrumb-delimiter'><span class='breadcrumb-content'>&rarr;</span></div>
+    <div class='menu-item'><span class='menu-item-content'>{{ object.name }}</span></div>
+{% endblock %}
+
+{% block page-content %}
+    <h1 id='work-name'>{{ object }}</h1>
+
+    <div id='work-image'>
+        {% dzi object.dzi %}
+    </div>
+    <div id='work-info'>
+        <div id='work-attrs'>
+            {{ object.term_abbrs|join:', ' }}
+            <br/>
+            {{ object.short_desc|join:', ' }}
+        </div>
+        <div id='work-author-name'>
+            <h2>{{ object.author.name }}</h2>
+        </div>
+        <div id='work-periods'>
+            {% if object.periods.all %}
+                <h2>{% trans "Periods" %}</h2>
+                {{ object.periods.all|join:', ' }}
+            {% endif %}
+        </div>
+        <div id='work-desc'>
+            {% if object.desc %}
+                <h2>{% trans "Description" %}</h2>
+                {{ object.desc|restructuredtext }}
+            {% endif %}
+        </div>
+        <div id='work-owner'>
+            {% if object.owner %}
+                <h2>{% trans "Current owner" %}</h2>
+                {{ object.owner }}
+            {% endif %}
+        </div>
+        <div id='work-like'>
+            {% include 'catalogue/social_panel.html' %}
+        </div>
+        <div id='work-comments'>
+            {% set_disqus_identifier object.author.slug '/' object.slug %}
+            {% set_disqus_url 'http://' site.domain request.path|rmlocale %}
+            {% set_disqus_title object.author.name ' ' object.name %}
+            {% disqus_show_comments %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block page-nav %}
+    {% show_filters %}
+    <div class='splitter'></div>
+{% endblock %}
+
+{% block page-footer-actions %}
+    {% if user.is_staff %}
+        <div class='admin-action'>
+            <a href={{ object.get_admin_url }}>{% trans "Edit" %}</a>
+        </div>
+    {% endif %}
+{% endblock %}

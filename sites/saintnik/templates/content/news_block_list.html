@@ -1,0 +1,20 @@
+{% load future i18n localeurl_tags contenttags %}
+<h2><a href='{% url 'news_list' %}'>{% trans "Latest news" %}</a></h2>
+<ul class="news">
+    {% for news in news_list %}
+        <li>
+            <div class='date'>
+                <div class='day_month'>
+                    {{ news.pub_date|date:'d.m' }}
+                </div>
+                <div class='year'>
+                    {{ news.pub_date|date:'Y' }}
+                </div>
+            </div>
+
+            <div class='description'>
+                <a href='{{ news.get_absolute_url }}'>{{ news.title }}</a>
+            </div>
+        </li>
+    {% endfor %}
+</ul>

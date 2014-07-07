@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% load future markup %}
+{% load thumbnail paging_extras %}
+
+{% block title %}{{ block.super }} | Список событий {% endblock %}
+
+{% block content %}
+    <div class="book-list">
+        <h1> Произведения </h1>
+    </div>
+    {% paginate object_list from request as results per_page 5 %}
+    {% for object in results.objects %}
+        <div class="book-list ">
+            <div>
+                {% thumbnail object.cover "275" as im %}
+                    <a href="{{ object.get_absolute_url }}" ><img src="{{ im.url }}" alt="{{ im.title }}"></a>
+                {% endthumbnail %}
+            </div>
+            <div>
+                <h2>{{ object.author }}</h2>
+                <h1><a href="{{ object.get_absolute_url }}">{{ object.title|upper }}</a></h1>
+                <h3>{{ object.preamble|restructuredtext }}</h3>
+            </div>
+        </div>
+        <div class="divider"></div>
+    {% endfor %}
+    <div class="pager-line">{{ results.paging }}</div>
+{% endblock %}
+
+{% block element_edit %}
+    <a class="h-link" href="{% url 'admin:books_book_changelist' %}">Редактировать</a>
+{% endblock %}

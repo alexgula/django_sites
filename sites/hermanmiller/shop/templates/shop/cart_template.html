@@ -1,0 +1,225 @@
+{% load i18n %}
+<div class="js-cart cart-dialog grid" title="{% trans "Cart" %}">
+    <div class="cart__header">{% trans "Your cart contains the following items:" %}</div>
+    <table class="cart__items">
+        <thead class="cart__items__header"><tr>
+            <th class="cart__items__header__column">{% trans "Product" %}</th>
+            <th class="cart__items__header__column cart__item__column__price">{% trans "Price" %}</th>
+            <th class="cart__items__header__column cart__item__column__quantity">{% trans "Quantity" %}</th>
+            <th class="cart__items__header__column cart__item__column__remove"></th>
+        </tr></thead>
+        <tbody data-bind="foreach: cart">
+            <tr class="cart__item">
+                <td class="cart__item__column"><a class="cart__item__column__name" data-bind="text: name, attr: { href: url }"></a></td>
+                <td class="cart__item__column">
+                    <div class="cart__item__price-uah">
+                        <span data-bind="text: price_uah"></span>
+                        <span class="goods-currency"> грн.</span>
+                    </div>
+                    <div class="cart__item__price-eur" >
+                        <span data-bind="text: price_eur"></span>
+                        <span class="goods-currency"> EUR</span>
+                    </div>
+                </td>
+                <td class="cart__item__column">
+                    <input class="cart__item__quantity" data-bind="spinner: quantity, spinnerOptions: { min: 1 }">
+                </td>
+                <td class="cart__item__column" data-bind="click: $parent.cartItemRemove">
+                    <span class="sprite-btn-delete"></span>
+                </td>
+            </tr>
+        </tbody>
+        <tr data-bind="slideVisible: cartTotalQuantity() > 0">
+            <td class="cart__item__column cart__total">{% trans "Total" %}</td>
+            <td class="cart__item__column cart__total__price">{% trans "Total cost" %}:
+                <div class="cart__item__price-uah">
+                    <span data-bind="text: cartTotalPriceUah()"></span>
+                    <span class="goods-currency"> грн.</span>
+                </div>
+                <div class="cart__item__price-eur" >
+                    <span data-bind="text: cartTotalPriceEur()"></span>
+                    <span class="goods-currency"> EUR</span>
+                </div>
+            </td>
+            <td class="cart__item__column cart__total__quantity">{% trans "Total quantity" %}:
+                <div class="cart__item__price-uah" data-bind="text: cartTotalQuantity()"></div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="cart__customer" data-bind="slideVisible: !isAuthenticated()">
+        <div class="cart__customer__box">
+            <div class="cart__customer__title">{% trans "Do you have an account?" %}</div>
+            <label class="cart__registration__choices">{% trans "I have an account and want to login" %}
+                <input type="radio" name="registration-types" value="login" data-bind="checked: customerRegistration">
+            </label>
+            <label class="cart__registration__choices">{% trans "I do NOT have an account, but want to register" %}
+                <input type="radio" name="registration-types" value="register" data-bind="checked: customerRegistration">
+            </label>
+            <label class="cart__registration__choices">{% trans "I do NOT have an account and do NOT want register" %}
+                <input type="radio" name="registration-types" value="skip" data-bind="checked: customerRegistration">
+            </label>
+        </div>
+    </div>
+
+    <div class="cart__customer" data-bind="slideVisible: cartShowLogin">
+        <div class="cart__customer__box">
+            <div class="cart__customer__title">{% trans "Please provide credentials (either email or phone number)" %}</div>
+            <label class="cart__customer__label cart__customer__label-required">
+                {% trans "Email or phone" %}<span class="cart__customer__label__required-marker"
+                                         data-bind="visible: !customerLoginName.isValid(), text:customerLoginName.validationMessage"></span>:
+                <input class="cart__customer__value" type="text" data-bind="value: customerLoginName"/>
+            </label>
+            <label class="cart__customer__label cart__customer__label-required">
+                {% trans "Password" %}<span class="cart__customer__label__required-marker"
+                                            data-bind="visible: !customerPassword.isValid(), text:customerPassword.validationMessage"></span>:
+                <input class="cart__customer__value" type="password" data-bind="value: customerPassword"/>
+            </label>
+        </div>
+        <div class="cart_button-box">
+            <button class="js-cart-login cart__button" data-bind="click: function () { customerLogin(); }, enabled: enableLogin()">{% trans "Login" %}</button>
+        </div>
+    </div>
+
+    <div class="cart__customer" data-bind="slideVisible: cartShowOrder">
+        <div class="cart__customer__box">
+            <div class="cart__customer__title">{% trans "Delivery information" %}</div>
+            <label class="cart__customer__label cart__customer__label-required">
+                {% trans "Name" %}<span class="cart__customer__label__required-marker"
+                                        data-bind="visible: !order.name.isValid(), text:order.name.validationMessage"></span>:
+                <input class="cart__customer__value" type="text" data-bind="value: order.name"/>
+                <span class="cart__customer__label-alternative"><br>{% trans "Organisation" %}</span>
+            </label>
+            <label class="cart__customer__label cart__customer__label-required">
+                {% trans "Phone" %}<span class="cart__customer__label__required-marker"
+                                         data-bind="visible: !order.phone.isValid(), text:order.phone.validationMessage"></span>:
+                <input class="cart__customer__value" type="text" data-bind="value: order.phone"/>
+            </label>
+            <label class="cart__customer__label cart__customer__label-required" data-bind="slideVisible: customerRegistration()=='register'">
+                {% trans "Password" %}<span class="cart__customer__label__required-marker"
+                                            data-bind="visible: !customerPassword.isValid(), text:customerPassword.validationMessage"></span>:
+                <input class="cart__customer__value" type="password" data-bind="value: customerPassword"/>
+            </label>
+            <label class="cart__customer__label cart__customer__label-required">
+                {% trans "Email" %}: <input class="cart__customer__value" type="text" data-bind="value: order.email"/>
+            </label>
+            <label class="cart__customer__label">
+                {% trans "Identification Code" %}: <input class="cart__customer__value" type="text" data-bind="value: order.code"/>
+            </label>
+            <label class="cart__customer__label">
+                {% trans "Contact Person" %}: <input class="cart__customer__value" type="text" data-bind="value: order.contact"/>
+            </label>
+            <label class="cart__customer__label cart__customer__label-required cart__customer__label-last">
+                {% trans "Address" %}: <input class="cart__customer__value" type="text" data-bind="value: order.address"/>
+            </label>
+        </div>
+    </div>
+
+    <div class="cart__order" data-bind="slideVisible: cartShowOrder">
+        <div class="cart__order__box">
+            <div class="cart__order__label">
+                <div class="cart__order__title">{% trans "Payment Type" %}:</div>
+                <div data-bind="foreach: cartChoices.payment_types">
+                    <label class="cart__order__choices">
+                        <input type="radio" name="payment_types" data-bind="checkedValue: $data, checked: $parent.order.payment_type">
+                        <!-- ko text: name -->
+                        <!-- /ko -->
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="cart__comments" data-bind="slideVisible: cartShowOrder">
+        <div class="cart__comments__box">
+            <label class="cart__order__label">
+                <div class="cart__customer__title">{% trans "Comment" %}:</div> <textarea class="cart__order__value" data-bind="value: order.comment"></textarea>
+            </label>
+        </div>
+    </div>
+
+    <div class="cart_button-box" data-bind="slideVisible: cartEnableOrder">
+        <div class="ui-state-error ui-corner-all message-main-text" data-bind="visible: cartStatus">
+            <p>
+                <span class="ui-icon ui-icon-alert message-icon"></span>
+                <span data-bind="text: cartStatus"></span>
+            </p>
+        </div>
+        <button class="js-cart-continue cart__button" data-bind="click: function () { cartContinueShopping(); }">{% trans "Continue Shopping" %}</button>
+        <button class="js-cart-logout cart__button" data-bind="click: function () { customerLogout(); }, visible: isAuthenticated">{% trans "Logout" %}</button>
+        <button class="js-cart-order cart__button" data-bind="click: function () { cartOrder(); }">{% trans "Order Items" %}</button>
+    </div>
+</div>
+
+<div class="js-login">
+    <div class="cart__customer">
+        <div class="cart__customer__box">
+            <div class="cart__customer__title">{% trans "Please provide credentials (either email or phone number)" %}</div>
+            <label class="cart__customer__label cart__customer__label-required">
+                {% trans "Email or phone" %}<span class="cart__customer__label__required-marker"
+                                         data-bind="visible: !customerLoginName.isValid(), text:customerLoginName.validationMessage"></span>:
+                <input class="cart__customer__value" type="text" data-bind="value: customerLoginName"/>
+            </label>
+            <label class="cart__customer__label cart__customer__label-required">
+                {% trans "Password" %}<span class="cart__customer__label__required-marker"
+                                            data-bind="visible: !customerPassword.isValid(), text:customerPassword.validationMessage"></span>:
+                <input class="cart__customer__value" type="password" data-bind="value: customerPassword"/>
+            </label>
+        </div>
+        <div class="cart_button-box">
+            <button class="js-cart-login cart__button" data-bind="click: function () { customerLogin(); }, enabled: enableLogin()">{% trans "Login" %}</button>
+            <button class="js-cart-login cart__button" data-bind="click: function () { closeLoginDialog(); }">{% trans "Cancel" %}</button>
+        </div>
+    </div>
+</div>
+
+<div class="js-logout">
+    <div class="cart__customer">
+        <div class="cart__customer__box">
+            <div class="cart__customer__title">{% trans "Do you want to logout from shop?" %}</div>
+        </div>
+        <div class="cart_button-box">
+            <button class="js-cart-login cart__button" data-bind="click: function () { customerLogout(); }">{% trans "Logout" %}</button>
+            <button class="js-cart-login cart__button" data-bind="click: function () { closeLogoutDialog(); }">{% trans "Cancel" %}</button>
+        </div>
+    </div>
+</div>
+
+<div class="js-system-error-message" title="{% trans "Error" %}">
+    <div class="ui-state-error ui-corner-all message-main-text">
+        <p>
+            <span class="ui-icon ui-icon-alert message-icon"></span>
+            {% trans "Data sending failed! An unexpected error occurred." %}
+        </p>
+    </div>
+    <p class="message-text">{% trans "Please, try again later or contact technical support."%}</p>
+</div>
+
+<div class="js-cart-error-message" title="{% trans "Error" %}">
+    <div class="ui-state-error ui-corner-all message-main-text">
+        <p>
+            <span class="ui-icon ui-icon-alert message-icon"></span>
+            {% trans "Cart order failed! An unexpected error occurred." %}
+        </p>
+    </div>
+    <p class="message-text">{% trans "Please, try again later or contact technical support."%}</p>
+</div>
+
+<div class="js-cart-success-message" title="{% trans "Cart Order" %}">
+    <div class="ui-state-highlight ui-corner-all message-main-text">
+        <p>
+            <span class="ui-icon ui-icon-info message-icon"></span>
+            {% trans "Order successfully placed." %}
+        </p>
+    </div>
+    <p class="message-text">{% trans "Order details have been sent to your e-mail. Our managers will contact you soon."%} <strong>{% trans "Thank you!" %}</strong></p>
+</div>
+
+<div class="js-order-error-message" title="{% trans "Order Error" %}">
+    <div class="ui-state-error ui-corner-all message-main-text">
+        <p>
+            <span class="ui-icon ui-icon-alert message-icon"></span>
+            {% trans "Unable to place an order. An error occurred." %}
+        </p>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+{% load url from future %}
+<h2 class='block-title'>
+    Примеры монтажа
+    <a class='see-all' href="{% url 'portfolio_list' %}">Все примеры</a>
+</h2>
+{% for portfolio in portfolio_list %}
+    <div class='last-portfolio'>
+        <div class='last-portfolio-date'>{{ portfolio.created_on|date:'d.m.Y' }}</div>
+        <div class='last-portfolio-text'><a class='text-link' href="{{ portfolio.get_absolute_url }}">{{ portfolio.title }}</a></div>
+    </div>
+{% endfor %}

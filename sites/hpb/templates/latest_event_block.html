@@ -1,0 +1,34 @@
+{% load future %}
+
+<div class="inform-element">
+    <table class="inform-block-events">
+        <tr>
+            <td class="img-event"></td>
+            <td><h2><a href="{% url 'event_list' %}">События</a></h2></td>
+        </tr>
+        {% if event %}
+            <tr>
+                <td class="h-datetime">
+                    <div class="h-data">{{ event.start_date|date:"d.m.Y" }}</div>
+                    {% if event.start_date != event.end_date %}
+                        <div class="h-data">{{ event.end_date|date:"d.m.Y" }}</div>
+                    {% endif %}
+                    {% if event.start_time == event.end_time %}
+                        <div class="h-data">{{ event.start_time|time:"H:i" }}</div>
+                    {% else %}
+                        <div class="h-time">{{ event.start_time|time:"H:i" }} - {{ event.end_time|time:"H:i" }}</div>
+                    {% endif %}
+                </td>
+                <td class="h-link">
+                    <a href="{% url 'event_details' event.id %}">{{ event.title }}</a>
+                </td>
+            </tr>
+            <tr class="h-main-text">
+                <td colspan="2">{{ event.preview }}</td>
+            </tr>
+        {% endif %}
+        <tr class="h-main-text">
+            <td colspan="2"><a href="{% url 'event_list' %}">Просмотреть все события</a></td>
+        </tr>
+    </table>
+</div>

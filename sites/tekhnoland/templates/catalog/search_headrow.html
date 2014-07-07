@@ -1,0 +1,13 @@
+<th>Код по каталогу</th>
+<th>Название</th>
+{% if user.is_authenticated %}
+    <th>Цена, USD</th>
+{% endif %}
+<th>Цена, UAH</th>
+{% if user.is_authenticated %}
+    <th>Резерв</th>
+{% endif %}
+<th>Наличие</th>
+{% if user.is_authenticated %}
+    <th></th>
+{% endif %}

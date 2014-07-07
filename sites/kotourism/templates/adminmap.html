@@ -1,0 +1,100 @@
+{% extends 'base_sidebar.html' %}
+
+{% load i18n future %}
+{% load statictags mediatags %}
+{% load eventtags weathertags %}
+
+{% block title %}
+    {% trans "Administrative Map" %}
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel='stylesheet' href='{% static 'jquery-ui-datepicker/css/custom-theme/jquery-ui-1.8.9.custom.css' %}' type='text/css' media='all' charset='utf-8' />
+{% endblock %}
+
+{% block content %}
+    <div id='adminmap'>
+        <h3>{% trans "Administrative Map" %}</h3>
+        <div class='first vblock triple'>
+            <div id='map-container' class='map-image'>
+                <img src='{{ STATIC_URL }}adminmap/map.png'
+                     alt='{% trans "Administrative Map" %}'
+                     width='440' height='564'/>
+                <div id='map-overlay-selected' class='map-image map-overlay'></div>
+                <div id='map-overlay-hover' class='map-image map-overlay'></div>
+            </div>
+        </div>
+        <div class='vblock single'>
+            <div id='region-container'>
+                <a class='region-link' href=''><h4 class='region-name'></h4></a>
+                <div class='region-desc'></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+
+    <script type="text/javascript">
+        $(function() {
+            $("#region-container").css({
+                'display':'none'
+            });
+            $.ajax({
+                url: '{% url 'region_map' %}',
+                dataType: 'json',
+                success: function(data) {
+                    var color_map = data;
+                    var region_id = 0;
+                    var current_region = 0;
+                    var displayed_region = 0;
+                    var offset = $('#adminmap .map-image').offset();
+                    var region = {};
+                    function show_region(region_id) {
+                        var width = $('#adminmap .map-image').width();
+                        var background_offset = region_id > 0 ? -width * (region_id - 1) : width;
+                        $('#map-overlay-hover').css({backgroundPosition: '' + background_offset + 'px 0'});
+                    }
+
+                    $('#adminmap #map-container').mousemove(function(event) {
+                        var x = Math.floor((event.pageX - offset.left) / 4);
+                        var y = Math.floor((event.pageY - offset.top) / 4);
+                        var pos = y * color_map.size[0] + x;
+                        region_id = color_map.color_map[pos];
+                        region = region_id > 0? color_map.region_map[region_id]: {};
+
+                        if(current_region != region_id)
+                        {
+                            current_region = region_id;
+                            show_region(region_id);
+                        }
+                    }).mouseout(function() {
+                        region_id = current_region = 0;
+                        region = {};
+                        show_region(region_id);
+                    }).click(function() {
+                        if(region_id > 0 && displayed_region != region_id)
+                        {
+                            displayed_region = region_id;
+                            var background_offset = $('#adminmap .map-image').width() * (displayed_region - 1);
+                            console.log(background_offset);
+                            $('#map-overlay-selected').css({backgroundPosition: '-' + background_offset + 'px 0'});
+
+                            $('#region-container').slideUp('fast', function() {
+                                $(this).find(".region-name").html(region.name);
+                                $(this).find(".region-link").attr('href', region.url);
+                                $(this).find(".region-desc").html(region.desc);
+                                $(this).find(".region-desc a.external").attr('target', '_blank');
+                                $(this).slideDown("slow");
+                            });
+                        }
+                    });
+                },
+                error: function(data) {
+                }
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% load future thumbnail %}
+
+<a class='item' href='{{ author.get_absolute_url }}' title='{{ author }}'>
+    <span class='border'>
+        {% thumbnail author.portrait '80x120' upscale=False crop='center' as thumb %}
+            <img class='img border-body' src='{{ thumb.url }}' width='{{ thumb.width }}' height='{{ thumb.height }}'/>
+        {% empty %}
+            <span class='img border-body author-portrait-dummy'></span>
+        {% endthumbnail %}
+    </span>
+    <span class='name family'>{{ author.family_name }}</span>
+    <span class='name first'>{{ author.first_name }}</span>
+</a>
+{% for work in author.listed_works %}
+    <a class='item' href='{{ work.get_absolute_url }}'>{{ work.title }}</a>
+{% endfor %}

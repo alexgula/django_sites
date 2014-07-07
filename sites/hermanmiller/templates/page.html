@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% load navtags %}
+
+{% block content %}
+    <div class='breadcrumbs'>
+        {% block breadcrumbs %}
+            {% breadcrumbs " | " %}
+        {% endblock %}
+    </div>
+    {{ block.super }}
+{% endblock %}

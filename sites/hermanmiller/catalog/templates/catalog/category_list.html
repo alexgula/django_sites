@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% load future i18n thumbnail %}
+{% load url from future %}
+{% load product %}
+
+{% block title %}
+    {% trans "Catalog" %}
+{% endblock %}
+
+{% block content %}
+    <div class="grid">
+        <div class="grid-3">
+            <h2 class="title">{% trans "Catalog" %}</h2>
+            <ul class="catalog">
+                {% for category in object_list %}
+                    <li class="catalog__item">
+                        <h3 class="title-2"><a href="{{ category.get_absolute_url }}" class="title__link">{{ category.title }}</a></h3>
+                        <ul class="catalog-list">
+                            {% products category.products.all %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="grid-1 special-list-box">
+            <span class="special__ttl">{% trans "Special offer" %}</span>
+            {% products_special 2 %}
+        </div>
+    </div>
+{% endblock %}

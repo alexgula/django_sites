@@ -1,0 +1,23 @@
+{% load i18n %}
+{% load localeurl_tags %}
+
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as langs %}
+
+<ul id='culture-chooser' class='row'>
+    {% for lang in langs %}
+        {% if lang.code == request.LANGUAGE_CODE %}
+            <li class='culture-current icon' title='{{ lang.name_local }}'>
+                <div class='sprite-icon_flag_{{ lang.code }}-png'>
+                </div>
+            </li>
+        {% else %}
+            <li class='culture-other icon' title='{{ lang.name_local }}'>
+                <div class='sprite-icon_flag_{{ lang.code }}-png'>
+                    <a class='icon sprite-icon_flag_{{ lang.code }}-png' href="{{ request.get_full_path|chlocale:lang.code }}">
+                    </a>
+                </div>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>

@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+
+{% load future %}
+{% load i18n %}
+{% load media_tags statictags %}
+{% load catalogue_tags %}
+
+<head>
+    <meta name="google-site-verification" content="GqAHpbhOcRA96FHKL3kPz4E5D9JsqmZUwhUTlVkHFv8" />
+    <meta property="fb:page_id" content="200677073310674" />
+    <title>Raisonne {{ LANGUAGE_CODE|upper }} | {% block title %}{% endblock %}</title>
+
+    <link rel='shortcut icon' href='/favicon.ico' type='image/vnd.microsoft.icon'>
+
+    <link rel='stylesheet' href='{% static 'css/elastic.css' %}' type='text/css' media='all' charset='utf-8' />
+    <link rel='stylesheet' href='{% static 'css/elastic.print.css' %}' type='text/css' media='print' charset='utf-8' />
+    <link rel='stylesheet' href='{% static 'css/site.css' %}' type='text/css' media='all' charset='utf-8' />
+    {% block styles %}{% endblock %}
+
+    <!-- Scripts have to be loaded before using inside some pages -->
+    <script type='text/javascript' src='{% static 'js/jquery.min.js' %}' charset="utf-8"></script>
+    <script type='text/javascript' src='{% static 'js/custom.js' %}' charset="utf-8"></script>
+    <script data-cfasync="false" type='text/javascript' src='{% static 'js/elastic.js' %}' charset='utf-8'></script>
+</head>
+
+<body class='{% block bodyclass %}{% endblock %}'>
+    <div id='page'>
+        <div id='header'>
+            <div id='branding-site'>
+                <a href='{% url 'catalogue_home' %}'>{% staticimage 'images/logo.png' _("Raisonne") %}</a>
+            </div>
+            {% include 'culture_chooser.html' %}
+            <div id='branding-page'>
+                {% block branding-page %}
+                {% endblock %}
+            </div>
+        </div>
+
+        <div id='top'>
+            <div id='menu'>
+                <div id='breadcrumbs'>
+                    {% block breadcrumbs %}
+                    {% endblock %}
+                </div>
+                <div id='menu-main'>
+                    {% block menu %}
+                        <div class='menu-item'><a href='{% url 'content_about' %}'><span class='menu-item-content'>{% trans "About" %}</span></a></div>
+                        <div class='menu-item'><a href='{% url 'content_video' %}'><span class='menu-item-content'>{% trans "Video" %}</span></a></div>
+                        <!--<div class='menu-item'><a href='{# url 'catalogue_lot_list' #}'><span class='menu-item-content'>{# trans "Works Auction" #}</span></a></div>-->
+                        <div class='menu-item'><a href='{% url 'catalogue_list' %}'><span class='menu-item-content'>{% trans "Works Search" %}</span></a></div>
+                        <div class='menu-item'><a href='{% url 'content_partners' %}'><span class='menu-item-content'>{% trans "Partners" %}</span></a></div>
+                        <div class='menu-item'><a href='{% url 'content_contacts' %}'><span class='menu-item-content'>{% trans "Contacts" %}</span></a></div>
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+
+        <div id='main' class='columns same-height'>
+            <div id='content' class='column elastic'>
+                {% block page-content %}
+                {% endblock %}
+            </div>
+            <div id='nav' class='column fixed'>
+                {% block page-nav %}
+                    {% show_categories %}
+                    <div class='splitter'></div>
+                {% endblock %}
+            </div>
+        </div>
+
+        <div id='footer'>
+            <div id='login'>
+                <a href='{% url 'admin:index' %}'>
+                    {% staticimage 'images/login_door.png' _("Go to admin site") %}
+                </a>
+            </div>
+            {% block page-footer-actions %}
+            {% endblock %}
+            <div id='copyright'>
+                <a href='http://picassoft.com.ua/site/info' target='_blank'>
+                    Создание информационного сайта
+                </a>
+                <span class='picassoft'>&copy;</span><span>{% trans "Picassoft" %} 2010</span>
+            </div>
+        </div>
+    </div>
+    {% if debug %}
+        <div id='debug'>
+            {% block debug-data %}
+            {% endblock %}
+        </div>
+    {% endif %}
+</body>
+
+{% if not debug %}
+    {% include "counters.html" %}
+{% endif %}
+
+{% block scripts %}{% endblock %}
+
+</html>

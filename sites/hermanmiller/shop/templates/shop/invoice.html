@@ -1,0 +1,118 @@
+{% load markup %}<!DOCTYPE html>
+<html>
+<head>
+    <title>Замовлення {{ order }}</title>
+    <style type="text/css">
+        .head {
+            font-weight: bold;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .underline {
+            border-bottom: 2px solid #000000;
+        }
+
+        .spaced-up {
+            padding-top: 50px;
+        }
+
+        .grid td, .grid th {
+            border: 1px solid #000000;
+        }
+
+        h1 {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        table {
+            width: 100%;
+            border-spacing: 0;
+            border-collapse: separate;
+        }
+
+        th {
+            background: #e2e2e2;
+        }
+    </style>
+</head>
+<body>
+<table>
+    <tr>
+        <td class="head">Постачальник</td>
+        <td>{{ supplier|restructuredtext }}</td>
+    </tr>
+    <tr>
+        <td class="head">Одержувач</td>
+        <td>{{ order.customer.name }}<br>{{ order.customer.phone }}</td>
+    </tr>
+    <tr>
+        <td class="head">Платник</td>
+        <td>той самий</td>
+    </tr>
+    <tr>
+        <td class="head">Замовлення</td>
+        <td>Без замовлення</td>
+    </tr>
+</table>
+
+<h1>Рахунок-фактура № I-{{ order.id }}<br/>від {{ order_date }} р.</h1>
+
+<table>
+    <tr class="grid">
+        <th class="head center">№</th>
+        <th class="head center">Назва</th>
+        <th class="head center">Од.</th>
+        <th class="head center">Кількість</th>
+        <th class="head center">Ціна без ПДВ</th>
+        <th class="head center">Сума без ПДВ</th>
+    </tr>
+    {% for item in order.items.all %}
+        <tr class="grid">
+            <td>{{ forloop.counter }}</td>
+            <td>{{ item.title }}</td>
+            <td class="center">шт.</td>
+            <td class="right">{{ item.quantity }}</td>
+            <td class="right">{{ item.price_without_pdv|floatformat:"2" }}</td>
+            <td class="right">{{ item.sum_without_pdv|floatformat:"2" }}</td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <td colspan="5" class="head right">Разом без ПДВ:</td>
+        <td class="head right">{{ order.sum_without_pdv|floatformat:"2" }}</td>
+    </tr>
+    <tr>
+        <td colspan="5" class="head right">ПДВ:</td>
+        <td class="head right">{{ order.sum_of_pdv|floatformat:"2" }}</td>
+    </tr>
+    <tr>
+        <td colspan="5" class="head right">Всього з ПДВ:</td>
+        <td class="head right">{{ order.sum_uah|floatformat:"2" }}</td>
+    </tr>
+    <tr>
+        <td colspan="6">Всього на суму:</td>
+    </tr>
+    <tr>
+        <td colspan="6" class="head">{{ order.sum_in_words }}</td>
+    </tr>
+    <tr>
+        <td colspan="6">ПДВ: {{ order.sum_of_pdf }} грн.</td>
+    </tr>
+    <tr>
+        <td colspan="4" class="right">Виписав(ла):</td>
+        <td colspan="2" class="underline spaced-up"></td>
+    </tr>
+    <tr>
+        <td colspan="6" class="head right spaced-up">Рахунок дійсний до сплати до {{ valid_until|date:"d.m.Y" }}</td>
+    </tr>
+</table>
+</body>
+</html>

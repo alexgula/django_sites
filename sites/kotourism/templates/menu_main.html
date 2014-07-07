@@ -1,0 +1,50 @@
+{% load future %}
+{% load i18n %}
+{% load mptt_tags %}
+{% load navtags %}
+
+{% full_tree_for_model places.PlaceType as place_types %}
+
+<h3>{% trans "Main Menu" %}</h3>
+
+<ul class='menu-tree'>
+    <li class='menu-item level-0 first {% active_url 'typed_event_list' 'news' %}'>
+        <a class='menu-link level-0' href='{% url 'typed_event_list' 'news' %}'>{% trans "News" %}</a>
+    </li>
+    <li class='menu-item level-0 {% active_url 'typed_event_list' 'announce' %}'>
+        <a class='menu-link level-0' href='{% url 'typed_event_list' 'announce' %}'>{% trans "Announces" %}</a>
+    </li>
+    <li class='menu-item level-0 {% active_url 'adminmap' %}'>
+        <a class='menu-link level-0' href='{% url 'adminmap' %}'>{% trans "Administrative Map" %}</a>
+    </li>
+    <li class='menu-item level-0 {% active_url 'tourmap' %}'>
+        <a class='menu-link level-0' href='{% url 'tourmap' %}'>{% trans "Tourists Map" %}</a>
+    </li>
+    {% recursetree place_types %}
+        {% if node.active %}
+            <li class='menu-item level-{{ node.level }} {% active_model node %}{% if node.is_leaf_node %} leaf{% endif %}'>
+                <a class='menu-link level-{{ node.level }}' href='{{ node.get_absolute_url }}'>{{ node }}</a>
+                {% if not node.is_leaf_node %}
+                    <ul class='menu-tree children'>
+                        {{ children }}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endif %}
+    {% endrecursetree %}
+    <li class='menu-item level-0 {% active_url 'tourguide' %}'>
+        <a class='menu-link level-0' href='{% url 'tourguide' %}'>{% trans "Tourists Guide" %}</a>
+    </li>
+    <li class='menu-item level-0 {% active_url 'video' %}'>
+        <a class='menu-link level-0' href='{% url 'video' %}'>{% trans "Video" %}</a>
+    </li>
+    <li class='menu-item level-0 {% active_url 'track_list' %}'>
+        <a class='menu-link level-0' href='{% url 'track_list' %}'>{% trans "Holiday tours" %}</a>
+    </li>
+    <li class='menu-item level-0 {% active_url 'partner_list' %}'>
+        <a class='menu-link level-0' href='{% url 'partner_list' %}'>{% trans "Partners" %}</a>
+    </li>
+    <li class='menu-item level-0 {% active_url 'contacts' %}'>
+        <a class='menu-link level-0' href='{% url 'contacts' %}'>{% trans "Contacts" %}</a>
+    </li>
+</ul>

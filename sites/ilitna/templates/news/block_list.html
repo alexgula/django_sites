@@ -1,0 +1,6 @@
+{% load future i18n %}
+{% for news in news_list %}
+    <div class='grid-1'>
+        {% include 'news/includes/block_news.html' %}
+    </div>
+{% endfor %}

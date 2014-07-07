@@ -1,0 +1,22 @@
+{% load future %}
+
+<td class='can-disable'><a href='{% url 'catalog:search' %}?part_number={{ object.part_number }}'>{{ object.part_number }}</a></td>
+<td class='can-disable'>{{ object.name }}</td>
+<td class='can-disable part-list-price'>{{ object.price|floatformat:'2' }}</td>
+<td class='can-disable part-list-price'>{{ object.user_price|floatformat:'2' }}</td>
+<td class='part-list-count'>
+    <div stock-unit-id='{{ object.id }}' class='part-list-basket-count-order-container'>
+        <input name='quantity__{{ object.id }}' class='part-list-count-order' type='text' value='{{ object.basket_quantity|floatformat:'0' }}' maxvalue='{{ object.stock_quantity }}'/>
+    </div>
+</td>
+<td class='can-disable part-list-price'>{{ object.basket_cost|floatformat:'2' }}</td>
+<td class='part-list-marker'>{% if object.pending %}{{ object.pending|date:"Y-m-d" }}{% else %}{% if object.stock_quantity > 0 %}+{% else %}-{% endif %}{% endif %}</td>
+<td>
+    <div class='part-list-checkbox-container'>
+        <input name='selected__{{ object.id }}' class='part-list-checkbox part-list-selected' type='checkbox'{% if object.selected %} checked='checked'{% endif %} title='{% if object.selected %}Отложить{% else %}Вернуть в заказ{% endif %}'>
+    </div>
+</td>
+<td>
+    <input name='deleted__{{ object.id }}' class='part-list-checkbox part-list-deleted' type='checkbox' title='Удалить'>
+    <span class='part-list-deleted-display sprites sprites-button_delete-png' title='Удалить'></span>
+</td>

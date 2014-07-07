@@ -1,0 +1,27 @@
+{% extends 'static_content_base.html' %}
+
+{% load i18n %}
+{% load media_tags statictags %}
+
+{% block title %}{% trans "Video" %}{% endblock %}
+
+{% block breadcrumbs_title %}{% trans "Video" %}{% endblock %}
+
+{% block content-container %}
+    <div id='content-video-dvd' class='column fixed full-height content-static'>
+        <div class='container full-height'>
+            <h1>{% trans "Video" %}</h1>
+            <object id='Object1' type='application/x-shockwave-flash' data='{% static 'swf/player_flv_maxi.swf' %}' width='768' height='576'>
+            <param name='movie' value={% static 'swf/player_flv_maxi.swf' %} />
+            <param name='wmode' value='opaque' />
+            <param name='allowFullScreen' value='true' />
+            <param name='allowScriptAccess' value='sameDomain' />
+            <param name='quality' value='high' />
+            <param name='menu' value='true' />
+            <param name='autoplay' value='true' />
+            <param name='autoload' value='true' />
+            <param name='FlashVars' value='flv={% media 'video/Zaretsky.flv' %}&width=768&height=576&autoplay=0&autoload=0&buffer=5&buffermessage=&playercolor=464646&loadingcolor=999898&buttoncolor=ffffff&buttonovercolor=dddcdc&slidercolor=ffffff&sliderovercolor=dddcdc&showvolume=1&showfullscreen=1&playeralpha=100&title=Zaretsky&margin=0&buffershowbg=0' />
+            </object>
+        </div>
+    </div>
+{% endblock %}

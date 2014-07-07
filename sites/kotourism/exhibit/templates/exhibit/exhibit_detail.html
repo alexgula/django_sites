@@ -1,0 +1,111 @@
+{% extends 'base_sidebar.html' %}
+
+{% load future %}
+{% load i18n markup %}
+{% load thumbnail %}
+{% load mediatags statictags %}
+
+{% block title %}
+    {{ object }}
+{% endblock %}
+
+{% block content %}
+    <div class='content'>
+        <div class='triple vblock paragraph first'>
+            <h3 id='content-top'>{{ object }}</h3>
+            <ul>
+            {% for section in object.exhibitsection_set.all %}
+                <li><a href='#section-{{ section.id }}'>{{ section.name }}</a></li>
+            {% endfor %}
+            {% for map in object.exhibitmap_set.all %}
+                <li><a href='#map-{{ map.id }}'>{{ map.name }}</a></li>
+            {% endfor %}
+            </ul>
+            {{ object.desc|restructuredtext }}
+            {% for section in object.exhibitsection_set.all %}
+                <h3 id='section-{{ section.id }}'>{{ section.name }}<div class='head-addition'><a class='head-addition-icon' href='#content-top'>&uarr;</a></div></h3>
+                <div class='content'>
+                    {% thumbnail section.image THUMBNAIL_SETTINGS.FULLSCREEN_SIZE upscale=False as im_big %}
+                        {% thumbnail section.image '390' upscale=False as im %}
+                            <div class='image-right' style='width: {{ im.width }}px; height: {{ im.height }}px; clear: both;'>
+                                <a class='colorbox' rel='exhibit' href='{{ im_big.url }}'>
+                                    <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'>
+                                </a>
+                            </div>
+                        {% endthumbnail %}
+                    {% endthumbnail %}
+                    {{ section.desc|restructuredtext }}
+                    {%  if section.file %}
+                        <p><strong>{% trans "Download additional materials" %}:</strong> <a href='{{ section.file.url }}'>{{ section.file.name }}</a></p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <h3>{% trans "Venue Map" %}<span class='head-addition'><a class='head-addition-icon' href='#content-top'>&uarr;</a></span></h3>
+            <div id='visicom-viewport' style='width: 790px; height: 390px; margin-bottom: 1em;'></div>
+            {% for map in object.exhibitmap_set.all %}
+                <div id='map-{{ map.id }}' class='map vblock single'>
+                    <h4 class='map-name'>{{ map.name }}</h4>
+                    <div class='map-desc'>{{ map.desc|restructuredtext }}</div>
+                    <div class='map-content' style='visibility: hidden; display: none;'>
+                        <div class='map-lon'>{{ map.lon }}</div>
+                        <div class='map-lat'>{{ map.lat }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class='single vblock'>
+            <h3>{% trans "Partners" %}:</h3>
+            {% for partner in object.exhibitpartner_set.all %}
+                {% thumbnail partner.image '190' upscale=False as im %}
+                    <a class='banner' href='{{ partner.link }}'>
+                        <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}' title='{{ partner.name }}'>
+                    </a>
+                {% endthumbnail %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block admin-actions %}
+    {{ block.super }}
+    <div class='admin-action'>
+        <a href='{% admin_url exhibit %}' title='{% trans "Edit current record" %}'>{% trans "Edit" %}</a>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type='text/javascript' src='http://maps.visicom.ua/api/2.0.0/map/world_{{ COUNTRY_CODE }}.js' charset='utf-8'></script>
+
+    <script>
+        var map;
+        function createVisicomMap() {
+            map = new VMap(document.getElementById('visicom-viewport'));
+            var midpoint = {lng: 0.0, lat: 0.0};
+            var point_num = 0;
+
+            $('.map').each(function() {
+                var name = $(this).find('.map-name').text();
+                var desc = $(this).find('.map-desc').text();
+                var lng = parseFloat($(this).find('.map-lon').text().replace(',', '.'));
+                var lat = parseFloat($(this).find('.map-lat').text().replace(',', '.'));
+
+                midpoint.lng += lng;
+                midpoint.lat += lat;
+                point_num++;
+
+                var point = {lng: lng, lat: lat};
+                var marker = new VMarker(point);
+                marker.hint(name);
+                marker.info(desc);
+                map.add(marker);
+            });
+            console.log(midpoint, point_num);
+            midpoint.lng /= point_num;
+            midpoint.lat /= point_num;
+            console.log(midpoint, point_num);
+            map.center(midpoint, 13);
+            map.repaint();
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% load future %}
+{% load i18n markup %}
+{% load media_tags %}
+
+<div class='column'>
+    <div class='container full-height'>
+        <span class='author-info-item full-height'>
+            <a href='{% url 'catalogue_author_detail' object.slug %}'>
+                <span class='author-portrait'>
+                    {% image object.portrait.url %}
+                </span>
+                <span class='author-detail'>
+                    <h3 class='author-name'>{{ object.name }}</h3>
+                    <span class='author-desc'>{{ object.desc|restructuredtext }}</span>
+                    <span class='author-life-dates'>{{ object.date_birth|date:"SHORT_DATE_FORMAT" }} - {{ object.date_death|date:"SHORT_DATE_FORMAT" }}</span>
+                </span>
+            </a>
+        </span>
+    </div>
+</div>

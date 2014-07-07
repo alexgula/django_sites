@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% load future %}
+{% load thumbnail paging_extras %}
+
+{% block title %}{{ block.super }} | Список событий {% endblock %}
+
+{% block content %}
+    <div class="block-for-object-in-event-list">
+        <h1> События в Музейном центре Е.П. Блаватской и её семьи</h1>
+    </div>
+    {% paginate object_list from request as results per_page 5 %}
+    {% for object in results.objects %}
+    <div class="block-for-object-in-event-list">
+        <div>
+            {% thumbnail object.picture "275" as im %}
+                <a href="{{ object.get_absolute_url }}" ><img src="{{ im.url }}" alt="{{ im.title }}"></a>
+            {% endthumbnail %}
+        </div>
+        <div>
+            <h2><a href="{{ object.get_absolute_url }}" >{{ object.title }}</a></h2>
+            {% if object.start_date == object.end_date %}
+                <p>{{ object.start_date }}</p>
+            {% else %}
+                <p>{{ object.start_date }} - {{ object.end_date }}</p>
+            {% endif %}
+            {% if object.start_time == object.end_time %}
+                <p>{{ object.start_time|time:"H:i" }}</p>
+            {% else %}
+                <p>{{ object.start_time|time:"H:i" }} - {{ object.end_time|time:"H:i" }}</p>
+            {% endif %}
+            <h3>{{ object.preview }}</h3>
+        </div>
+    </div>
+    <div class="divider"></div>
+    {% endfor %}
+    <div class="pager-line">{{ results.paging }}</div>
+{% endblock %}
+
+{% block element_edit %}
+    <a class="h-link" href="{% url 'admin:events_event_changelist' %}">Редактировать</a>
+{% endblock %}

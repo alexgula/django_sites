@@ -1,0 +1,58 @@
+{% load future i18n compress library switchlang capture %}{% load static from staticfiles %}<!DOCTYPE html>
+<html lang='{{ LANGUAGE_CODE }}'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, minimum-scale=1.0, maximum-scale=1.0'>
+
+    <title>{% trans "Ilitna" %} | {% block title %}{% endblock %}</title>
+
+    {% compress css %}
+        <link rel='stylesheet' href='{{ STATIC_URL }}css/inuit.css'>
+        {#<link rel='stylesheet' href='{{ STATIC_URL }}css/annotate.css'>#}
+        <link rel='stylesheet' href='{{ STATIC_URL }}css/breadcrumb.css'>
+        <link rel='stylesheet' href='{{ STATIC_URL }}css/dropdown.css'>
+        <link rel='stylesheet' href='{{ STATIC_URL }}css/grid.css'>
+        <link rel='stylesheet' href='{{ STATIC_URL }}css/sprites.css'>
+        <link rel='stylesheet' href='{{ STATIC_URL }}css/fonts.css'>
+        <link type='text/less' rel='stylesheet' href='{{ STATIC_URL }}css/site.less'>
+    {% endcompress %}
+
+    {#<link rel='author' href='humans.txt'>#}
+
+    <link rel='shortcut icon' href='/favicon.ico'>
+    <link rel='apple-touch-icon' href='/favicon.png' />
+</head>
+
+<body>
+
+    <div class='wrapper'>
+        <div class='header'>
+            <a href='{% url 'home' %}' class='logo' title="{% trans "Ilitna" %}">
+                <img src='{% static 'img/logo.png' %}' alt="{% trans "Ilitna" %} {% trans "Home" %}">
+            </a>
+            <ul class='top-menu nav'>{% include 'includes/menu_main.html' %}</ul>
+            <div class='languages'>{% language_switcher %}</div>
+        </div>
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <hr>
+
+    <div class='wrapper'>
+        <div class='footer'>
+            <div class='admin'>
+                {% if user.is_staff %}
+                    <a href='{% url 'admin:index' %}' title='{% trans "Go to admin site" %}'>{% trans "Admin area" %}</a>
+                    {% capture as admin_url %}{% block admin_url %}{% endblock %}{% endcapture %}
+                    {% if admin_url %}
+                        <a href='{{ admin_url }}' title='{% trans "Go to edit node" %}'>{% trans "Edit node" %}</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <p class='copyright'>&copy; Picassoft, 2012</p>
+        </div>
+    </div>
+
+</body>
+</html>

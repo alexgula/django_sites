@@ -1,0 +1,331 @@
+@import 'mixins';
+
+a, a:visited {
+    color: inherit;
+}
+
+body {
+    color: @color-primary;
+    background: url(/static/img/bg-top.png) center top repeat-x;
+    .font-text;
+}
+
+h1, h2, h3, h4, h5, h6,
+.alpha, .beta, .gamma, .delta, .epsilon, .zeta {
+    .font-head;
+}
+
+hr {
+    border-top: 1px solid lighten(@color-secondary, 15%);
+    border-right: none;
+    border-bottom: 1px solid @color-secondary;
+    border-left: none;
+    margin-bottom: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.header {
+}
+
+.border {
+    display: block;
+    float: left;
+    margin-right: 7px;
+    padding: 4px;
+    border: 1px solid @color-secondary;
+    background: @color-tertiary;
+    line-height: 0;
+
+    .border-body {
+        margin: 0;
+        border: 1px solid @color-secondary;
+        background: @color-background;
+    }
+}
+
+.item {
+    display: block;
+    overflow: hidden;
+    margin-bottom: 4px;
+    padding: 6px;
+    border: 1px solid transparent;
+    font-size: 14px;
+    .font-head;
+
+    &:hover {
+        box-shadow: 2px 2px 6px @color-secondary;
+        border: 1px solid @color-secondary;
+        background: @color-background;
+        text-decoration: none;
+    }
+
+    .body {
+        display: block;
+        padding-top: 8px;
+        overflow: hidden;
+        clear: both;
+
+        p {
+            margin: 0;
+            font-size: 12px;
+        }
+    }
+
+    .name {
+        display: block;
+        font-weight: bold;
+    }
+
+    .name.family {
+        font-size: 16px;
+    }
+
+    .name.first {
+        font-size: 12px;
+    }
+
+    .label {
+        display: block;
+        margin-top: 8px;
+        font-size: 12px;
+        line-height: 16px;
+        color: @color-primary;
+    }
+
+    .labeled {
+        text-align: right;
+    }
+
+    .title {
+        display: block;
+        font-size: 14px;
+        font-weight: bold;
+    }
+}
+
+.date {
+    display: block;
+    float: left;
+    text-align: center;
+    .font-black;
+    .text-primary-shadow;
+    color: @color-invert;
+
+    .day_month {
+        display: block;
+        font-size: 12px;
+        line-height: 16px;
+        margin-top: 3px;
+    }
+
+    .year {
+        display: block;
+        font-size: 14px;
+        line-height: 18px;
+    }
+}
+
+.top-menu {
+    margin: 0;
+
+    li {
+        margin-right: -13px;
+    }
+
+    a {
+        height: 41px;
+        color: @color-invert;
+
+        span {
+            float: left;
+        }
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}
+
+.figure-tile {
+    @top: 8px;
+    height: 41px - @top;
+    background: url('/static/img/figure-tile.png') repeat-x;
+    padding: @top 1em 0;
+    font-size: 16px;
+    .font-head;
+    .text-primary-shadow;
+
+    &:hover {
+        .text-glow;
+    }
+}
+
+.block-title {
+    display: block;
+    float: left;
+    margin: 16px;
+    font-size: 18px;
+    line-height: 24px;
+}
+
+.block-link {
+    display: block;
+    float: right;
+    margin: 16px 0 15px 16px;
+    font-size: 14px;
+    line-height: 25px;
+
+    &:hover {
+        .text-secondary-shadow;
+    }
+
+    .list {
+        float: right;
+        margin-left: 1em;
+    }
+}
+
+.main-panel {
+    padding-bottom: 10px;
+    border: 1px solid @color-secondary;
+    .hgradient(@color-tertiary, @color-background);
+}
+
+.author-block-portrait {
+    margin-top: 10px;
+}
+
+.author-block-title {
+    text-align: center;
+    font-weight: bold;
+    .font-head;
+}
+
+.author-block-dates {
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 24px;
+    text-align: center;
+    .font-head;
+}
+
+.author-portrait-dummy {
+    display: block;
+    width: 80px;
+    height: 120px;
+}
+
+.contents {
+    margin: 0;
+    padding: 5px 8px;
+    list-style: none;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: normal;
+
+    li {
+        padding: 2px;
+    }
+
+    &.level-1 {
+        padding: 0;
+        font-size: 12px;
+        line-height: 16px;
+        font-weight: bold;
+    }
+
+    &.level-3 {
+        padding: 5px;
+        font-size: 10px;
+        line-height: 12px;
+
+        li{
+            padding: 3px;
+        }
+    }
+
+    strong {
+        display: block;
+        background-color: @color-primary;
+        color: @color-invert;
+        padding: 5px;
+    }
+}
+
+.work-item {
+    display: block;
+    height: 264px;
+    overflow: hidden;
+}
+
+.breadcrumbs {
+    font-size: 12px;
+    line-height: 16px;
+    margin-bottom: 1em;
+}
+
+.content {
+    font-size: 14px;
+
+    .main-content {
+        margin-top: 1em;
+        &:first-letter {
+            float: left;
+            margin: 5px 7px 5px 0;
+            padding: 4px 10px;
+            display: block;
+            width: 50px;
+            height: 53px;
+            overflow: hiden;
+            background-color: @color-primary;
+            color: @color-tertiary;
+            font-size: 52px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 4px;
+            line-height: 100%;
+            font-style: normal;
+        }
+    }
+
+    blockquote {
+        margin: 6px 30px;
+        padding: 10px;
+        border-left: 2px solid;
+        //background-color: @color-secondary;
+        font-size: 12px;
+        line-height: 16px;
+        text-align: justify;
+
+        p {
+            margin: 0;
+        }
+    }
+
+    td.label {
+        width: 2em;
+    }
+}
+
+.work-pager {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    padding-top: 30px;
+    text-align: center;
+    font-size: 14px;
+
+    &.prev-page {
+        background: url('/static/img/icon-prev-page.png') no-repeat top center;
+    }
+
+    &.next-page {
+        background: url('/static/img/icon-next-page.png') no-repeat top center;
+    }
+
+    &.go-to-top {
+        background: url('/static/img/icon-go-to-top.png') no-repeat top center;
+    }
+}
+
+

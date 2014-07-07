@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% load future %}
+{% load statictags %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href='{% static 'jquery-ui/jquery-ui.css' %}' />
+{% endblock %}
+
+{% block content %}
+    <form id='content-form-search' action='{% url 'catalog:search' %}' name='search' method='GET'>
+        <label id='content-search-label' for='content-search-partnumber'>Поиск детали по номеру</label>
+
+        <div id='content-search-partnumber-container' class='input-container sprites sprites-header_search_input-png'>
+            <div id='content-search-partnumber-wrapper'>
+                <input id='content-search-partnumber' type='text' name='part_number'
+                       value='{{ request.session.part_number }}'/>
+            </div>
+        </div>
+        <div id='content-search-submit-container' class='input-container sprites sprites-button_find-png'>
+            <input id='content-search-submit' type='submit' value=''/>
+        </div>
+    </form>
+    {{ block.super }}
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type='text/javascript' src='{% static 'jquery-ui/jquery-ui.min.js' %}' charset='utf-8'></script>
+    <script type='text/javascript' src='{% static 'js/ui.spinner.min.js' %}' charset='utf-8'></script>
+    <script type='text/javascript' charset='utf-8'>
+        $('.part-list-count-order').each(function () {
+            $(this).spinner({min: 0, max: parseInt($(this).attr('maxvalue'))});
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'catalog/base.html' %}
+
+{% load future %}
+{% load statictags ordertags %}
+
+{% block title %}Заказ №{{ object.id }}{% endblock %}
+
+{% block content %}
+    {{ block.super }}
+    <h1>Заказ №{{ object.id }}</h1>
+
+    {{ object }}
+    <table class='part-list'>
+        {% if stock_list %}
+            <tr class='part-list-header'>{% order_textrow '' "Товары в заказе" %}</tr>
+            <tr>{% order_headrow %}</tr>
+            {% for id, stock in stock_list.iteritems %}
+                <tr>{% order_textrow 'part-list-title' stock.name %}</tr>
+                {% for object in stock.objects %}
+                    <tr class='part-list-data'>{% orderitem_datarow object %}</tr>
+                {% endfor %}
+            {% endfor %}
+            <tr class='part-list-total'>
+                <td class='part-list-title' colspan='4'>Всего</td>
+                <td class='part-list-title part-list-count'>{{ total_count|floatformat:'0' }}</td>
+                <td class='part-list-title part-list-price'>{{ total_sum|floatformat:'2' }}</td>
+                <td class='part-list-title'></td>
+            </tr>
+        {% endif %}
+    </table>
+    <a href='{% url 'catalog:order_list' %}'>Перейти к списку заказов</a>
+    <a href='{% url 'catalog:order_detail_excel' object.id %}' class='excel-link'>Сохранить в xls файл</a>
+{% endblock %}

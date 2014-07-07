@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% load future i18n thumbnail markup paging_extras %}
+{% load url from future %}
+
+{% block title %}
+    {% trans "News" %}
+{% endblock %}
+
+{% block logo %}
+    {% thumbnail object.logo THUMBNAIL_SETTINGS.ICON_SIZE crop='center' as im %}
+        <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+    {% endthumbnail %}
+{% endblock %}
+
+{% block content %}
+    {% paginate news_list from request as results per_page 6 %}
+    {{ block.super }}
+    <h1>{% trans "News" %}</h1>
+    {% for news in results.objects %}
+        <div class='news_item'>
+            {% comment %}
+                {% if news.logo %}
+                    {% thumbnail news.logo THUMBNAIL_SETTINGS.PREVIEW_IMG as im %}
+                        <img class='news_logo' src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+                    {% endthumbnail %}
+                {% else %}
+                    <div class='news_logo_default'></div>
+                {% endif %}
+            {% endcomment %}
+            <div class="news_date">{{ news.created_on|date:"d.m.Y" }}</div>
+            <a class="news_title" href="{{ news.get_absolute_url }}">
+                {{ news.title }}
+            </a>
+            {{ news.desc|restructuredtext|truncatewords_html:30  }}
+        </div>
+    {% endfor %}
+
+    <div class=''>{{ results.paging }}</div>
+{% endblock %}

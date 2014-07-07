@@ -1,0 +1,32 @@
+{% load statictags ordertags %}
+<p>На сайте был сделан заказ.</p>
+
+<h2>Заказ {{ object }}</h2>
+
+<p>Форма оплаты: {{ object.get_payment_type_display }}</p>
+<p>Валюта: {{ object.currency }}</p>
+<p>Курс: {{ object.currency_rate|floatformat:'2' }}</p>
+<p>Сумма: {{ object.sum|floatformat:'2' }} грн</p>
+
+<table class='part-list' border='1' cellpadding='2'>
+    {% if stock_list %}
+        <tr>{% order_headrow %}</tr>
+        {% for id, stock in stock_list.iteritems %}
+            <tr>{% order_textrow 'part-list-title' stock.name %}</tr>
+            {% for item in stock.objects %}
+                <tr class='part-list-data'>{% orderitem_datarow item %}</tr>
+            {% endfor %}
+        {% endfor %}
+        <tr class='part-list-total'>
+            <td class='part-list-title' colspan='4'>Всего</td>
+            <td class='part-list-title part-list-count'>{{ total_count|floatformat:'0' }}</td>
+            <td class='part-list-title part-list-price'>{{ total_sum|floatformat:'2' }}</td>
+            <td class='part-list-title'></td>
+        </tr>
+    {% endif %}
+</table>
+
+{% if object.comment %}
+<h4>Комментарий пользователя:</h4>
+<p>{{ object.comment }}</p>
+{% endif %}

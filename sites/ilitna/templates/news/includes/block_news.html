@@ -1,0 +1,14 @@
+{% load future i18n markup thumbnail %}
+<a class='item' href='{{ news.get_absolute_url }}'>
+    {% thumbnail news.image '230x120' upscale=False crop='center' as thumb %}
+        <span class='border'><img class='img' src='{{ thumb.url }}' width='{{ thumb.width }}' height='{{ thumb.height }}' alt='{{ news.name }}'/></span>
+    {% endthumbnail %}
+    <span class='body'>
+        <span class='date'>
+            <span class='day_month'>{{ news.pub_date|date:'d.m' }}</span>
+            <span class='year'>{{ news.pub_date|date:'Y' }}</span>
+        </span>
+        <span class='title'>{{ news.title }}</span>
+        <span class='body'>{{ news.text|restructuredtext|truncatewords_html:15 }}</span>
+    </span>
+</a>

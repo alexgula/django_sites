@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% load future i18n %}
+
+{% block content %}
+    {{ block.super }}
+    <p>{% trans "Thank you for question!" %}</p>
+    <p>{% trans "The question has been sent to administration, you will be contacted." %}</p>
+{% endblock %}

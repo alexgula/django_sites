@@ -1,0 +1,19 @@
+{% extends 'catalog/category_detail.html' %}
+
+{% load future i18n %}
+{% load url from future %}
+{% load static from staticfiles %}
+
+{% block breadcrumbs %}
+{% endblock %}
+
+{% block left-side %}
+    <img class='director-photo' src='../static/img/director-photo.jpg'>
+    <div class='name'>{% trans "Victor Riznyk Full Name" %}</div>
+    <div class='position'>{% trans "Director" %}</div>
+    <div class='words'>{% trans "VR AgriSolution LLC builds cooperation with its clients and partners on the principles of professionalism, high moral values, creative combination of rich practical experience with the scientific approach to problem solving. Our company is successful and confidently leads its partners to success." %}</div>
+    <div class='signature'>{% trans "Best regards" %},<br> {% trans "Victor Riznyk" %}</div>
+    {% include 'includes/contact_us_button.html' %}
+{% endblock %}
+
+{% block comparison-table-button %}{% endblock %}

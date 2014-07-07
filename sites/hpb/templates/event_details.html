@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% load future %}
+{% load markup %}
+{% load thumbnail %}
+
+{% block title %}{{ block.super }} | {{ object }}{% endblock %}
+
+{% block content %}
+    <div class="block-for-one-event">
+        <div class="image-left">
+            {% thumbnail object.picture "275" as im %}
+                <img src="{{ im.url }}" alt="{{ im.title }}">
+            {% endthumbnail %}
+        </div>
+        <div>
+            <h1>{{ object.title }}</h1>
+            {% if object.start_date == object.end_date %}
+                <p>{{ object.start_date }}</p>
+            {% else %}
+                <p>{{ object.start_date }} - {{ object.end_date }}</p>
+            {% endif %}
+            {% if object.start_time == object.end_time %}
+                <p>{{ object.start_time|time:"H:i" }}</p>
+            {% else %}
+                <p>{{ object.start_time|time:"H:i" }} - {{ object.end_time|time:"H:i" }}</p>
+            {% endif %}
+            <h2>{{ object.preview }} </h2>
+        </div>
+        <div class="content-text">
+            {{ object.text|restructuredtext }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block element_edit %}
+    <a class="h-link" href="{% url 'admin:events_event_change' object.id %}">Редактировать</a>
+{% endblock %}

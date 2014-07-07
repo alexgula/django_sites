@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load catalogue_tags %}
+{% load paging_extras %}
+
+{% block title %}
+    {% trans "Home" %} | {{ filters_title }}
+{% endblock %}
+
+{% block breadcrumbs %}
+{% endblock %}
+
+{% block page-content %}
+    <div id="home-content">
+        <h1>{% trans "Raisonne" %}</h1>
+        <h2>{% trans "Catalogue of famous Ukrainian artists" %}</h2>
+
+        {% paginate object_list from request as results per_page 20 %}
+        <div id='details' class='columns adaptive-400-800 same-height'>
+            {% for object in results.objects %}
+                {% include 'catalogue/author_detail_include.html' %}
+            {% endfor %}
+        </div>
+        {{ results.paging }}
+    </div>
+{% endblock %}
+
+{% block page-nav %}
+    {% show_filters %}
+    <div class='splitter'></div>
+{% endblock %}

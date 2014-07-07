@@ -1,0 +1,203 @@
+{% load future markup statictags navtags newstags catalogtags accounttags polltags %}
+<!DOCTYPE html>
+<html lang='ru'>
+
+<head>
+    <meta charset='utf-8'>
+    <meta Name='keywords' content= 'hyundai, kia, honda, оптика, toyota, lexus, автозапчасти, доставка, запчасти,parts, auto, autoparts, заказ, 1с, охлаждение, porsche, mercedes-benz, hammer, широкий ассортимент, доставка,скорость выполнения, on-line заказы, наличие на складе, технобаланс, tekhnobalans, кузовные, моторные, широкий, ассортимент запчастей.'/>
+    <meta Name='description' content= 'Автозапчасти TOYOTA, LEXUS, HONDA, HYUNDAI, KIA, MERCEDES-BENZ, HAMMER, PORSCHE, и другие, широкий ассортимент,кузовные и моторные, оптика, охлаждение. доставка, заказ, Наличие на складе, скорость выполнения заказа, On-line заказы!'/>
+    <meta name="google-site-verification" content="O70lKe7ozQJ_U3crBnCrNV0jBZzHX3PEeWI-gGdnpt8" />
+    <title>ТехноЛенд | {% block title %}{% endblock %}</title>
+
+    <link rel='shortcut icon' href='/favicon.ico' type='image/vnd.microsoft.icon'>
+
+    {% block styles %}
+        <link rel='stylesheet' href='{% static 'css/sen.css' %}' type='text/css' media='all' charset='utf-8' />
+        <link rel='stylesheet' href='{% static 'css/site.css' %}' type='text/css' media='all' charset='utf-8' />
+        <link rel='stylesheet' href='{% static 'css/sprites.css' %}' type='text/css' media='all' charset='utf-8' />
+    {% endblock %}
+</head>
+
+<body>
+    <div id='top-container'>
+        <div id='main-container'>
+            {% block main %}
+                <div id='main'>
+                    {% if messages %}
+                        <div id='user-messages'>
+                            {% for message in messages %}
+                                <div class='user-message{% if message.tags %} {{ message.tags }}{% endif %}'>{{ message|restructuredtext }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <div id='breadcrumbs'>{% breadcrumbs %}</div>
+                    {% block content %}
+                    {% endblock %}
+                </div>
+                <div id='sidebar'>
+                    {% block sidebar-user %}
+                        {% if user.is_authenticated %}
+                            {% block basket %}
+                                <div class='sprites sprites-sidebar_header-png'>
+                                    <div class='sideheader'>
+                                        <a class='sideblock-title-link' href='{% url 'catalog:basket' %}'>Корзина</a>
+                                    </div>
+                                </div>
+                                <div class='sidebody'>
+                                    <div class='sideblock'>
+                                        <div id='basket-stats'>{% basket_stats %}</div>
+                                        <div id='basket-messages'></div>
+                                    </div>
+                                    <div class='sideblock-last-half'>
+                                        <div class='sprites sprites-button_sidebar_submit-png'>
+                                            <a class='sideblock-link' href='{% url 'catalog:basket' %}'>Перейти в корзину</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endblock %}
+                            <div class='sprites sprites-sidebar_header-png'>
+                                <div class='sideheader'>
+                                    <a class='sideblock-title-link' href='{% url 'account:profile' %}'>Личный кабинет</a>
+                                </div>
+                            </div>
+                            <div class='sidebody'>
+                                <div class='sideblock'>
+                                    <div class='sideblock-user-label'>Пользователь:</div>
+                                    <div class='sideblock-user'>{{ user.profile.full_name }}</div>
+                                    <div class='sideblock-user-sub'>(логин <span class="sideblock-user-sub-name">{{ user }}</span>)</div>
+                                </div>
+                                <div class='sideblock'>
+                                    <div class='sideblock-user-label'>Цена:</div>
+                                    <div class='sideblock-user'>{{ user.profile.price_type }}</div>
+                                </div>
+                                <div class='sideblock'>
+                                    <div class='sprites sprites-button_sidebar_submit-png'>
+                                        <a class='sideblock-link' href='{% url 'catalog:order_list' %}'>История заказов</a>
+                                    </div>
+                                </div>
+                                <div class='sideblock'>
+                                    <div class='sprites sprites-button_sidebar_submit-png'>
+                                        <a class='sideblock-link' href='{% url 'catalog:upload_form' %}'>Загрузить заказ</a>
+                                    </div>
+                                </div>
+                                <div class='sideblock'>
+                                    <div class='sprites sprites-button_sidebar_submit-png'>
+                                        <a class='sideblock-link' href='{% url 'account:password' %}'>Смена пароля</a>
+                                    </div>
+                                </div>
+                                <div class='sideblock'>
+                                    <div class='sprites sprites-button_sidebar_submit-png'>
+                                        <a class='sideblock-link' href='{% url 'account:profile' %}'>Личные данные</a>
+                                    </div>
+                                </div>
+                                <div class='sideblock-last-half'>
+                                    <form id='form-logout' action='{% url 'account:logout' %}' method='POST'>{% csrf_token %}
+                                        <div id='logout-submit-container' class='sprites sprites-button_logout-png'>
+                                            <input id='logout-submit' type='submit' value='' />
+                                        </div>
+                                        <input type='hidden' name='next' value='{% url 'home' %}'>
+                                    </form>
+                                </div>
+                            </div>
+                            {% poll %}
+                        {% else %}
+                            <div class='sprites sprites-sidebar_header-png'>
+                                <div class='sideheader'>Авторизация</div>
+                            </div>
+                            <div class='sidebody'>
+                                <div class='sideblock-last-half'>
+                                    <form id='form-login' action='{% url 'account:login' %}' method='POST'>{% csrf_token %}
+                                        <label for='login_name'>Логин</label>
+                                        <div class='sprites sprites-sidebar_input-png'>
+                                            <div class="login-input-wrapper">
+                                                <input id='login_name' class='login-input' type='text' name='username' maxlength='30'/>
+                                            </div>
+                                        </div>
+                                        <label for='login_password'>Пароль</label>
+                                        <div class='sprites sprites-sidebar_input-png'>
+                                            <div class="login-input-wrapper">
+                                                <input id='login_password' class='login-input' type='password' name='password' />
+                                            </div>
+                                        </div>
+                                        <div id='login-submit-container' class='sprites sprites-button_login-png'>
+                                            <input id='login-submit' type='submit' value='' />
+                                        </div>
+                                        <div id='login-links-container'>
+                                            <a href='{% url 'account:reset' %}'>Забыли пароль?</a>
+                                            <a href='{% url 'account:register' %}'>Регистрация</a>
+                                        </div>
+                                        <input type='hidden' name='next' value='{% login_next_url %}'>
+                                    </form>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endblock %}
+                    {% block sidebar-news %}
+                        {% latest_news 5 %}
+                    {% endblock %}
+                </div>
+            {% endblock %}
+        </div>
+
+        <div id='header-container' class='sprites sprites-header-png'>
+            <div id='header'>
+                <a id='logo' href='{% url 'home' %}' title='ТехноЛенд'></a>
+                {% block header-search %}
+                    <form id='form-search' class='sprites sprites-header_search_panel-png'
+                          action='{% url 'catalog:search' %}' name='search' method='GET'>
+                        <label id='search-label' for='search-partnumber'>Поиск детали по номеру</label>
+                        <div id='search-partnumber-container' class='input-container sprites sprites-header_search_input-png'>
+                            <div id='search-partnumber-wrapper'>
+                                <input id='search-partnumber' type='text' name='part_number' value='{{ request.session.part_number }}'/>
+                            </div>
+                        </div>
+                        <div id='search-submit-container' class='input-container sprites sprites-button_find-png'>
+                            <input id='search-submit' type='submit' value='' />
+                        </div>
+                    </form>
+                {% endblock %}
+                <a id='contacts-header' class='sprites sprites-contacts_header-png' href='{% url 'home' %}' title='ТехноЛенд'></a>
+                <div id='menu-main'>{% include 'menu_main.html' %}</div>
+            </div>
+        </div>
+    </div>
+
+    <div id='footer-container' class='sprites sprites-footer-png'>
+        <div id='footer'>
+            <a id='contacts-footer' class='sprites sprites-contacts_footer-png' href='{% url 'home' %}' title='ТехноЛенд'></a>
+            <div id='admin'>
+                <a id='admin-login' href='{% url 'admin:index' %}' class='icon sprites sprites-login_door-png' title='Администрирование сайта'></a>
+                {% if user.is_staff %}
+                    {% block admin-actions %}
+                    {% endblock %}
+                {% endif %}
+            </div>
+            <div id='copyright'>
+                <div id='copyright-tekhnoland'>
+                    <span class='copy'>&copy;</span>
+                    <span class='right'> Tekhnoland (ТехноЛенд), 2006&mdash;2011</span>
+                </div>
+                <div id='copyright-picassoft'>
+                    <span class='copy'>&copy;</span>
+                    <a href='http://picassoft.com.ua/site/info' target='_blank' class='hidden-link'>
+                        Создание информационного сайта.
+                    </a>
+                    <a href='http://picassoft.com.ua/site/info' target='_blank'>Picassoft (Пикассофт)</a>, 2011
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+{% block scripts %}
+    <script type='text/javascript' src='{% static 'js/jquery.min.js' %}' charset='utf-8'></script>
+    <script type='text/javascript' src='{% static 'js/custom.js' %}' charset='utf-8'></script>
+{% endblock %}
+
+{% if not debug %}
+    {% block counters %}
+        {% include 'counters.html' %}
+    {% endblock %}
+{% endif %}
+
+</html>

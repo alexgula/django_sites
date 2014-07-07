@@ -1,0 +1,24 @@
+{% load future %}
+
+<td><a href='{% url 'catalog:search' %}?part_number={{ object.stock_unit.product.part_number }}'>{{ object.stock_unit.product.part_number }}</a></td>
+<td>{{ object.stock_unit.product.name }}</td>
+{% if user.is_authenticated %}
+    <td class='part-list-price'>{{ object.price|floatformat:'2' }}</td>
+{% endif %}
+<td class='part-list-price'>{{ object.user_price|floatformat:'2' }}</td>
+{% if user.is_authenticated %}
+    <td class='part-list-quantity-reserved'>{{ object.quantity_reserved|floatformat:'0' }}</td>
+{% endif %}
+<td class='part-list-marker'>{% if object.stock_unit.pending %}{{ object.stock_unit.pending|date:"Y-m-d" }}{% else %}{% if object.stock_unit.quantity > 0 %}+{% else %}-{% endif %}{% endif %}</td>
+{% if user.is_authenticated %}
+    <td>
+        <div stock-unit-id='{{ object.stock_unit.id }}' class='part-list-input-container {{ class }}'>
+            <div class='part-list-search-count-order-container'>
+                <input class='part-list-count-order' type='text' value='{{ object.quantity|floatformat:'0' }}' maxvalue='{{ object.stock_unit.quantity|floatformat:'0' }}'/>
+            </div>
+            <div class='part-list-make-order' title='Заказать'>
+                <div class='sprites sprites-shopping_cart-png'></div>
+            </div>
+        </div>
+    </td>
+{% endif %}

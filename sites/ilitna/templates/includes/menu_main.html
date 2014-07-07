@@ -1,0 +1,14 @@
+{% load future i18n mptt_tags navtags compress menutags %}
+
+{# Closing tags are omitted intentionally to remove spaces! #}
+
+<li class='level-0 {% url 'home' %}'>
+    <a class='level-0' href='{% url 'home' %}'>{% figure %}{% trans "Home" %}{% endfigure %}</a>
+{#<li class='level-0 {% active_url 'news:list' %}'>#}
+{#    <a class='level-0' href='{% url 'news:list' %}'>{% figure %}{% trans "Newses" %}{% endfigure %}</a>#}
+<li class='level-0 {% active_url 'library:author_list' %}'>
+    <a class='level-0' href='{% url 'library:author_list' %}'>{% figure %}{% trans "Library" %}{% endfigure %}</a>
+{#<li class='level-0 {% active_url 'page:page' 'partners' %}'>#}
+{#    <a class='level-0' href='{% url 'page:page' 'partners' %}'>{% figure %}{% trans "Partners" %}{% endfigure %}</a>#}
+<li class='level-0 {% active_url 'page:page' 'contacts' %}'>
+    <a class='level-0' href='{% url 'page:page' 'contacts' %}'>{% figure %}{% trans "Contacts" %}{% endfigure %}</a>

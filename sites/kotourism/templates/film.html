@@ -1,0 +1,13 @@
+{% extends "base_sidebar.html" %}
+
+{% load i18n %}
+
+{% block content %}
+    <h3>{% trans "Film" %}</h3>
+    <div id='frame-container' style="width: 530px; height: 1460px; margin: 0 auto;">
+        <iframe
+            name="film" scrolling="no" noresize target="contents" marginwidth="1" marginheight="0"
+            src="http://rtv.com.ua/tour/film/01.html" width="530" height="100%" border="0" frameborder="0">
+        </iframe>
+    </div>
+{% endblock %}

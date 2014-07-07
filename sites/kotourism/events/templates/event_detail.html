@@ -1,0 +1,73 @@
+{% extends 'base_sidebar.html' %}
+
+{% load future %}
+{% load i18n markup %}
+{% load thumbnail %}
+{% load mediatags statictags %}
+
+{% block title %}
+    {{ event }}
+{% endblock %}
+
+{% block content %}
+    <h3>{{ event }}</h3>
+    {% if event.date_from and event.date_to %}
+    <div class='content event'>
+        <div class='single label'>
+            {% if event.date_from == event.date_to %}
+                {% trans "Event date" %}:
+            {% else %}
+                {% trans "Event dates" %}:
+            {% endif %}
+        </div>
+        <div class='double vblock paragraph'>
+            {% if event.date_from == event.date_to %}
+                {{ event.date_from }}
+            {% else %}
+                {{ event.date_from }} - {{ event.date_to }}
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    {% if event.place or event.place_link %}
+        <div class='content event'>
+            <div class='single label'>
+                {% trans "Venue" %}:
+            </div>
+            <div class='double vblock paragraph'>
+                {% if event.place %}
+                    {{ event.place }}
+                {% endif %}
+                {% if event.place_link %}
+                    <a href='{{ event.place_link.get_absolute_url }}' title='{{ event.place_link }}'>{{ event.place_link }}</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+    {% if event.organizer %}
+        <div class='content event'>
+            <div class='single label'>
+                {% trans "Organizer" %}:
+            </div>
+            <div class='double vblock paragraph'>
+                {% if event.organizer %}
+                    {{ event.organizer }}
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+    <div class='content event'>
+        {% block region %}
+            <div class='content paragraph'>
+                {{ event.desc|restructuredtext }}
+            </div>
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block admin-actions %}
+    {{ block.super }}
+    <div class='admin-action'>
+        <a href='{% admin_url event %}' title='{% trans "Edit current record" %}'>{% trans "Edit" %}</a>
+    </div>
+{% endblock %}

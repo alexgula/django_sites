@@ -1,0 +1,206 @@
+{% load future i18n localeurl_tags %}
+{% load statictags %}
+{% load slidetags eventtags currencytags navtags %}
+
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='{{ request.LANGUAGE_CODE }}' lang='{{ request.LANGUAGE_CODE }}'>
+
+<head>
+    <meta charset='utf-8'>
+    <title>{% trans "Kyiv Oblast for Tourists" %} | {% block title %}{% endblock %}</title>
+
+    <link rel='shortcut icon' href='/favicon.ico' type='image/vnd.microsoft.icon'>
+
+    {% block styles %}
+        <link rel='stylesheet' href='{% static 'css/sen.css' %}' type='text/css' media='all' charset='utf-8' />
+        <link rel='stylesheet' href='{% static 'css/site.css' %}' type='text/css' media='all' charset='utf-8' />
+        <link rel='stylesheet' href='{% static 'css/sprites.css' %}' type='text/css' media='all' charset='utf-8' />
+    {% endblock %}
+
+    {% block links %}
+    {% endblock %}
+</head>
+
+<body class='{% block bodyclass %}{% endblock %}'>
+    <div id='page'>
+        <div id='main' class='content'>
+            {% block main %}
+            {% endblock %}
+        </div>
+
+        <div id='header'>
+            <a id='logo-main' class='sprite-logo_main-png' href='{% url 'home' %}' title='{% trans "Kyiv Oblast for Tourists" %}'></a>
+            <a id='logo-sub' class='sprite-logo_sub-png' href='{% url 'home' %}' title='{% trans "Official Travel Site" %}'></a>
+            <div id='slideshow'>{% slideshow %}</div>
+        </div>
+
+        <div id='top'>
+            <div id='announce'>{% announce %}</div>
+            <div id='breadcrumbs'>
+                {% block breadcrumbs %}
+                    {% breadcrumbs " - " %}
+                {% endblock %}
+            </div>
+            <div id='search'>
+                <form id='form-search' action='{% url 'search' %}' name='search' method='GET'>
+                    <div id='search-text-container'><input id='search-text' type='text' name='q' value='{{ query }}'></div>
+                    <div id='search-submit-container'><input id='search-submit' type='submit' value='{% trans "Search" %}' /></div>
+                </form>
+            </div>
+            <div id='currency'>{% currency_rates %}</div>
+            {# include 'search.html' #}
+            {% include 'culture_chooser.html' %}
+            <div class='hblock'></div>
+        </div>
+
+        <div id='footer'>
+            <a id='logo-foot' class='sprite-logo_foot-png' href='{% url 'home' %}'></a>
+            <div id='sitemap'>{% include 'sitemap.html' %}</div>
+            <div id='admin'>
+                <a href='{% url 'admin:index' %}' class='icon sprite-icon_login_door-png' title='{% trans "Go to admin site" %}'></a>
+                {% if user.is_staff %}
+                    {% block admin-actions %}
+                    {% endblock %}
+                {% endif %}
+            </div>
+            <div id='copyright'>
+                <div>
+                    <span class='copy'>&copy;</span>
+                    <span class='right'> {% trans "Kiev Oblast Tourists Agency" %}, 2006&mdash;2011</span>
+                </div>
+                <div>
+                    <span class='copy'>&copy;</span>
+                    <span class='right'> {% trans "Kyiv Oblast Center of Tourism Development" %}, 2012&mdash;2013</span>
+                </div>
+                <div>
+                        <span class='copy'>&copy;</span>
+                        <a href='http://picassoft.com.ua/site/info' target='_blank' class='hidden-link'>
+                            Создание информационного сайта.
+                        </a>
+                        <a href='http://picassoft.com.ua/site/info' target='_blank'>
+                            {% trans "Picassoft" %}
+                        </a>
+                        , 2011
+                </div>
+            </div>
+            <div id="social">
+                <div class="addthis_toolbox addthis_default_style addthis_32x32_style"
+                     addthis:url="http://ko-tourism.gov.ua{{ request.path|rmlocale }}">
+                    <a class="addthis_button_preferred_1"></a>
+                    <a class="addthis_button_preferred_2"></a>
+                    <a class="addthis_button_preferred_3"></a>
+                    <a class="addthis_button_preferred_4"></a>
+                    <a class="addthis_button_compact"></a>
+                    <a class="addthis_counter addthis_bubble_style"></a>
+                </div>
+                <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4e89bd69584a1a2c"></script>
+                <script type="text/javascript">
+                    var addthis_config = {
+                        ui_language: "{{ request.LANGUAGE_CODE }}",
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+</body>
+
+{% block scripts %}
+    <script type='text/javascript' src='{% static 'js/jquery.min.js' %}' charset='utf-8'></script>
+    <script type='text/javascript' src='{% static 'js/jquery.marquee.min.js' %}' charset='utf-8'></script>
+    <script type='text/javascript' src='{% static 'js/jquery.galleriffic.js' %}' charset='utf-8'></script>
+    <script type='text/javascript' src='{% static 'js/jquery.colorbox-min.js' %}' charset='utf-8'></script>
+    <script type='text/javascript' src='{% static 'js/toastr.min.js' %}' charset='utf-8'></script>
+    <script type='text/javascript' src='{% static 'js/custom.js' %}' charset='utf-8'></script>
+
+    <script type="text/javascript">
+        $(function() {
+            $('#announce .marquee').marquee({pauseSpeed: 12000, scrollSpeed: 20});
+
+            // We only want these styles applied when javascript is enabled
+            $('div.navigation').css({'width' : '300px', 'float' : 'left'});
+            $('div.content').css('display', 'block');
+
+            // Initially set opacity on thumbs and add
+            // additional styling for hover effect on thumbs
+            var onMouseOutOpacity = 0.5;
+            $('#slideshow ul.thumbs li').opacityrollover({
+                mouseOutOpacity:   onMouseOutOpacity,
+                mouseOverOpacity:  1.0,
+                fadeSpeed:         'fast',
+                exemptionSelector: '.selected'
+            });
+
+            $('#slideshow').galleriffic({
+                delay:                     6000,
+                numThumbs:                 15,
+                preloadAhead:              15,
+                enableTopPager:            false,
+                enableBottomPager:         false,
+                maxPagesToShow:            7,
+                imageContainerSel:         '#slideshow .slides',
+                controlsContainerSel:      '#slideshow .controls',
+                captionContainerSel:       '#slideshow .captions',
+                loadingContainerSel:       '#slideshow .loading',
+                renderSSControls:          false,
+                renderNavControls:         false,
+                playLinkText:              'Play Slideshow',
+                pauseLinkText:             'Pause Slideshow',
+                prevLinkText:              '&lsaquo; Previous Photo',
+                nextLinkText:              'Next Photo &rsaquo;',
+                nextPageLinkText:          'Next &rsaquo;',
+                prevPageLinkText:          '&lsaquo; Prev',
+                enableHistory:             true,
+                autoStart:                 true,
+                syncTransitions:           true,
+                defaultTransitionDuration: 1500,
+                enableKeyboardNavigation:  false,
+                onSlideChange:             function(prevIndex, nextIndex) {
+                    // 'this' refers to the gallery, which is an extension of $('#thumbs')
+                    this.find('ul.thumbs').children()
+                        .eq(prevIndex).fadeTo('fast', onMouseOutOpacity).end()
+                        .eq(nextIndex).fadeTo('fast', 1.0);
+                    //this.play();
+                },
+                onTransitionIn:            function(slide, caption, isSync) {
+                    slide.fadeTo(this.getDefaultTransitionDuration(isSync), 1.0);
+                    var x = 58;
+                    var y = 96;
+                    if (caption) {
+                        caption.fadeTo(this.getDefaultTransitionDuration(isSync), 1.0);
+                        var desc = caption.find('.caption');
+                        var map = this.find('.slide-map .slide-map-background');
+                        x = parseFloat(desc.attr('x')) * (map.width()-12);
+                        y = parseFloat(desc.attr('y')) * (map.height()-12);
+                    }
+                    this.find('.slide-map .slide-map-pointer').animate({bottom: y+10, left: x+10}, 'slow');
+                },
+                onPageTransitionOut:       function(callback) {
+                    this.fadeTo('fast', 0.0, callback);
+                },
+                onPageTransitionIn:        function() {
+                    this.fadeTo('fast', 1.0);
+                }
+            });
+
+            toastr.options.positionClass = "toast-top-full-width";
+            toastr.options.timeOut = 12000;
+
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'success' %}
+                        toastr.success("{{ message }}");
+                    {% else %}
+                        toastr.warning("{{ message }}");
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        });
+    </script>
+{% endblock %}
+
+{% if not debug %}
+    {% include "counters.html" %}
+{% endif %}
+
+</html>

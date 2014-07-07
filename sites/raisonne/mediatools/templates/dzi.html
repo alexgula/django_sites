@@ -1,0 +1,15 @@
+<script type='text/javascript' src='/static/js/seadragon-min.js'></script>
+
+<script type='text/javascript'>
+    var viewer = null;
+
+    function init() {
+        Seadragon.Config.imagePath = '/static/images/seadragon/';
+        viewer = new Seadragon.Viewer('{{ container_id }}');
+        viewer.openDzi('{{ url }}');
+    }
+
+    Seadragon.Utils.addEvent(window, 'load', init);
+</script>
+
+<div id='{{ container_id }}' class='dzi-container'></div>

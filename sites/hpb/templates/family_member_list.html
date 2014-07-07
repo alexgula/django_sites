@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% load thumbnail %}
+{% load future %}
+
+{% block title %}{{ block.super }} | История семьи Е.П. Блаватской {% endblock %}
+
+{% block content %}
+    <div class="block-for-object-in-family-member-list">
+        <h1> История семьи</h1>
+    </div>
+    <ul class="block-list">
+        {% for object in object_list %}
+            <li class="h-data"><a href="{{ object.get_absolute_url }}" >{{ object.surname|upper }} {{ object.name }} {{ object.father_name }}</a></li>
+        {% endfor %}
+    </ul>
+    {% for object in object_list %}
+    <div class="block-for-object-in-family-member-list">
+        <div class="left-column">
+            {% thumbnail object.main_portrait "270" as im %}
+                <a href="{{ object.get_absolute_url }}" ><img src="{{ im.url }}" alt="{{ im.title_for_main_portrait }}"></a>
+            {% endthumbnail %}
+            <a href="{{ object.get_absolute_url }}"><p>{{ object.title_for_main_portrait }}</p></a>
+        </div>
+        <div>
+            <h2><a href="{{ object.get_absolute_url }}" >{{ object.name }} {{ object.father_name }} {{ object.surname|upper }}</a></h2>
+            <p>{{ object.birth_date }} - {{ object.died_date }}</p>
+            <h3>{{ object.preview }}</h3>
+            <blockquote>{{ object.citation }}</blockquote>
+            <h4>{{ object.autor_of_citation }}</h4>
+        </div>
+    </div>
+    <div class="divider"></div>
+    {% endfor %}
+{% endblock %}
+
+{% block element_edit %}
+    <a class="h-link" href="{% url 'admin:family_familymember_changelist' %}">Редактировать</a>
+{% endblock %}

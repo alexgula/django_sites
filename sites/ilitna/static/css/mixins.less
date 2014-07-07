@@ -1,0 +1,50 @@
+@color-primary: #1B2B58;
+@color-secondary: #BBCAE7;
+@color-tertiary: #E6EBF6;
+@color-tone: #E0B3D3;
+@color-invert: #FFFFFF;
+@color-background: #FFFFFF;
+
+.text-primary-shadow {
+    text-shadow: 1px 1px 2px #000000;
+}
+
+.text-secondary-shadow {
+    text-shadow: 1px 1px 4px @color-secondary;
+}
+
+.text-glow {
+    text-shadow: 0 0 16px @color-invert;
+}
+
+.font-head {
+    font-family: Georgia, serif;
+}
+
+.font-text {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.font-black {
+    font-family: Arial Black, Gadget, sans-serif;
+}
+
+.font-symbol {
+    font-family: 'WebSymbolsRegular';
+}
+
+.hgradient(@color-top, @color-bottom, @start-top: 100%, @start-bottom: 0%) {
+    background-image: linear-gradient(bottom, @color-bottom @start-bottom, @color-top @start-top);
+    background-image: -o-linear-gradient(bottom, @color-bottom @start-bottom, @color-top @start-top);
+    background-image: -moz-linear-gradient(bottom, @color-bottom @start-bottom, @color-top @start-top);
+    background-image: -webkit-linear-gradient(bottom, @color-bottom @start-bottom, @color-top @start-top);
+    background-image: -ms-linear-gradient(bottom, @color-bottom @start-bottom, @color-top @start-top);
+
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(@start-bottom, @color-bottom),
+        color-stop(@start-top, @color-top)
+    );
+}

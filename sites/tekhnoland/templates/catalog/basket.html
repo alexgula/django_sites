@@ -1,0 +1,127 @@
+{% extends 'catalog/base.html' %}
+
+{% load future %}
+{% load statictags baskettags %}
+
+{% block title %}Корзина{% endblock %}
+
+{% block basket %}{% endblock %}
+
+{% block content %}
+    {{ block.super }}
+    <h1>Корзина</h1>
+
+    {% if stock_list_available or stock_list_setapart or stock_list_disabled %}
+        <form action='{% url 'catalog:basket_save' %}' method='POST'>{% csrf_token %}
+            <table class='part-list page-form'>
+                {% if stock_list_available %}
+                    <tr class='part-list-header'>{% basket_textrow '' "Товары в корзине" %}</tr>
+                    <tr>{% basket_headrow %}</tr>
+                    {% for id, stock in stock_list_available.iteritems %}
+                        <tr>{% basket_textrow 'part-list-title' stock.name %}</tr>
+                        {% for object in stock.objects %}
+                            <tr class='part-list-data'>{% basket_datarow object %}</tr>
+                        {% endfor %}
+                    {% endfor %}
+                    <tr class='part-list-total'>
+                        <td class='part-list-title' colspan='4'>Всего</td>
+                        <td class='part-list-title part-list-count'>{{ total_available_count|floatformat:'0' }}</td>
+                        <td class='part-list-title part-list-price'>{{ total_available_sum|floatformat:'2' }}</td>
+                        <td class='part-list-title' colspan='3'></td>
+                    </tr>
+                {% endif %}
+                <tr class='part-list-header'>
+                    <td colspan='9'>
+                        <table class='submit-table-container'>
+                            <tr>
+                                <td>
+                                    <div id='part-list-calculate' class='submit-container sprites sprites-button_page_form_submit-png'>
+                                        <input type='submit' name='calculate' value="Пересчитать"/>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div id='part-list-order' class='submit-container sprites sprites-button_page_form_submit-png'>
+                                        <input type='submit' name='order' value="Оформить заказ"/>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                {% if stock_list_setapart %}
+                    <tr class='part-list-header'>{% basket_textrow '' "&nbsp;" %}</tr>
+                    <tr class='part-list-header'>{% basket_textrow '' "Отложенные товары" %}</tr>
+                    <tr class='part-list-header'>{% basket_textrow '' "Обратите внимание! Отложенные товары не попадут в заказ!" %}</tr>
+                    <tr>{% basket_headrow %}</tr>
+                    {% for id, stock in stock_list_setapart.iteritems %}
+                        <tr>{% basket_textrow 'part-list-title' stock.name %}</tr>
+                        {% for object in stock.objects %}
+                            <tr class='part-list-data'>{% basket_datarow object %}</tr>
+                        {% endfor %}
+                    {% endfor %}
+                    <tr class='part-list-header'>{% basket_textrow '' "Чтобы перенести товар обратно в корзину, поставьте галочку справа от товара" %}</tr>
+                {% endif %}
+
+                {% if stock_list_disabled %}
+                    <tr class='part-list-header'>{% basket_textrow '' "&nbsp;" %}</tr>
+                    <tr class='part-list-header'>{% basket_textrow '' "Отсутствующие товары" %}</tr>
+                    <tr>{% basket_headrow %}</tr>
+                    {% for id, stock in stock_list_disabled.iteritems %}
+                        <tr>{% basket_textrow 'part-list-title' stock.name %}</tr>
+                        {% for object in stock.objects %}
+                            <tr class='part-list-data'>{% basket_datarow object %}</tr>
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %}
+            </table>
+        </form>
+    {% else %}
+        <div>Ваша козина пуста.</div>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type='text/javascript' charset='utf-8'>
+        function define_checker(checkbox_selector, display_selector, class_normal, class_checked) {
+            $(display_selector).click(function() {
+                var cb = $(this).siblings(checkbox_selector);
+                if(cb.is(':checked'))
+                    cb.removeAttr('checked');
+                else
+                    cb.attr('checked', 'checked');
+                cb.change();
+            });
+            $(checkbox_selector).change(function () {
+                var disp = $(this).siblings(display_selector);
+                if($(this).attr('checked'))
+                    disp.removeClass(class_normal).addClass(class_checked);
+                else
+                    disp.removeClass(class_checked).addClass(class_normal);
+            });
+        }
+
+        define_checker('.part-list-deleted', '.part-list-deleted-display',
+                'sprites-button_delete-png', 'sprites-button_delete_grayed-png');
+
+        $('.part-list-deleted').change(function() {
+            if($(this).is(':checked'))
+                $(this).parents('tr').first().addClass('deleted');
+            else
+                $(this).parents('tr').first().removeClass('deleted');
+        });
+
+        $('#part-list-calculate').click(function() {
+            var basket = [];
+            $('.part-list-data').each(function() {
+                var row = $(this);
+                basket.push({
+                    'id': parseInt(row.find('.part-list-basket-count-order-container').attr('stock-unit-id')),
+                    'quantity': parseInt(row.find('.part-list-count-order').val()),
+                    'selected': row.find('.part-list-selected').is(':checked'),
+                    'deleted': row.find('.part-list-deleted').is(':checked')
+                });
+            });
+        });
+    </script>
+{% endblock %}

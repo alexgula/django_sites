@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% load future i18n thumbnail %}
+{% load url from future %}
+{% load markup %}
+
+{% block title %}
+    {{ object.title }}
+{% endblock %}
+
+{% block logo %}
+    {% thumbnail object.logo THUMBNAIL_SETTINGS.ICON_SIZE crop='center' as im %}
+        <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+    {% endthumbnail %}
+{% endblock %}
+
+{% block content %}
+    {{ block.super }}
+    <h1>{{ object.title }}</h1>
+    <div class='content_render'>
+        {{ object.desc|restructuredtext }}
+    </div>
+{% endblock %}

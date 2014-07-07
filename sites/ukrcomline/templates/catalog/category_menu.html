@@ -1,0 +1,13 @@
+{% load url from future %}
+{% for category_column in category_menu %}
+    <div class='grid-01'>
+        {% for category_item in category_column %}
+            <a href="{{ category_item.data.url }}">{{ category_item.data.title }}</a>
+            <ul>
+                {% for subcategory_item in category_item.children %}
+                    <li><a href="{{ subcategory_item.data.url }}">{{ subcategory_item.data.title }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </div>
+{% endfor %}

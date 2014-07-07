@@ -1,0 +1,23 @@
+{% extends 'catalog/base.html' %}
+
+{% load future %}
+{% load markup %}
+{% load paging_extras %}
+
+{% block title %}Редактирование профиля{% endblock %}
+
+{% block content %}
+    <h1>Редактирование профиля</h1>
+
+    <p>Для редактирования вашего профиля заполните, пожалуйста, поля формы.</p>
+
+    <div>
+        <form class='page-form' autocomplete='off' action='{% url 'account:profile' %}' method='POST'>{% csrf_token %}
+            {{ form }}
+            <div class='submit-container sprites sprites-button_page_form_submit-png'><input type='submit' value='Отправить'/></div>
+        </form>
+    </div>
+
+    <p>Если у вас возникли проблемы с изменением профиля, напишите нам в <a href='{% url 'feedback:show' %}'>форме обратной связи</a>
+        о вашей проблеме и мы постараемся её решить.</p>
+{% endblock %}

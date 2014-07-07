@@ -1,0 +1,27 @@
+{% load future %}
+{% load i18n %}
+{% load media_tags %}
+
+<div class='column'>
+    <div class='container full-height'>
+        <div class='work-item full-height'>
+            <a href='{% url 'catalogue_work_detail' work.author.slug work.slug %}'>
+                <span class='work-image'>
+                    {% image work.thumbnail work %}
+                </span>
+                <span class='work-name'>
+                    {{ work }}
+                </span>
+                <span class='work-size'>
+                    {{ work.size }}
+                </span>
+                <span class='work-rating'>
+                    &nbsp;
+                </span>
+                <span class='work-years'>
+                    {{ work.years }}
+                </span>
+            </a>
+        </div>
+    </div>
+</div>

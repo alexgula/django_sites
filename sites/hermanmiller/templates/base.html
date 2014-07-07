@@ -1,0 +1,163 @@
+{% load i18n navtags shoptags %}{% load url from future %}{% load static from staticfiles %}<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="description" content="{% block description %}{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}{% endblock %}">
+    <meta name="viewport" content="width=device-width">
+
+    {% block styles %}
+        <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+        <link rel="stylesheet" href="{% static 'css/helper.css' %}">
+        <link rel="stylesheet" href="{% static 'css/colorbox.css' %}">
+        <link rel="stylesheet" href="{% static 'css/fotorama.css' %}">
+        <link rel="stylesheet" href="{% static 'css/hermanmiller-theme/jquery-ui-1.10.4.custom.css' %}">
+        <link rel="stylesheet" href="{% static 'css/grid.css' %}">
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <link rel="stylesheet" href="{% static 'css/sprites.css' %}">
+        <link rel="stylesheet" href="{% static 'css/catalog.css' %}">
+        <link rel="stylesheet" href="{% static 'css/shop.css' %}">
+        <link rel="stylesheet" href="{% static 'css/media.css' %}">
+        <link rel="stylesheet" href="{% static 'css/print.css' %}">
+    {% endblock %}
+    <script src="{% static 'js/vendor/modernizr-2.6.2.min.js' %}"></script>
+</head>
+<body>
+    <!--[if lt IE 7]>
+        <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+    <![endif]-->
+
+    <header class="grid header">
+        <div class="grid-1 logo">
+            <a href="{% url 'home' %}" class="logo__link sprite-logo">Прайм-Тайм Украина</a>
+        </div>
+        <div class="grid-1 logo-partner">
+            <a href="{% url 'home' %}" class="logo-partner__link sprite-logo-partner">HermanMiller Authorised Dealer Partner</a>
+        </div>
+        <div class="grid-1">
+            <span class="tel-number">[044] <span class="tel-number__number">555-55-55</span></span>
+            <span class="tel-number">[067] <span class="tel-number__number">555-55-55</span></span>
+            <a href="mailto:info@hermanmiller.com.ua" class="mail-link">info@hermanmiller.com.ua</a>
+        </div>
+        <div class="grid-1">
+            <div class="grid-1 auth-reg-cart">
+                <div class="auth-reg">
+                    <div class="auth-reg-cart__section">
+                        <a href="#" class="auth-link" data-bind="slideVisible: !isAuthenticated(), click: function() { showLoginDialog(); }" style="display: none">{% trans "Login" %}</a>
+                        <a href="{% url 'shop_order_list' %}" class="auth-link" data-bind="slideVisible: isAuthenticated" style="display: none"><span data-bind="text: customerName"></span>: {% trans "orders" %}</a>
+                    </div>
+                    <a href="#" class="reg-link" data-bind="slideVisible: isAuthenticated, click: function() { showLogoutDialog(); }" style="display: none">{% trans "Logout" %}</a>
+                </div>
+                <div class="cart" data-bind="slideVisible: cartNotEmpty" style="display: none">
+                    <div class="auth-reg-cart__section">
+                        <a href="#" class="cart-link" data-bind="click: function() { cartShow(); }">Корзина: <span class="cart-link__count" data-bind="text: cartTotalQuantity()"></span></a>
+                    </div>
+                    <a href="#" class="issue-link" data-bind="click: function() { cartShow(); }">Оформить</a>
+                </div>
+            </div>
+            <div class="search-form sprite-bg-search-form">
+                <div class="search-form__holder">
+                    <form action="{% url 'search' %}">
+                        <fieldset>
+                            <input type="text" class="search-form__txt" value="" name="q" />
+                            <input type="submit" class="search-form__btn-search sprite-btn-search" value="Search" />
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="grid">
+        {% include 'includes/menu_main.html' %}
+    </nav>
+
+    {% block breadcrumbs %}
+        <nav class="grid">
+            <div class="breadcrumbs">
+                {% breadcrumbs delimiter=" | " %}
+            </div>
+        </nav>
+    {% endblock %}
+
+    <section class="grid">
+        {% block content %}
+        {% endblock %}
+    </section>
+
+    <footer class="grid footer">
+        <div class="copy">
+            <p class="footer__text">2013, <a href="#" class="footer__link">hermanmiller.com.ua</a></p>
+            <p class="footer__text">OOO “Прайм-Тайм Украина”</p>
+        </div>
+        <ul class="social-networks">
+        </ul>
+        <div class="footer__info">
+            <p class="footer__text">(044) 555-55-55, (067) 555-55-55</p>
+            <a href="mailto:info@hermanmiller.com.ua" class="footer__link">info@hermanmiller.com.ua</a>
+        </div>
+    </footer>
+
+{% comment %}
+    <div class='admin'>
+        {% if user.is_staff %}
+            <a href='{% url 'admin:index' %}' title='{% trans "Go to admin site" %}'>{% trans "Admin area" %}</a>
+            {% capture as admin_url %}{% block admin_url %}{% endblock %}{% endcapture %}
+            {% if admin_url %}
+                <a href='{{ admin_url }}' title='{% trans "Go to edit node" %}'>{% trans "Edit node" %}</a>
+            {% endif %}
+        {% endif %}
+    </div>
+    <p class='copyright'>&copy; Picassoft, 2013</p>
+{% endcomment %}
+
+    {% include 'includes/counters.html' %}
+
+    <div style="display: none">
+        {% include 'shop/cart_template.html' %}
+    </div>
+
+    {% block scripts %}
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="{% static 'js/vendor/jquery-1.10.2.min.js' %}"><\/script>')</script>
+        <script src="{% static 'js/vendor/jquery-ui-1.10.4.min.js' %}"></script>
+        <script src="{% static 'js/vendor/knockout-3.0.0.js' %}"></script>
+        <script src="{% static 'js/vendor/jquery.colorbox.js' %}"></script>
+        <script src="{% static 'js/vendor/fotorama.js' %}"></script>
+        <script src="{% static 'js/vendor/jquery.elevatezoom.js' %}"></script>
+        <script src="{% static 'js/vendor/jquery.elevateZoom-3.0.8.min.js' %}"></script>
+        <script src="{% static 'js/plugins.js' %}"></script>
+        <script src="{% static 'js/main.js' %}"></script>
+        <script>
+            ko.applyBindings(new CartViewModel({
+                cartData: {% cart_data request %},
+                cartUrl: "{% url 'shop_cart' %}",
+                customerLoginUrl: "{% url 'shop_login' %}",
+                customerLogoutUrl: "{% url 'shop_logout' %}",
+                orderUrl: "{% url 'shop_order' %}",
+                cartChoices: {% cart_choices %},
+                product: window.cart_product,
+                customerName: "{% customer_name request %}",
+                isAuthenticated: {% is_authenticated request %}}));
+        </script>
+        <script>
+            $('.nav > ul > li >a').each(function () {
+                $(this).removeClass('active');
+            });
+            $('.nav > ul > li >a').each(function () {
+                var location = window.location.href
+                var link = this.href
+                if(location == link) {
+                    $(this).addClass('active');
+                }
+            });
+        </script>
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,1 @@
+D:/Programs/PostgreSQL/9.0/bin\pg_dump.exe --host localhost --port 5432 --username "postgres" --format custom --blobs --verbose --file "E:\Picassoft\Projects\Django\db\backups\kotourism.backup" kotourism

@@ -1,0 +1,13 @@
+{% extends "base_sidebar.html" %}
+
+{% load i18n %}
+
+{% block content %}
+    <h3>{% trans "Audio Guide" %}</h3>
+    <div id='frame-container' style="width: 530px; height: 5100px; margin: 0 auto;">
+        <iframe
+            name="gid" scrolling="no" noresize target="contents" marginwidth="1" marginheight="0"
+            src="http://rtv.com.ua/tour/gid/00.html" width="530" height="100%" border="0" frameborder="0">
+        </iframe>
+    </div>
+{% endblock %}

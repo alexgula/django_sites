@@ -1,0 +1,8 @@
+{% load future %}
+<p>Здравствуйте, {{ obj.first_name }} {{ obj.father_name }} {{ obj.last_name }}.</p>
+
+<p>Вы были успешно зарегистрированы на сайте {{ site.name }}!</p>
+
+<p>Для подтверждения регистрации, пожалуйста, перейдите по ссылке
+    <a href="http://{{ site.domain }}{% url 'account:register_confirm' obj.activation_key %}">http://{{ site.domain }}{% url 'account:register_confirm' obj.activation_key %}</a>
+</p>

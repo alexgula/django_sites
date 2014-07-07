@@ -1,0 +1,20 @@
+{% load url from future %}
+{% load category_breadcrumbs_recur from categorytags %}
+{% for category_item in category_ancestors %}
+    <div class='production-menu-elem'>
+        {% if not forloop.last %}
+            <a href="{{ category_item.data.url }}" class="production-menu-link level-{{ forloop.counter }}">{{ category_item.data.title }}</a>
+            <div class='down-arrow level-{{ forloop.counter }}'></div>
+        {% else %}
+            <div class="level-last">{{ category_item.data.title }}</div>
+        {% endif %}
+            <div class='production-menu-categories level-{{ forloop.counter }}'>
+                <ul class="category level-{{ forloop.counter }}">
+                    {% category_breadcrumbs_recur category_item forloop.counter %}
+                </ul>
+            </div>
+    </div>
+    {% if not forloop.last %}
+        <div class='right-arrow level-{{ forloop.counter }}'>&nbsp;</div>
+    {% endif %}
+{% endfor %}

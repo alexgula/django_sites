@@ -1,0 +1,41 @@
+{% load future %}
+{% load static from staticfiles %}
+{% load i18n webdesign localeurl_tags contenttags mediatags blocktags %}
+<div id='top_banner'>
+    <a href='{% url 'info_detail' 'about' %}#top'><img src='{% static 'images/top_banner_{}.png'|format:LANGUAGE_CODE %}' alt='' title='' /></a>
+</div>
+<div id='three_columns'>
+    <div class='first_column'>
+        <div class='photo'>
+            <img src='{% static 'images/nastojatel.jpg' %}' alt='pop' title=''/>
+            <div class='description'>
+                <div class='sixteen_px'>
+                    <a href='{% url 'info_detail' 'abbot' %}'>{% trans "Page abbot of the temple" %}</a>
+                </div>
+                <div class='twenty_px_red'>
+                    <a href='{% url 'info_detail' 'abbot' %}'>{% text_block 'abbot' %}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="to_contacts_href" href='{% url 'contacts' %}'></a>
+    <div class='second_column'>
+        <img class='top_banner' src='{% static 'images/top_banner_map.png' %}' alt='' title='' />
+    </div>
+    <div class='third_column'>
+        <div class='table_cell'>
+            <div class='contact-text address'>
+                <div class="sprites sprites-icon-home-png"></div>
+                {% text_block 'address' %}
+            </div>
+            <div class='contact-text telephone'>
+                <div class="sprites sprites-icon-phone-png"></div>
+                {% text_block 'phone' %}
+            </div>
+            <div class='contact-text email'>
+                <div class="sprites sprites-icon-mail-png"></div>
+                e-mail: {% text_block 'email' %}
+            </div>
+        </div>
+    </div>
+</div>

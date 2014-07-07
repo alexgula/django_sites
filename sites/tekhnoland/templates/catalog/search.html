@@ -1,0 +1,89 @@
+{% extends 'catalog/base.html' %}
+
+{% load future %}
+{% load statictags searchtags %}
+
+{% block title %}Поиск детали с номером {{ part_number }}{% endblock %}
+
+{% block sidebody %}
+    Корзина
+{% endblock %}
+
+{% block content %}
+    {{ block.super }}
+    <h1>Поиск детали с номером {{ part_number }}</h1>
+    {% if stock_list or pending_list or replacement_list %}
+        <table class='part-list'>
+            {% if stock_list %}
+                <tr>{% search_headrow %}</tr>
+                {% for id, stock in stock_list.iteritems %}
+                    <tr>{% search_textrow 'part-list-title' stock.name %}</tr>
+                    {% for object in stock.objects %}
+                        <tr>{% search_datarow object %}</tr>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+
+            {% if replacement_list %}
+                <tr class='part-list-header'>{% search_textrow '' "&nbsp;" %}</tr>
+                <tr class='part-list-header'>{% search_textrow '' "Замены товара" %}</tr>
+                <tr>{% search_headrow %}</tr>
+                {% for id, stock in replacement_list.iteritems %}
+                    <tr>{% search_textrow 'part-list-title' stock.name %}</tr>
+                    {% for object in stock.objects %}
+                        <tr>{% search_datarow object 'replacement' %}</tr>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+        </table>
+    {% else %}
+        <div>Деталей с таким номером не найдено.</div>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type='text/javascript' charset='utf-8'>
+        var orderTimeouts = {};
+        $('.part-list-count-order').change(function() {
+            var parent = $(this).parents('.part-list-input-container').first();
+            var id = parent.attr('stock-unit-id');
+            if(orderTimeouts[id])
+                window.clearTimeout(orderTimeouts[id]);
+            var timeoutId = window.setTimeout(function() {
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'catalog:add_basket_item' %}',
+                    data: {
+                        stock_unit_id: id,
+                        quantity: parent.find('input').attr('value'),
+                        is_replacement: parent.hasClass('replacement')
+                    },
+                    success: function(data) {
+                        $('#basket-stats .basket-content').animate({
+                            'opacity': 0.1
+                        }, {
+                            'duration': 500,
+                            'complete': function() {
+                                $('#basket-stats .basket-stats-table').replaceWith(data.desc);
+                                $(this).animate({'opacity': 1}, 500);
+                            }
+                        });
+                        parent.parents('tr').first().children('td').animate({'opacity': 0.5}, 500).animate({'opacity': 1}, 500);
+                        $('#basket-stats').animate({'opacity': 0.5}, 500).animate({'opacity': 1}, 500);
+                    },
+                    error: function(data) {
+                        alert('Error!');
+                    }
+                });
+                delete orderTimeouts[id];
+            }, 500);
+            orderTimeouts[id] = timeoutId;
+        });
+
+        $('.part-list-make-order').click(function() {
+            var parent = $(this).parent();
+            parent.find('input').val(parseInt(parent.find('input').val()) + 1).change();
+        });
+    </script>
+{% endblock %}

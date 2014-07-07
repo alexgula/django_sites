@@ -1,0 +1,39 @@
+{% extends 'base_sidebar.html' %}
+
+{% load future %}
+{% load i18n markup %}
+{% load thumbnail %}
+{% load statictags %}
+
+{% block title %}
+    {% trans "Regions" %}
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel='stylesheet' href='{% static 'jquery-ui-datepicker/css/custom-theme/jquery-ui-1.8.9.custom.css' %}' type='text/css' media='all' charset='utf-8' />
+{% endblock %}
+
+{% block content %}
+    <h3>{% trans "Regions" %}</h3>
+    {% for region in regions %}
+        <div class='region paragraph'>
+            <div class='icon single image-icon'>
+                {% thumbnail region.icon THUMBNAIL_SETTINGS.FULLSCREEN_SIZE upscale=False as im_big %}
+                    {% thumbnail region.icon THUMBNAIL_SETTINGS.ICON_SIZE upscale=False as im %}
+                        <div class='image-content' style='width: {{ im.width }}px; height: {{ im.height }}px'>
+                            <a class='colorbox' rel='places' href='{{ im_big.url }}'>
+                                <img src='{{ im.url }}' width='{{ im.width }}' height='{{ im.height }}'/>
+                            </a>
+                        </div>
+                    {% endthumbnail %}
+                {% endthumbnail %}
+            </div>
+            <div class='head triple'>
+                <h4 class='name'><a href='{% url 'region_detail' region.type region.slug %}'>{{ region.name }}</a></h4>
+            </div>
+            <div class='date'>{{ region.post_date }}</div>
+            <div class='body double'>{{ region.desc|restructuredtext }}</div>
+        </div>
+    {% endfor %}
+{% endblock %}
